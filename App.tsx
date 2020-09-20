@@ -14,6 +14,8 @@ import { listTodos } from './src/graphql/queries'
 
 import { withAuthenticator } from 'aws-amplify-react-native'
 
+import { Auth } from 'aws-amplify'
+
 const initialState = { name: '', description: '' }
 
 const App = () => {
@@ -23,6 +25,14 @@ const App = () => {
   useEffect(() => {
     fetchTodos()
   }, [])
+
+  async function signOut() {
+    try {
+      await Auth.signOut();
+    } catch (error) {
+      console .log('error signing out: ', error)
+    }
+  }
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value })
@@ -49,17 +59,18 @@ const App = () => {
 
   return (
     <View style={styles.container}>
+      <Button title='Sign out' onPress={signOut} />
       <TextInput
         onChangeText={val => setInput('name', val)}
         style={styles.input}
         value={formState.name} 
-        placeholder="Name"
+        placeholder="Key"
       />
       <TextInput
         onChangeText={val => setInput('description', val)}
         style={styles.input}
         value={formState.description}
-        placeholder="Description"
+        placeholder="Value"
       />
       <Button title="Create Todo" onPress={addTodo} />
       {
