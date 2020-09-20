@@ -10,6 +10,11 @@
       "StackName": "amplify-geotracker-dev-132225",
       "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-dev-132225/db3fc680-fb65-11ea-bee7-0e09be17e2fd",
       "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      }
     }
   }
 }
