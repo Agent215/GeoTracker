@@ -3,6 +3,8 @@ import Amplify from 'aws-amplify'
 import config from './aws-exports'
 Amplify.configure(config)
 
+// brahm added a test comment 
+
 import React, { useEffect, useState } from 'react'
 import {
   View, Text, StyleSheet, TextInput, Button
