@@ -4,6 +4,7 @@ import config from './aws-exports'
 Amplify.configure(config)
 
 // brahm added a test comment 
+// test comment by Jian
 
 import React, { useEffect, useState } from 'react'
 import {
