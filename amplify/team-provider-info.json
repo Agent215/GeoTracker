@@ -1,0 +1,56 @@
+{
+  "lilah": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-lilah-210838-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-lilah-210838-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-lilah-210838-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-lilah-210838-deployment",
+      "UnauthRoleName": "amplify-geotracker-lilah-210838-unauthRole",
+      "StackName": "amplify-geotracker-lilah-210838",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-lilah-210838/1c57cfc0-0361-11eb-b401-0e194195a24f",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      }
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-prod-154830-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-prod-154830-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-prod-154830-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-prod-154830-deployment",
+      "UnauthRoleName": "amplify-geotracker-prod-154830-unauthRole",
+      "StackName": "amplify-geotracker-prod-154830",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-prod-154830/eb763c30-0355-11eb-9732-0e424e0e060d",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-dev-132225-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-dev-132225-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-dev-132225-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-dev-132225-deployment",
+      "UnauthRoleName": "amplify-geotracker-dev-132225-unauthRole",
+      "StackName": "amplify-geotracker-dev-132225",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-dev-132225/db3fc680-fb65-11ea-bee7-0e09be17e2fd",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      }
+    }
+  }
+}
