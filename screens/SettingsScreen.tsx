@@ -7,6 +7,7 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { createTodo } from '../src/graphql/mutations';
 import { listTodos } from '../src/graphql/queries'
+import { withAuthenticator } from 'aws-amplify-react-native'
 
 const initialState = { name: '', description: '' }
 
@@ -19,7 +20,7 @@ async function signOut() {
 }
 
 
-export default function EventFeedScreen() {
+function EventFeedScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Settings Tab</Text>
@@ -47,3 +48,5 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
+
+export default withAuthenticator(EventFeedScreen)

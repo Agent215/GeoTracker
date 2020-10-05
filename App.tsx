@@ -4,7 +4,6 @@ import config from './aws-exports'
 Amplify.configure(config)
 
 import React, { useEffect, useState } from 'react'
-import { withAuthenticator } from 'aws-amplify-react-native'
 
 
 // Added for tabs
@@ -33,4 +32,4 @@ const App = () => {
   }
 }
 
-export default withAuthenticator(App)
+export default App
