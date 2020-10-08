@@ -21,6 +21,7 @@ async function signOut() {
 
 //function to delete user
 async function onDeleteUser() {
+  const userName ='';
 
   //collect current authenticated user
   const user = await Auth.currentAuthenticatedUser();
@@ -29,7 +30,8 @@ async function onDeleteUser() {
     //send error to console if exists
     if(error)
       console.log('Error deleting user', error);
-    //TODO: add logic to pop navigation stack after successful delete of user
+    else
+      signOut();
   });
   
 }
