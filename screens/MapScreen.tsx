@@ -12,7 +12,7 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const INITIALREGION = {
+const INITIALREGION = {  // this is philly for now, we can change this to whatever
   latitude: 39.9526,
   longitude: -75.16522,
   latitudeDelta: 0.0922,
@@ -35,7 +35,7 @@ const MapScreen = props => {
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA
         };
-        console.log("MapScreen.js/animateToUser - User Coords : " + coords);
+        console.log("MapScreen.js/animateToUser - Getting User Coords : " + coords);
         mapRef.current.animateToRegion(coords, 0);  // why does my linter give me red squiglly lines, yet this runs...
 
       }, (error) => console.log("MapScreen.tsx/animateToUser() - Got error from navigator.geolocation.getCurrentPosition: " + error));
@@ -52,7 +52,6 @@ const MapScreen = props => {
 
       <MapView
         ref={mapRef}
-        onMapReady={animateToUser}
         initialRegion={INITIALREGION}
         style={styles.mapStyle}
         mapType="hybrid"
