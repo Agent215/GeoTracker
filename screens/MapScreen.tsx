@@ -60,6 +60,7 @@ const MapScreen = props => {
     <View style={styles.container}>
 
         <GooglePlacesAutocomplete
+            placeholder='Enter Location'
             query={{
               key: GOOGLE_PLACES_API_KEY,
               language: "en", // language of the results
