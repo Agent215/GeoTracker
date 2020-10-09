@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
-import { PROVIDER_GOOGLE} from 'react-native-maps';
+import { PROVIDER_GOOGLE } from 'react-native-maps';
 import MapView from "react-native-map-clustering";
 
 import { View } from '../components/Themed';
@@ -60,65 +60,8 @@ const MapScreen = props => {
   return (
     <View style={styles.container}>
 
-        <GooglePlacesAutocomplete
-            placeholder='Enter Location'
-            query={{
-              key: GOOGLE_PLACES_API_KEY,
-              language: "en", // language of the results
-            }}
-            onPress={(data, details = null) => {
-              console.log(data);
-              console.log("test");
-              Geocoder.from(data.description)
-                .then((json) => {
-                  var location = json.results[0].geometry.location;
-                  console.log(location);
-                })
-                .catch((error) => console.warn(error));
 
-              // this.map.animateCamera({
-              //   center: {
-              //     latitude: 0,
-              //     longitude: 0,
-              //   },
-              //   heading: 180,
-              // });
-            }}
-            onFail={(error) => console.error(error)}
-            requestUrl={{
-              url:
-                "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
-              useOnPlatform: "web",
-            }} // this in only required for use on the web. See https://git.io/JflFv more for details.
-            styles={{
-              container: {
-                flex: 1,
-                zIndex:6,
-              },
-              textInputContainer: {
-                backgroundColor: "rgba(0,0,0,0)",
-                borderTopWidth: 0,
-                borderBottomWidth: 0,
-                marginTop:80,
-                zIndex:6,
-                width: '100%'
-              },
-              textInput: {
-                marginLeft: 0,
-                marginRight: 0,
-                height: 38,
-                color: "#5d5d5d",
-                fontSize: 20,
-              },
-              predefinedPlacesDescription: {
-                color: "#1faadb",
-              },
-            }}
-          />
-
-
- 
-       {/* <MapView
+      <MapView
         ref={mapRef}
         initialRegion={INITIALREGION}
         style={styles.mapStyle}
@@ -129,8 +72,74 @@ const MapScreen = props => {
         rotateEnabled={false}
         showsTraffic={false}
         toolbarEnabled={true}
-      />   */}
+      />
+      <GooglePlacesAutocomplete
+        placeholder='Enter Location'
+        query={{
+          key: GOOGLE_PLACES_API_KEY,
+          language: "en", // language of the results
+        }}
+        onPress={(data, details = null) => {
+          console.log(data);
+          console.log("test");
+          Geocoder.from(data.description)
+            .then((json) => {
+              var location = json.results[0].geometry.location;
+              console.log(location);
+              let lat = location.lat;
+              let lng = location.lng;
 
+              let coords = {
+                latitude: lat,
+                longitude: lng,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+              };
+              mapRef.current.animateToRegion(coords, 0)
+            })
+            .catch((error) => console.warn(error));
+
+          // this.map.animateCamera({
+          //   center: {
+          //     latitude: 0,
+          //     longitude: 0,
+          //   },
+          //   heading: 180,
+          // });
+        }}
+        onFail={(error) => console.error(error)}
+        requestUrl={{
+          url:
+            "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
+          useOnPlatform: "web",
+        }} // this in only required for use on the web. See https://git.io/JflFv more for details.
+        styles={{
+          container: {
+            flex: 1,
+            zIndex: 6,
+          },
+          textInputContainer: {
+            backgroundColor: "rgba(0,0,0,0)",
+            borderTopWidth: 0,
+            borderBottomWidth: 0,
+            marginTop: 0,
+            zIndex: 6,
+            width: '100%'
+          },
+          textInput: {
+            marginLeft: 0,
+            marginRight: 0,
+            height: 38,
+            color: "#5d5d5d",
+            zIndex: 6,
+            fontSize: 20,
+          },
+          predefinedPlacesDescription: {
+            zIndex: 6,
+            color: "#1faadb",
+          },
+        }}
+      />
 
     </View>
   );
@@ -154,7 +163,12 @@ const styles = StyleSheet.create({
   mapStyle: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-    zIndex: 1,
+    zIndex: -1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
   }
 });
 
