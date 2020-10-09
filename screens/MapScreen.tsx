@@ -6,6 +6,15 @@ import MapView from "react-native-map-clustering";
 import { View } from '../components/Themed';
 
 
+// import * as React from "react";
+import Constants from "expo-constants";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Geocoder from "react-native-geocoding";
+const GOOGLE_PLACES_API_KEY = "AIzaSyB_fuGPEjP2hp9-GNXOt-ElFWceKQFFgz4";
+
+
+
+
 const LATITUDE_DELTA = 0.0922;
 const { width, height } = Dimensions.get('window');
 const SCREEN_HEIGHT = height;
@@ -21,7 +30,7 @@ const INITIALREGION = {  // this is philly for now, we can change this to whatev
 
 
 const MapScreen = props => {
-  let mapRef = useRef(null);
+  let mapRef = useRef(MapView.prototype);
 
   /*
   animateToUser 
@@ -50,6 +59,40 @@ const MapScreen = props => {
   return (
     <View style={styles.container}>
 
+        <GooglePlacesAutocomplete
+            query={{
+              key: GOOGLE_PLACES_API_KEY,
+              language: "en", // language of the results
+            }}
+            onPress={(data, details = null) => {
+              console.log(data);
+              console.log("test");
+              Geocoder.from(data.description)
+                .then((json) => {
+                  var location = json.results[0].geometry.location;
+                  console.log(location);
+                })
+                .catch((error) => console.warn(error));
+
+              // this.map.animateCamera({
+              //   center: {
+              //     latitude: 0,
+              //     longitude: 0,
+              //   },
+              //   heading: 180,
+              // });
+            }}
+            onFail={(error) => console.error(error)}
+            requestUrl={{
+              url:
+                "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
+              useOnPlatform: "web",
+            }} // this in only required for use on the web. See https://git.io/JflFv more for details.
+            styles={searchInputStyle}
+          />
+
+
+
       <MapView
         ref={mapRef}
         initialRegion={INITIALREGION}
@@ -61,7 +104,9 @@ const MapScreen = props => {
         rotateEnabled={false}
         showsTraffic={false}
         toolbarEnabled={true}
-      />
+      /> 
+
+
     </View>
   );
 }
@@ -84,7 +129,33 @@ const styles = StyleSheet.create({
   mapStyle: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
+    zIndex: 1,
   }
 });
+
+//style for search bar on Map
+const searchInputStyle = {
+  textInputContainer: {
+    backgroundColor: "rgba(0,0,0,0)",
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    zIndex: 5,
+  },
+  textInput: {
+    marginLeft: 0,
+    marginRight: 0,
+    height: 38,
+    color: "#5d5d5d",
+    fontSize: 16,
+  },
+  predefinedPlacesDescription: {
+    color: "#1faadb",
+  },
+  listView: {
+    color: "black", //To see where exactly the list is
+    zIndex: 5, //To popover the component outwards
+    position: "absolute",
+  },
+};
 
 export default MapScreen;
