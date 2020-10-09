@@ -11,7 +11,8 @@ import Constants from "expo-constants";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Geocoder from "react-native-geocoding";
 const GOOGLE_PLACES_API_KEY = "AIzaSyB_fuGPEjP2hp9-GNXOt-ElFWceKQFFgz4";
-
+// Initialize the module (needs to be done only once)
+Geocoder.init("AIzaSyB_fuGPEjP2hp9-GNXOt-ElFWceKQFFgz4", { language: "en" }); // use a valid API key
 
 
 
@@ -90,6 +91,10 @@ const MapScreen = props => {
               useOnPlatform: "web",
             }} // this in only required for use on the web. See https://git.io/JflFv more for details.
             styles={{
+              container: {
+                flex: 1,
+                zIndex:6,
+              },
               textInputContainer: {
                 backgroundColor: "rgba(0,0,0,0)",
                 borderTopWidth: 0,
@@ -113,7 +118,7 @@ const MapScreen = props => {
 
 
  
-      <MapView
+       {/* <MapView
         ref={mapRef}
         initialRegion={INITIALREGION}
         style={styles.mapStyle}
@@ -124,7 +129,7 @@ const MapScreen = props => {
         rotateEnabled={false}
         showsTraffic={false}
         toolbarEnabled={true}
-      />  
+      />   */}
 
 
     </View>
