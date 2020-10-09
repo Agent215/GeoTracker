@@ -88,11 +88,27 @@ const MapScreen = props => {
                 "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
               useOnPlatform: "web",
             }} // this in only required for use on the web. See https://git.io/JflFv more for details.
-            styles={searchInputStyle}
+            styles={{
+              textInputContainer: {
+                backgroundColor: "rgba(0,0,0,0)",
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+              },
+              textInput: {
+                marginLeft: 0,
+                marginRight: 0,
+                height: 38,
+                color: "#5d5d5d",
+                fontSize: 20,
+              },
+              predefinedPlacesDescription: {
+                color: "#1faadb",
+              },
+            }}
           />
 
 
-
+{/* 
       <MapView
         ref={mapRef}
         initialRegion={INITIALREGION}
@@ -104,7 +120,7 @@ const MapScreen = props => {
         rotateEnabled={false}
         showsTraffic={false}
         toolbarEnabled={true}
-      /> 
+      />  */}
 
 
     </View>
@@ -133,29 +149,6 @@ const styles = StyleSheet.create({
   }
 });
 
-//style for search bar on Map
-const searchInputStyle = {
-  textInputContainer: {
-    backgroundColor: "rgba(0,0,0,0)",
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-    zIndex: 5,
-  },
-  textInput: {
-    marginLeft: 0,
-    marginRight: 0,
-    height: 38,
-    color: "#5d5d5d",
-    fontSize: 16,
-  },
-  predefinedPlacesDescription: {
-    color: "#1faadb",
-  },
-  listView: {
-    color: "black", //To see where exactly the list is
-    zIndex: 5, //To popover the component outwards
-    position: "absolute",
-  },
-};
+
 
 export default MapScreen;
