@@ -94,6 +94,9 @@ const MapScreen = props => {
                 backgroundColor: "rgba(0,0,0,0)",
                 borderTopWidth: 0,
                 borderBottomWidth: 0,
+                marginTop:80,
+                zIndex:6,
+                width: '100%'
               },
               textInput: {
                 marginLeft: 0,
@@ -109,7 +112,7 @@ const MapScreen = props => {
           />
 
 
-{/* 
+ 
       <MapView
         ref={mapRef}
         initialRegion={INITIALREGION}
@@ -121,7 +124,7 @@ const MapScreen = props => {
         rotateEnabled={false}
         showsTraffic={false}
         toolbarEnabled={true}
-      />  */}
+      />  
 
 
     </View>
