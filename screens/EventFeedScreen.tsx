@@ -7,6 +7,7 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { createTodo } from '../src/graphql/mutations';
 import { listTodos } from '../src/graphql/queries'
+import { Image, ScrollView } from 'react-native';
 
 // const initialState = { name: '', description: '' }
 
@@ -15,12 +16,48 @@ import { listTodos } from '../src/graphql/queries'
 export default function EventFeedScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Event Feed Tab</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/EventFeedScreen.js" />
+      <ScrollView>
+        <Text style={{ fontSize: 96 }}>Test</Text>
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Text style={{ fontSize: 96 }}>If you like</Text>
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Text style={{ fontSize: 96 }}>Scrolling down</Text>
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Text style={{ fontSize: 96 }}>What's the best</Text>
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Text style={{ fontSize: 96 }}>Framework around?</Text>
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Image source={logo} />
+        <Text style={{ fontSize: 80 }}>React Native</Text>
+      </ScrollView>
     </View>
   );
 }
+
+const logo = {
+  uri: 'https://reactnative.dev/img/tiny_logo.png',
+  width: 64,
+  height: 64
+};
 
 const styles = StyleSheet.create({
   container: {
