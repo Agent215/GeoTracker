@@ -35,7 +35,6 @@ async function onDeleteUser() {
 function SettingsScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <Text style={styles.title}>Click below to sign out</Text>
       {<Button title='Sign out' onPress={signOut} />}
       <Text style={styles.title}>Click below to Delete User</Text>
