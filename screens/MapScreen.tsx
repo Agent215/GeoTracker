@@ -1,14 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
-import { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { PROVIDER_GOOGLE } from 'react-native-maps';
 import MapView from "react-native-map-clustering";
+
 import { View } from '../components/Themed';
+
+
+// import * as React from "react";
 import Constants from "expo-constants";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Geocoder from "react-native-geocoding";
 const GOOGLE_PLACES_API_KEY = "AIzaSyB_fuGPEjP2hp9-GNXOt-ElFWceKQFFgz4";
 // Initialize the module (needs to be done only once)
-Geocoder.init(GOOGLE_PLACES_API_KEY, { language: "en" }); // use a valid API key
+Geocoder.init("AIzaSyB_fuGPEjP2hp9-GNXOt-ElFWceKQFFgz4", { language: "en" }); // use a valid API key
 
 
 
@@ -68,7 +72,6 @@ const MapScreen = props => {
         rotateEnabled={false}
         showsTraffic={false}
         toolbarEnabled={true}
-        
       />
       <GooglePlacesAutocomplete
         placeholder='Enter Location'
@@ -92,11 +95,17 @@ const MapScreen = props => {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA
               };
-              mapRef.current.animateToRegion(coords, 0);
-              
+              mapRef.current.animateToRegion(coords, 0)
             })
             .catch((error) => console.warn(error));
 
+          // this.map.animateCamera({
+          //   center: {
+          //     latitude: 0,
+          //     longitude: 0,
+          //   },
+          //   heading: 180,
+          // });
         }}
         onFail={(error) => console.error(error)}
         requestUrl={{
