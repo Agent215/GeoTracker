@@ -8,6 +8,7 @@ import { Text, View } from '../components/Themed';
 import { createTodo } from '../src/graphql/mutations';
 import { listTodos } from '../src/graphql/queries'
 import { Image, ScrollView } from 'react-native';
+import { Card, ListItem, Icon } from 'react-native-elements'
 
 // const initialState = { name: '', description: '' }
 
@@ -15,39 +16,34 @@ import { Image, ScrollView } from 'react-native';
 
 export default function EventFeedScreen() {
   return (
+    
     <View style={styles.container}>
       <ScrollView>
-        <Text style={{ fontSize: 96 }}>Test</Text>
+        <Text style={{ fontSize: 96 }}>Demo 1</Text>
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
-        <Text style={{ fontSize: 96 }}>If you like</Text>
+        <Text style={{ fontSize: 60 }}>Try and scroll!</Text>
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
-        <Text style={{ fontSize: 96 }}>Scrolling down</Text>
+        <Text style={{ fontSize: 60 }}>Scroll down</Text>
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
-        <Text style={{ fontSize: 96 }}>What's the best</Text>
+        <Text style={{ fontSize: 60 }}>Scroll down</Text>
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
         <Image source={logo} />
-        <Text style={{ fontSize: 96 }}>Framework around?</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 80 }}>React Native</Text>
+        <Text style={{ fontSize: 60 }}>Scroll back up!</Text>
       </ScrollView>
     </View>
   );
