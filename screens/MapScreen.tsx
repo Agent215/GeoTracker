@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { PROVIDER_GOOGLE} from 'react-native-maps';
 import MapView from "react-native-map-clustering";
