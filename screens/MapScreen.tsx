@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
-import { PROVIDER_GOOGLE } from 'react-native-maps';
+import { StyleSheet, Dimensions, Text } from 'react-native';
+import { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapView from "react-native-map-clustering";
 
 import { View } from '../components/Themed';
@@ -52,17 +52,30 @@ const MapScreen = props => {
       }, (error) => console.log("MapScreen.tsx/animateToUser() - Got error from navigator.geolocation.getCurrentPosition: " + error));
   }
 
+
+
+
+  //useState Hook for region, used by Marker
+  const [region, setRegion] = useState({
+    latitude: 0,
+    longitude: 0
+  });
+
+
+
+
+
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
   }, []);
 
-
+  
   return (
     <View style={styles.container}>
 
-
       <MapView
+        onRegionChangeComplete={region => setRegion(region)}
         ref={mapRef}
         initialRegion={INITIALREGION}
         style={styles.mapStyle}
@@ -73,7 +86,15 @@ const MapScreen = props => {
         rotateEnabled={false}
         showsTraffic={false}
         toolbarEnabled={true}
-      />
+      >
+
+
+       <Marker coordinate={{ latitude: 40.050809, longitude: -75.049976 }}>
+               {/* <CustomMarker />  */}
+              
+            </Marker> 
+      </MapView> 
+
       <GooglePlacesAutocomplete
         placeholder='Enter Location'
         query={{
@@ -96,6 +117,7 @@ const MapScreen = props => {
                 longitudeDelta: LONGITUDE_DELTA
               };
               mapRef.current.animateToRegion(coords, 0);
+              (lat,lng)=>{setRegion({latitude:lat,longitude:lng})};
             })
             .catch((error) => console.warn(error));
         }}
