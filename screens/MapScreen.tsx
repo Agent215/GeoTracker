@@ -101,6 +101,7 @@ const MapScreen = props => {
         }}
         onFail={(error) => console.error(error)}
         styles={searchStyles}
+        textInputProps={{ clearButtonMode: "always" }}
       />
 
     </View>
