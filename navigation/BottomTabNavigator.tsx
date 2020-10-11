@@ -17,27 +17,27 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Feed"
+      initialRouteName="Map"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
         name="Feed"
         component={EventFeedNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-paper" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Map"
         component={MapScreenNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-map" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Settings"
         component={SettingsScreenNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-contact" color={color} />,
         }}
       />
     </BottomTab.Navigator>
