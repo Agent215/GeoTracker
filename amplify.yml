@@ -1,0 +1,36 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - '# Execute Amplify CLI with the helper script'
+        - amplifyPush --simple
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+        - nvm use 10
+        - npm install --silent --global expo-cli
+        - |-
+          if [ -f yarn.lock ]; then
+           yarn
+          elif [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+           npm ci
+          else
+           npm install
+          fi
+        - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+    build:
+      commands:
+        - if [ "${AWS_BRANCH}" = "master" ]; then expo build:web --release-channel default; fi
+        - if [ "${AWS_BRANCH}" = "staging" ]; then expo build:web --release-channel staging; fi
+        - if [ "${AWS_BRANCH}" = "amplify-automation" ]; then expo build:web --release-channel amplify-automation; fi
+  artifacts:
+    baseDirectory: web-build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - $(npm root --global)/**/*
