@@ -1,15 +1,8 @@
-import { API, Auth, graphqlOperation } from 'aws-amplify';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { Button, StyleSheet, TextInput } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
-import { createTodo } from '../src/graphql/mutations';
-import { listTodos } from '../src/graphql/queries'
-
-// const initialState = { name: '', description: '' }
-
 
 
 export default function EventFeedScreen() {
