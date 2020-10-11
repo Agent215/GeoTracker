@@ -10,7 +10,6 @@ import { listTodos } from '../src/graphql/queries'
 import { Image, ScrollView } from 'react-native';
 import { Card, ListItem, Icon } from 'react-native-elements'
 
-// const initialState = { name: '', description: '' }
 
 
 
