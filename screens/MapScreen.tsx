@@ -89,10 +89,6 @@ const MapScreen = props => {
       >
 
 
-       <Marker coordinate={{ latitude: 40.050809, longitude: -75.049976 }}>
-               {/* <CustomMarker />  */}
-              
-            </Marker> 
       </MapView> 
 
       <GooglePlacesAutocomplete
