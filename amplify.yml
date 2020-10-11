@@ -26,6 +26,7 @@ frontend:
         - if [ "${AWS_BRANCH}" = "master" ]; then expo build:android -t apk --no-wait --release-channel default; fi
         - if [ "${AWS_BRANCH}" = "staging" ]; then expo build:android -t apk --no-wait --release-channel staging; fi
         - mkdir build
+        - echo "# Hello World" >> build/index.html
   artifacts:
     baseDirectory: build
     files:
