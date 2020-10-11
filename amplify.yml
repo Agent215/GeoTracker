@@ -23,8 +23,14 @@ frontend:
         - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
     build:
       commands:
-        - if [ "${AWS_BRANCH}" = "master" ]; then expo build:android -t apk --no-wait --release-channel default; fi
-        - if [ "${AWS_BRANCH}" = "staging" ]; then expo build:android -t apk --no-wait --release-channel staging; fi
+        - |-
+          if [ "${AWS_BRANCH}" = "master" ]; then
+           expo build:android -t apk --no-wait --release-channel default
+          elif  "${AWS_BRANCH}" = "staging" ]; then
+           expo build:android -t apk --no-wait --release-channel staging
+          else
+           expo build:android -t apk --no-wait --release-channel "${AWS_BRANCH}"
+          fi
         - mkdir build
         - echo "# Hello World" >> build/index.html
   artifacts:
