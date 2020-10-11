@@ -24,9 +24,8 @@ frontend:
     build:
       commands:
         - expo build:web
-        - if [ "${AWS_BRANCH}" = "master" ]; then expo publish --release-channel default; fi
-        - if [ "${AWS_BRANCH}" = "staging" ]; then expo publish --release-channel staging; fi
-        - if [ "${AWS_BRANCH}" = "amplify-automation" ]; then expo publish --release-channel amplify-automation; fi
+        - if [ "${AWS_BRANCH}" = "master" ]; then expo build:android -t apk --no-wait --release-channel default; fi
+        - if [ "${AWS_BRANCH}" = "staging" ]; then expo build:android -t apk --no-wait --release-channel staging; fi
   artifacts:
     baseDirectory: web-build
     files:
