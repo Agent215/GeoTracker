@@ -23,9 +23,10 @@ frontend:
         - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
     build:
       commands:
-        - if [ "${AWS_BRANCH}" = "master" ]; then expo build:web --release-channel default; fi
-        - if [ "${AWS_BRANCH}" = "staging" ]; then expo build:web --release-channel staging; fi
-        - if [ "${AWS_BRANCH}" = "amplify-automation" ]; then expo build:web --release-channel amplify-automation; fi
+        - expo build:web
+        - if [ "${AWS_BRANCH}" = "master" ]; then expo publish --release-channel default; fi
+        - if [ "${AWS_BRANCH}" = "staging" ]; then expo publish --release-channel staging; fi
+        - if [ "${AWS_BRANCH}" = "amplify-automation" ]; then expo publish --release-channel amplify-automation; fi
   artifacts:
     baseDirectory: web-build
     files:
