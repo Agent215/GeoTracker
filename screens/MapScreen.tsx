@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Dimensions, Text } from 'react-native';
 import { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+
 import MapView from "react-native-map-clustering";
 
 import { View } from '../components/Themed';

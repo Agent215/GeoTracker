@@ -1,8 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import Amplify from 'aws-amplify'
 import config from './aws-exports'
-Amplify.configure(config)
-
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  },
+});
 import React, { useEffect, useState } from 'react'
 
 
