@@ -25,6 +25,7 @@
     "android": {
       "package": "com.temple.geotracker",
       "versionCode": 1
-    }
+    },
+    "scheme": "geotracker"
   }
 }
