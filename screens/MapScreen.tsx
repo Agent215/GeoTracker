@@ -92,7 +92,7 @@ const MapScreen = props => {
 
       </MapView> 
 
-      <GooglePlacesAutocomplete
+      <GooglePlacesAutocomplete      
         placeholder='Enter Location'
         query={{
           key: GOOGLE_PLACES_API_KEY,
@@ -178,12 +178,16 @@ const searchStyles = StyleSheet.create(
       height: 38,
       color: "#5d5d5d",
       zIndex: 6,
-      fontSize: 20,
+      fontSize: 18,
       width: SCREEN_WIDTH
     },
     predefinedPlacesDescription: {
       zIndex: 6,
       color: "#1faadb",
+      width: SCREEN_WIDTH
+    },
+    row:{
+      // backgroundColor:"#a09fa3",
       width: SCREEN_WIDTH
     },
   }
