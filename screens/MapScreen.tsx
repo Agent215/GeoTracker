@@ -82,14 +82,15 @@ const MapScreen = props => {
         style={styles.mapStyle}
         mapType="hybrid"
         provider={PROVIDER_GOOGLE}
-        showsUserLocation
-        showsMyLocationButton
+        showsUserLocation={true}
+        showsMyLocationButton={true}
         rotateEnabled={false}
         showsTraffic={false}
         toolbarEnabled={true}
+        zoomEnabled={true}
+        zoomControlEnabled={true}
+        loadingEnabled={true}
       >
-
-
       </MapView> 
 
       <GooglePlacesAutocomplete      
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     zIndex: -1,
     position: 'absolute',
-    top: 0,
+    top: 30,
     left: 0,
     right: 0,
     bottom: 0
@@ -162,7 +163,9 @@ const searchStyles = StyleSheet.create(
     container: {
       flex: 1,
       zIndex: 6,
-      width: SCREEN_WIDTH
+      width: SCREEN_WIDTH,
+      top: 0,
+      position:'absolute'
     },
     textInputContainer: {
       backgroundColor: "rgba(0,0,0,0)",
