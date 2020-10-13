@@ -1,29 +1,33 @@
 import { API, Auth, graphqlOperation } from 'aws-amplify';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Button, StyleSheet, TextInput } from 'react-native';
+import {StyleSheet, Image, ScrollView, Button, TextInput, View } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
-import { createTodo } from '../src/graphql/mutations';
-import { listTodos } from '../src/graphql/queries'
-import { Image, ScrollView } from 'react-native';
-import { Card, ListItem, Icon } from 'react-native-elements'
+import { Text, } from '../components/Themed';
+import { Container, Header, Content, Card, CardItem, Body} from 'native-base';
+import { ListItem, Icon, } from 'react-native-elements'
+import DisasterCard from '../components/DisasterCard';
 
 
+const disasters = [
+  {
+     name: 'Hurricane',
+     //avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
+  },
+  {
+     name: 'Wild Fire',
+  }  
+ ]
 
 
 export default function EventFeedScreen() {
   return (
     
-    <View style={styles.container}>
+    <View style={StyleSheet.card}>
       <ScrollView>
         <Text style={{ fontSize: 96 }}>Demo 1</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
+        <DisasterCard />
         <Text style={{ fontSize: 60 }}>Try and scroll!</Text>
         <Image source={logo} />
         <Image source={logo} />
