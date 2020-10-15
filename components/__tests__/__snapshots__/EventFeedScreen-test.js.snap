@@ -1,0 +1,273 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventFeedScreen renders correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#fff",
+      },
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      },
+    ]
+  }
+>
+  <RCTScrollView>
+    <View>
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#000",
+            },
+            Object {
+              "fontSize": 96,
+            },
+          ]
+        }
+      >
+        Demo 1
+      </Text>
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#000",
+            },
+            Object {
+              "fontSize": 60,
+            },
+          ]
+        }
+      >
+        Try and scroll!
+      </Text>
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#000",
+            },
+            Object {
+              "fontSize": 60,
+            },
+          ]
+        }
+      >
+        Scroll down
+      </Text>
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#000",
+            },
+            Object {
+              "fontSize": 60,
+            },
+          ]
+        }
+      >
+        Scroll down
+      </Text>
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Image
+        source={
+          Object {
+            "height": 64,
+            "uri": "https://reactnative.dev/img/tiny_logo.png",
+            "width": 64,
+          }
+        }
+      />
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#000",
+            },
+            Object {
+              "fontSize": 60,
+            },
+          ]
+        }
+      >
+        Scroll back up!
+      </Text>
+    </View>
+  </RCTScrollView>
+</View>
+`;

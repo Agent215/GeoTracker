@@ -1,21 +1,19 @@
-import { API, Auth, graphqlOperation } from 'aws-amplify';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { Button, StyleSheet, TextInput } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
+import * as React from 'react';
+
+import { StyleSheet } from 'react-native';
+
 import { Text, View } from '../components/Themed';
-import { createTodo } from '../src/graphql/mutations';
-import { listTodos } from '../src/graphql/queries'
+
 import { Image, ScrollView } from 'react-native';
-import { Card, ListItem, Icon } from 'react-native-elements'
+
 
 
 
 
 export default function EventFeedScreen() {
   return (
-    
+
     <View style={styles.container}>
       <ScrollView>
         <Text style={{ fontSize: 96 }}>Demo 1</Text>
