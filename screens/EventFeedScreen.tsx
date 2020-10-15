@@ -10,42 +10,17 @@ import { ListItem, Icon, } from 'react-native-elements'
 import DisasterCard from '../components/DisasterCard';
 
 
-const disasters = [
-  {
-     name: 'Hurricane',
-     //avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-  },
-  {
-     name: 'Wild Fire',
-  }  
- ]
-
-
-export default function EventFeedScreen() {
+export default function EventFeedScreen(Disasters) {
   return (
     
-    <View style={StyleSheet.card}>
+    <View>
       <ScrollView>
         <Text style={{ fontSize: 96 }}>Demo 1</Text>
         <DisasterCard />
-        <Text style={{ fontSize: 60 }}>Try and scroll!</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Scroll down</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Scroll down</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
+        <DisasterCard />
+        <DisasterCard />
+        <DisasterCard />
+        <DisasterCard />
         <Text style={{ fontSize: 60 }}>Scroll back up!</Text>
       </ScrollView>
     </View>

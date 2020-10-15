@@ -24,6 +24,7 @@
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+    "react-native-easy-grid": "^0.2.2",
     "react-native-geocoding": "^0.4.0",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-places-autocomplete": "^2.0.2",
