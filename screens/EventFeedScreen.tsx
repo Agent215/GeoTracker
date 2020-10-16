@@ -8,30 +8,30 @@ import { Text, } from '../components/Themed';
 import { Container, Header, Content, Card, CardItem, Body} from 'native-base';
 import { ListItem, Icon, } from 'react-native-elements'
 import DisasterCard from '../components/DisasterCard';
+import {event1, event2, event3, event4, event5} from '../assets/Mocked_Data';
 
-
-export default function EventFeedScreen(Disasters) {
+export default function EventFeedScreen() {
   return (
     
     <View>
       <ScrollView>
         <Text style={{ fontSize: 96 }}>Demo 1</Text>
-        <DisasterCard />
-        <DisasterCard />
-        <DisasterCard />
-        <DisasterCard />
-        <DisasterCard />
+        <DisasterCard 
+          event = {event1}/>
+        <DisasterCard 
+          event = {event2}/>
+        <DisasterCard 
+          event = {event3}/>
+        <DisasterCard 
+          event = {event4}/>
+        <DisasterCard 
+          event = {event5}/>
         <Text style={{ fontSize: 60 }}>Scroll back up!</Text>
       </ScrollView>
     </View>
   );
 }
 
-const logo = {
-  uri: 'https://reactnative.dev/img/tiny_logo.png',
-  width: 64,
-  height: 64
-};
 
 const styles = StyleSheet.create({
   container: {

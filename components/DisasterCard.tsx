@@ -6,17 +6,15 @@ import { Icon } from 'react-native-elements'
 
 
 
-const DisasterCard = (event) => {
-  console.log(event.title);
-  console.log(event.description);
+const DisasterCard = (props) => {
   return (
     <Card>
       <CardItem header bordered>
         <Grid>
           <Col size={2}>
             <Text>
-              {event.title}
-                  </Text>
+              {props.event.title}
+            </Text>
           </Col>
           <Col>
             <Icon
@@ -25,7 +23,9 @@ const DisasterCard = (event) => {
         </Grid>
       </CardItem>
       <Body>
-        {event.description}
+        <Text>
+        {props.event.description}
+        </Text>
       </Body>
       <CardItem footer bordered>
         <Col>
