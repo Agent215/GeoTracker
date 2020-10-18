@@ -7,7 +7,7 @@ import MapView from "react-native-map-clustering";
 import { View } from "../components/Themed";
 import { IconButton, Colors } from "react-native-paper";
 
-import Constants from "expo-constants";
+import { events } from '../assets/Mocked_Data'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -53,7 +53,7 @@ const MapScreen = (props) => {
       (error) =>
         console.log(
           "MapScreen.tsx/animateToUser() - Got error from navigator.geolocation.getCurrentPosition: " +
-            error
+          error
         )
     );
   };
@@ -64,7 +64,7 @@ const MapScreen = (props) => {
   }, []);
 
 
-  
+
   return (
     <View style={styles.container}>
       <MapView
@@ -81,7 +81,20 @@ const MapScreen = (props) => {
         zoomEnabled={true}
         zoomControlEnabled={true}
         loadingEnabled={true}
-      ></MapView>
+      >
+        {events.map((marker, index) => (
+
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: marker.LatL,
+              longitude: marker.LongL
+            }}
+            title={marker.title}
+            description={marker.description}
+          />
+        ))}
+      </MapView>
 
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
@@ -113,15 +126,15 @@ const MapScreen = (props) => {
         textInputProps={{ clearButtonMode: "always" }}
       />
 
-        {/*current location button that shows on bottom right of the map */}
+      {/*current location button that shows on bottom right of the map */}
       <IconButton
         // icon={require('../assets/locationG-Icon.png')}
         // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
-        icon ="crosshairs-gps"       
+        icon="crosshairs-gps"
         style={locationIcon.container}
         color={Colors.blue600}
         size={50}
-        onPress={() =>{ animateToUser();}}
+        onPress={() => { animateToUser(); }}
       />
     </View>
   );
@@ -199,8 +212,8 @@ const searchStyles = StyleSheet.create({
 const locationIcon = StyleSheet.create({
   container: {
     position: "absolute",
-    right:0,
-    bottom:0,
+    right: 0,
+    bottom: 0,
   },
 });
 
