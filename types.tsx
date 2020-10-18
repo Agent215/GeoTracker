@@ -20,8 +20,3 @@ export type MapScreenParamList = {
 export type SettingsScreenParamList = {
   SettingsScreen: undefined;
 };
-
-export type withAuthenticator = {
-
-  withAuthenticator: undefined;
-}

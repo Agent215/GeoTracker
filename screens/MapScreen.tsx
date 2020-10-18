@@ -32,7 +32,7 @@ const INITIALREGION = {
 };
 
 const MapScreen = (props) => {
- 
+  let mapRef = useRef(MapView.prototype);
   /*
   animateToUser 
   */
@@ -82,7 +82,7 @@ const MapScreen = (props) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-      
+
 
       </MapView>
 
