@@ -1,11 +1,9 @@
 import React, { Component, useState, createContext } from "react";
 import { Container, Header, Content, Card, CardItem, Text, Body, Footer } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Icon } from 'react-native-elements'
-
-
-
+import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
+// DisasterCard holds the layout to each feed card.
+// The Card uses <Grid> to space objects out in header, and footer. 2/3 of header is description 1/3 is icon
 const DisasterCard = (props) => {
   return (
     <Card>
@@ -13,18 +11,17 @@ const DisasterCard = (props) => {
         <Grid>
           <Col size={2}>
             <Text>
-              {props.event.title}
+              {props.event.description}
             </Text>
           </Col>
           <Col>
-            <Icon
-              name='rowing' />
+            <Image source={require('../assets/Icons/Iceberg.png')} />
           </Col>
         </Grid>
       </CardItem>
       <Body>
         <Text>
-        {props.event.description}
+          {props.event.title}
         </Text>
       </Body>
       <CardItem footer bordered>
