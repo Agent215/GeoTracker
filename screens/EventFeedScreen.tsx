@@ -1,56 +1,34 @@
 
 import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Image, ScrollView, Button, TextInput, View } from 'react-native';
 
-import { StyleSheet } from 'react-native';
-
-import { Text, View } from '../components/Themed';
-
-import { Image, ScrollView } from 'react-native';
-
-
-
-
+import EditScreenInfo from '../components/EditScreenInfo';
+import { Text, } from '../components/Themed';
+import { Container, Header, Content, Card, CardItem, Body } from 'native-base';
+import { ListItem, Icon, } from 'react-native-elements'
+import DisasterCard from '../components/DisasterCard';
+import { events } from '../assets/Mocked_Data';
 
 export default function EventFeedScreen() {
+
+
   return (
 
-    <View style={styles.container}>
-      <ScrollView>
-        <Text style={{ fontSize: 96 }}>Demo 1</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Try and scroll!</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Scroll down</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Scroll down</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Scroll back up!</Text>
-      </ScrollView>
-    </View>
+
+    <ScrollView>
+      <View>
+        {events.map(function (data ,index) {
+          { console.log("event " + data.title) }
+          return (<DisasterCard
+            event={data} />)
+        })}
+        
+      </View>
+    </ScrollView>
   );
 }
 
-const logo = {
-  uri: 'https://reactnative.dev/img/tiny_logo.png',
-  width: 64,
-  height: 64
-};
 
 const styles = StyleSheet.create({
   container: {

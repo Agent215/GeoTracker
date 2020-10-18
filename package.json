@@ -11,7 +11,7 @@
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|@codler|react-native-keyboard-aware-scroll-view|listenToKeyboardEvents|sentry-expo|native-base|@sentry/.*)"
     ]
   },
   "dependencies": {
@@ -27,9 +27,11 @@
     "expo-status-bar": "^1.0.2",
     "expo-web-browser": "~8.3.1",
     "ionicons": "^5.2.3",
+    "native-base": "^2.13.14",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+    "react-native-easy-grid": "^0.2.2",
     "react-native-geocoding": "^0.4.0",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-places-autocomplete": "^2.0.2",
