@@ -32,12 +32,7 @@ const INITIALREGION = {
 };
 
 const MapScreen = (props) => {
-  let mapRef = useRef(MapView.prototype);
-  //let tileUrl = "https://api.climacell.co/v3/weather/layers/temp/now/{z}/{x}/{y}.png?apikey=mU2w12US9sAUfDSQ1iQUXWhZtMks9oI7";
-  //let tileUrl = "https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b";
-  //let tileUrl = "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/AIRS_L3_Surface_Skin_Temperature_Monthly_Night/default/2014-04-09/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png";
-  let tileUrl = "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/IMERG_Precipitation_Rate/default/2020-10-16/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png";
-  //let tileUrl = ""
+ 
   /*
   animateToUser 
   */
@@ -87,28 +82,7 @@ const MapScreen = (props) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-        <View
-          style={{ opacity: 0.01 }}>
-          <UrlTile
-
-            style={{ opacity: 0.01 }}
-            /**
-             * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
-             * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
-             */
-            urlTemplate={tileUrl}
-            /**
-             * The maximum zoom level for this tile overlay. Corresponds to the maximumZ setting in
-             * MKTileOverlay. iOS only.
-             */
-            maximumZ={19}
-            /**
-             * flipY allows tiles with inverted y coordinates (origin at bottom left of map)
-             * to be used. Its default value is false.
-             */
-            flipY={false}
-          />
-        </View>
+      
 
       </MapView>
 
