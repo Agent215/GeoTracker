@@ -6,7 +6,7 @@ import { Text, View } from '../components/Themed';
 import { withAuthenticator } from 'aws-amplify-react-native'
 
 
-async function signOut() {
+export async function signOut() {
   try {
     await Auth.signOut();
   } catch (error) {

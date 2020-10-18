@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { StyleSheet, Dimensions, Text } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
-import MapView from "react-native-map-clustering";
+import MapView, { UrlTile } from "react-native-maps";
+
 
 import { View } from "../components/Themed";
 import { IconButton, Colors } from "react-native-paper";
@@ -32,7 +33,11 @@ const INITIALREGION = {
 
 const MapScreen = (props) => {
   let mapRef = useRef(MapView.prototype);
-
+  //let tileUrl = "https://api.climacell.co/v3/weather/layers/temp/now/{z}/{x}/{y}.png?apikey=mU2w12US9sAUfDSQ1iQUXWhZtMks9oI7";
+  //let tileUrl = "https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b";
+  //let tileUrl = "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/AIRS_L3_Surface_Skin_Temperature_Monthly_Night/default/2014-04-09/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png";
+  let tileUrl = "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/IMERG_Precipitation_Rate/default/2020-10-16/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png";
+  //let tileUrl = ""
   /*
   animateToUser 
   */
@@ -53,7 +58,7 @@ const MapScreen = (props) => {
       (error) =>
         console.log(
           "MapScreen.tsx/animateToUser() - Got error from navigator.geolocation.getCurrentPosition: " +
-            error
+          error
         )
     );
   };
@@ -64,7 +69,7 @@ const MapScreen = (props) => {
   }, []);
 
 
-  
+
   return (
     <View style={styles.container}>
       <MapView
@@ -81,7 +86,31 @@ const MapScreen = (props) => {
         zoomEnabled={true}
         zoomControlEnabled={true}
         loadingEnabled={true}
-      ></MapView>
+      >
+        <View
+          style={{ opacity: 0.01 }}>
+          <UrlTile
+
+            style={{ opacity: 0.01 }}
+            /**
+             * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
+             * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
+             */
+            urlTemplate={tileUrl}
+            /**
+             * The maximum zoom level for this tile overlay. Corresponds to the maximumZ setting in
+             * MKTileOverlay. iOS only.
+             */
+            maximumZ={19}
+            /**
+             * flipY allows tiles with inverted y coordinates (origin at bottom left of map)
+             * to be used. Its default value is false.
+             */
+            flipY={false}
+          />
+        </View>
+
+      </MapView>
 
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
@@ -113,15 +142,15 @@ const MapScreen = (props) => {
         textInputProps={{ clearButtonMode: "always" }}
       />
 
-        {/*current location button that shows on bottom right of the map */}
+      {/*current location button that shows on bottom right of the map */}
       <IconButton
         // icon={require('../assets/locationG-Icon.png')}
         // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
-        icon ="crosshairs-gps"       
+        icon="crosshairs-gps"
         style={locationIcon.container}
         color={Colors.blue600}
         size={50}
-        onPress={() =>{ animateToUser();}}
+        onPress={() => { animateToUser(); }}
       />
     </View>
   );
@@ -199,8 +228,8 @@ const searchStyles = StyleSheet.create({
 const locationIcon = StyleSheet.create({
   container: {
     position: "absolute",
-    right:0,
-    bottom:0,
+    right: 0,
+    bottom: 0,
   },
 });
 
