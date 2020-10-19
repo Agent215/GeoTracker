@@ -21,6 +21,7 @@ export default function EventFeedScreen() {
         {events.map(function (data ,index) {
           { console.log("event " + data.title) }
           return (<DisasterCard
+            key = {index}
             event={data} />)
         })}
         
