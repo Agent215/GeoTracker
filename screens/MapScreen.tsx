@@ -11,6 +11,8 @@ import { events } from '../assets/Mocked_Data'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
+import DisasterPin from '../components/CustomMarker';
+
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
@@ -92,7 +94,12 @@ const MapScreen = (props) => {
             }}
             title={marker.title}
             description={marker.description}
-          />
+          >
+            <DisasterPin
+              size={50}
+              category={marker.description}
+            />
+          </Marker>
         ))}
       </MapView>
 

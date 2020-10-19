@@ -18,9 +18,10 @@ export default function EventFeedScreen() {
 
     <ScrollView>
       <View>
-        {events.map(function (data) {
+        {events.map(function (data, index) {
           { console.log("event " + data.title) }
           return (<DisasterCard
+            key = {index}
             event={data} />)
         })}
         
