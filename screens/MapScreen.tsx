@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, Dimensions, Text } from "react-native";
+import React, { useRef, useEffect } from "react";
+import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
 import MapView from "react-native-map-clustering";
@@ -48,7 +48,7 @@ const MapScreen = (props) => {
           longitudeDelta: LONGITUDE_DELTA,
         };
         console.log(
-          "MapScreen.js/animateToUser - Getting User Coords : " + coords
+          "MapScreen.tsx/animateToUser - Getting User Coords : " + coords
         );
         mapRef.current.animateToRegion(coords, 0); // why does my linter give me red squiglly lines, yet this runs...
       },
