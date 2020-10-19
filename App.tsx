@@ -16,9 +16,6 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 
-const initialState = { name: '', description: '' }
-
-
 const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();

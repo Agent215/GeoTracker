@@ -1,4 +1,4 @@
-import { API, Auth, graphqlOperation } from 'aws-amplify';
+
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Image, ScrollView, Button, TextInput, View } from 'react-native';
@@ -18,9 +18,9 @@ export default function EventFeedScreen() {
 
     <ScrollView>
       <View>
-        {events.map(function (data) {
-          { console.log("event " + data.title) }
+        {events.map(function (data ,index) {
           return (<DisasterCard
+            key = {index}
             event={data} />)
         })}
         

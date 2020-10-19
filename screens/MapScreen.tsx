@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { StyleSheet, Dimensions, Text } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
-import MapView from "react-native-map-clustering";
+import MapView, { UrlTile } from "react-native-maps";
+
 
 import { View } from "../components/Themed";
 import { IconButton, Colors } from "react-native-paper";
@@ -32,7 +33,6 @@ const INITIALREGION = {
 
 const MapScreen = (props) => {
   let mapRef = useRef(MapView.prototype);
-
   /*
   animateToUser 
   */
@@ -53,7 +53,7 @@ const MapScreen = (props) => {
       (error) =>
         console.log(
           "MapScreen.tsx/animateToUser() - Got error from navigator.geolocation.getCurrentPosition: " +
-            error
+          error
         )
     );
   };
@@ -64,7 +64,7 @@ const MapScreen = (props) => {
   }, []);
 
 
-  
+
   return (
     <View style={styles.container}>
       <MapView
@@ -81,7 +81,10 @@ const MapScreen = (props) => {
         zoomEnabled={true}
         zoomControlEnabled={true}
         loadingEnabled={true}
-      ></MapView>
+      >
+
+
+      </MapView>
 
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
@@ -113,15 +116,15 @@ const MapScreen = (props) => {
         textInputProps={{ clearButtonMode: "always" }}
       />
 
-        {/*current location button that shows on bottom right of the map */}
+      {/*current location button that shows on bottom right of the map */}
       <IconButton
         // icon={require('../assets/locationG-Icon.png')}
         // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
-        icon ="crosshairs-gps"       
+        icon="crosshairs-gps"
         style={locationIcon.container}
         color={Colors.blue600}
         size={50}
-        onPress={() =>{ animateToUser();}}
+        onPress={() => { animateToUser(); }}
       />
     </View>
   );
@@ -199,8 +202,8 @@ const searchStyles = StyleSheet.create({
 const locationIcon = StyleSheet.create({
   container: {
     position: "absolute",
-    right:0,
-    bottom:0,
+    right: 0,
+    bottom: 0,
   },
 });
 
