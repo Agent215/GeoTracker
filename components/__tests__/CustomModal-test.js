@@ -1,8 +1,10 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
-
 import CustomModal from '../../components/CustomModal';
+import * as enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
+enzyme.configure({ adapter: new Adapter() });
 // mock of a prop to pass CustomModal
 const mockProp = { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, icon: '../assets/Icons/Draught.png' };
 
@@ -22,3 +24,18 @@ it(`DisasterCard should not be null`, () => {
 
     expect(tree).toBeTruthy();
 });
+
+/**
+ * try and press all buttons in
+ */
+
+it('calls actions as expected when pressing buttons', () => {
+    const wrapper = shallow(
+        <CustomModal event={mockProp} />
+    );
+    const render = wrapper.dive();
+    render.find('TouchableOpacity').forEach(child => {
+        child.simulate('press');
+    });
+});
+
