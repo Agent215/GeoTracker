@@ -1,18 +1,16 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { StyleSheet, Dimensions } from "react-native";
-import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-
+import { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import MapView from "react-native-map-clustering";
-
-
-import { View } from "../components/Themed";
-import { IconButton, Colors } from "react-native-paper";
-
-import { events } from '../assets/Mocked_Data'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { IconButton, Colors, Switch } from "react-native-paper";
+
+import { View, Text } from "../components/Themed";
+import { events } from '../assets/Mocked_Data'
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
 import DisasterPin from '../components/CustomMarker';
+import CustomModal from '../components/CustomModal'
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -35,6 +33,36 @@ const INITIALREGION = {
 
 const MapScreen = (props) => {
   let mapRef = useRef(MapView.prototype);
+
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [mapMode, setMapMode] = useState("hybrid")
+  const [toggleMap, setToggleMap] = useState(false)
+  const [selectedDisaster, setSelectedDisaster] = useState(
+    {
+      title: '',
+      id: 0,
+      description: '',
+      LatL: 0,
+      LongL: 0,
+      icon: '',
+      date: ''
+    }
+  );
+
+  const toggleMapMode = () => {
+
+    if (!toggleMap) { setMapMode("standard"); setToggleMap(true); }
+    else { setMapMode("hybrid"); setToggleMap(false); }
+
+  }
+
+  /**
+   * Toggle disaster modal
+   */
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   /*
   animateToUser 
   */
@@ -73,7 +101,7 @@ const MapScreen = (props) => {
         ref={mapRef}
         initialRegion={INITIALREGION}
         style={styles.mapStyle}
-        mapType="hybrid"
+        mapType={mapMode}  // typescript error i think we can fix by going to index.d.ts and changing maptype to string
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
         showsMyLocationButton={true}
@@ -84,16 +112,17 @@ const MapScreen = (props) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-        {events.map((marker, index) => (
+        {events.map((marker) => (
 
           <Marker
-            key={index}
+            key={marker.id}
             coordinate={{
               latitude: marker.LatL,
               longitude: marker.LongL
             }}
             title={marker.title}
             description={marker.description}
+            onPress={() => { toggleModal(); setSelectedDisaster(marker) }}
           >
             <DisasterPin
               size={50}
@@ -102,7 +131,11 @@ const MapScreen = (props) => {
           </Marker>
         ))}
       </MapView>
-
+      <CustomModal
+        title={selectedDisaster.title}
+        visable={isModalVisible}
+        toggleModal={toggleModal}
+      />
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
         query={{
@@ -134,6 +167,7 @@ const MapScreen = (props) => {
       />
 
       {/*current location button that shows on bottom right of the map */}
+
       <IconButton
         // icon={require('../assets/locationG-Icon.png')}
         // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
@@ -143,6 +177,9 @@ const MapScreen = (props) => {
         size={50}
         onPress={() => { animateToUser(); }}
       />
+
+
+      <Switch value={toggleMap} onValueChange={toggleMapMode} />
     </View>
   );
 };
@@ -171,6 +208,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  plainView: {
+    flex: 1,
+    width: 'auto',
+    backgroundColor: '#107B67'
+
   },
 });
 
