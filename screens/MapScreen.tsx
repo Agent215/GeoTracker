@@ -1,17 +1,19 @@
-import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, Dimensions, Text } from "react-native";
+import React, { useRef, useEffect } from "react";
+import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
-import MapView, { UrlTile } from "react-native-maps";
+import MapView from "react-native-map-clustering";
 
 
 import { View } from "../components/Themed";
 import { IconButton, Colors } from "react-native-paper";
 
-import Constants from "expo-constants";
+import { events } from '../assets/Mocked_Data'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
+import DisasterPin from '../components/CustomMarker';
+
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
@@ -46,7 +48,7 @@ const MapScreen = (props) => {
           longitudeDelta: LONGITUDE_DELTA,
         };
         console.log(
-          "MapScreen.js/animateToUser - Getting User Coords : " + coords
+          "MapScreen.tsx/animateToUser - Getting User Coords : " + coords
         );
         mapRef.current.animateToRegion(coords, 0); // why does my linter give me red squiglly lines, yet this runs...
       },
@@ -82,8 +84,23 @@ const MapScreen = (props) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
+        {events.map((marker, index) => (
 
-
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: marker.LatL,
+              longitude: marker.LongL
+            }}
+            title={marker.title}
+            description={marker.description}
+          >
+            <DisasterPin
+              size={50}
+              category={marker.description}
+            />
+          </Marker>
+        ))}
       </MapView>
 
       <GooglePlacesAutocomplete

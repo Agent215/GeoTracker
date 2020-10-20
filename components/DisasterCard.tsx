@@ -1,7 +1,7 @@
-import React, { Component, useState, createContext } from "react";
-import { Container, Header, Content, Card, CardItem, Text, Body, Footer } from "native-base";
-import { Col, Row, Grid } from "react-native-easy-grid";
-import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
+import React from "react";
+import { Card, CardItem, Text, Body } from "native-base";
+import { Col, Grid } from "react-native-easy-grid";
+import { StyleSheet, TouchableOpacity, Image } from "react-native";
 // DisasterCard holds the layout to each feed card.
 // The Card uses <Grid> to space objects out in header, and footer. 2/3 of header is description 1/3 is icon
 const DisasterCard = (props) => {
