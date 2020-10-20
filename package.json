@@ -5,11 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject",
-    "test": "jest --watchAll"
-  },
-  "jest": {
-    "preset": "jest-expo"
+    "eject": "expo eject"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
@@ -20,10 +16,7 @@
     "@types/node-geocoder": "^3.24.1",
     "aws-amplify": "^3.3.1",
     "aws-amplify-react-native": "^4.2.6",
-    "expo": "~39.0.2",
-    "expo-asset": "~8.2.0",
-    "expo-constants": "~9.2.0",
-    "expo-linking": "^1.0.1",
+    "expo": "~38.0.8",
     "expo-status-bar": "^1.0.2",
     "expo-web-browser": "~8.3.1",
     "ionicons": "^5.2.3",
@@ -39,7 +32,7 @@
     "react-native-maps": "0.27.1",
     "react-native-paper": "^4.2.0",
     "react-native-screens": "~2.9.0",
-    "react-native-svg": "12.1.0",
+    "react-native-svg": "^12.1.0",
     "react-native-svg-transformer": "^0.14.3",
     "react-native-web": "~0.11.7"
   },
