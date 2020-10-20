@@ -10,10 +10,9 @@ export default function EventFeedScreen() {
 
     <ScrollView>
       <View>
-        {events.map(function (data, index) {
-          { console.log("EventFeedScreen.tsx - Creating DisasterCard  " + data.title) }
+        {events.map(function (data ,index) {
           return (<DisasterCard
-            key={index}
+            key = {index}
             event={data} />)
         })}
 

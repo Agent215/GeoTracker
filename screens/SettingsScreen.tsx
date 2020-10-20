@@ -1,12 +1,11 @@
 import { Auth } from 'aws-amplify';
 import * as React from 'react';
 import { Button, StyleSheet, TextInput } from 'react-native';
-
-import { Text, View } from '../components/Themed';
 import { withAuthenticator } from 'aws-amplify-react-native'
+import { Text, View } from '../components/Themed';
 
 
-async function signOut() {
+export async function signOut() {
   try {
     await Auth.signOut();
   } catch (error) {

@@ -2,7 +2,8 @@ import React, { useRef, useEffect } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
-import MapView from "react-native-map-clustering";
+import MapView, { UrlTile } from "react-native-maps";
+
 
 import { View } from "../components/Themed";
 import { IconButton, Colors } from "react-native-paper";
@@ -34,7 +35,6 @@ const INITIALREGION = {
 
 const MapScreen = (props) => {
   let mapRef = useRef(MapView.prototype);
-
   /*
   animateToUser 
   */
