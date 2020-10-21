@@ -21,6 +21,13 @@ export default function BottomTabNavigator() {
       initialRouteName="Map"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
+        name="Filter"
+        component={FilterScreenNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-funnel" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
         name="Feed"
         component={EventFeedNavigator}
         options={{
@@ -32,13 +39,6 @@ export default function BottomTabNavigator() {
         component={MapScreenNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="md-map" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Filter"
-        component={FilterScreenNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="md-pizza" color={color} />,
         }}
       />
       <BottomTab.Screen
