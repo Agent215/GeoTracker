@@ -7,6 +7,7 @@ export type BottomTabParamList = {
   Feed: undefined;
   Map: undefined;
   Settings: undefined;
+  Filter: undefined;
 };
 
 export type EventScreenParamList = {
@@ -20,3 +21,7 @@ export type MapScreenParamList = {
 export type SettingsScreenParamList = {
   SettingsScreen: undefined;
 };
+
+export type FilterScreenParamList = {
+  FilterScreen: undefined;
+}

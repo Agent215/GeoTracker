@@ -16,6 +16,11 @@ export default {
               MapScreen: 'map',
             },
           },
+          Filters: {
+            Screens: {
+              FilterScreen: 'filters'
+            },
+          },
           Settings: {
             screens: {
               SettingsScreen: 'settings',

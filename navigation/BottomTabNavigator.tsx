@@ -8,7 +8,8 @@ import useColorScheme from '../hooks/useColorScheme';
 import EventFeedScreen from '../screens/EventFeedScreen';
 import MapScreen from '../screens/MapScreen';
 import SettingsScreen from '../screens/SettingsScreen'
-import { BottomTabParamList, EventScreenParamList, MapScreenParamList, SettingsScreenParamList } from '../types';
+import FilterScreen from '../screens/FilterScreen'
+import { BottomTabParamList, EventScreenParamList, FilterScreenParamList, MapScreenParamList, SettingsScreenParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -31,6 +32,13 @@ export default function BottomTabNavigator() {
         component={MapScreenNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="md-map" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Filter"
+        component={FilterScreenNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-pizza" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -91,5 +99,19 @@ function SettingsScreenNavigator() {
         options={{ headerTitle: 'Settings Screen Title' }}
       />
     </SettingsStack.Navigator>
+  );
+}
+
+const FilterStack = createStackNavigator<FilterScreenParamList>();
+
+function FilterScreenNavigator() {
+  return (
+    <FilterStack.Navigator>
+      <FilterStack.Screen
+        name="FilterScreen"
+        component={FilterScreen}
+        options={{ headerTitle: 'Filter Screen Title' }}
+      />
+    </FilterStack.Navigator>
   );
 }
