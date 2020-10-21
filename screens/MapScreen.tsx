@@ -4,6 +4,7 @@ import { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
+import { useDispatch, useSelector } from 'react-redux';
 
 import { View, Text } from "../components/Themed";
 import { events } from '../assets/Mocked_Data'
@@ -11,11 +12,12 @@ import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
 import DisasterPin from '../components/CustomMarker';
 import CustomModal from '../components/CustomModal'
-
+import * as actions from '../store/actions/actions';
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
 Geocoder.init(Keys.geocoderKey, { language: "en" }); // use a valid API key
+
 
 const LATITUDE_DELTA = 0.0922;
 const { width, height } = Dimensions.get("window");
@@ -23,31 +25,38 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const INITIALREGION = {
-  // this is philly for now, we can change this to whatever
-  latitude: 39.9526,
-  longitude: -75.16522,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
 
 const MapScreen = (props) => {
+
+  const dispatch = useDispatch();
+  const currentDisaster = useSelector(state => state.disaster.currentDisaster);
+  console.log("Mapscreen.tsx - current disaster " + currentDisaster.title);
   let mapRef = useRef(MapView.prototype);
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid")
   const [toggleMap, setToggleMap] = useState(false)
-  const [selectedDisaster, setSelectedDisaster] = useState(
-    {
-      title: '',
-      id: 0,
-      description: '',
-      LatL: 0,
-      LongL: 0,
-      icon: '',
-      date: ''
-    }
-  );
+
+  if (currentDisaster == "null") {
+    var INITIALREGION = {
+      // this is philly for now, we can change this to whatever
+      latitude: 39.9526,
+      longitude: -75.16522,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    };
+  } else {
+
+    // delcare types
+    let lat: number = currentDisaster.LatL;
+    let long: number = currentDisaster.LongL;
+    var INITIALREGION = {
+      latitude: lat,
+      longitude: long,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    };
+  }
 
   const toggleMapMode = () => {
 
@@ -59,8 +68,9 @@ const MapScreen = (props) => {
   /**
    * Toggle disaster modal
    */
-  const toggleModal = () => {
+  const toggleModal = (event) => {
     setModalVisible(!isModalVisible);
+    console.log("MapScreen.tsx-toggleModal()-current disaster " + currentDisaster.title);
   };
 
   /*
@@ -88,10 +98,29 @@ const MapScreen = (props) => {
     );
   };
 
+
+  const animateToDisaster =() => {
+
+    let coords = {
+      latitude: currentDisaster.LatL,
+      longitude: currentDisaster.LongL,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    };
+   
+    mapRef.current.animateToRegion(coords, 0);
+  }
+
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
+
   }, []);
+  useEffect(() => {
+    if (currentDisaster != "null")
+    animateToDisaster();
+
+  }, [currentDisaster.title]);
 
 
 
@@ -122,7 +151,7 @@ const MapScreen = (props) => {
             }}
             title={marker.title}
             description={marker.description}
-            onPress={() => { toggleModal(); setSelectedDisaster(marker) }}
+            onPress={() => { dispatch(actions.setCurrentDisaster(marker)); toggleModal(marker); }}
           >
             <DisasterPin
               size={50}
@@ -132,7 +161,7 @@ const MapScreen = (props) => {
         ))}
       </MapView>
       <CustomModal
-        title={selectedDisaster.title}
+        title={currentDisaster.title}
         visable={isModalVisible}
         toggleModal={toggleModal}
       />
@@ -177,9 +206,7 @@ const MapScreen = (props) => {
         size={50}
         onPress={() => { animateToUser(); }}
       />
-
-
-      <Switch value={toggleMap} onValueChange={toggleMapMode} />
+      <Switch value={toggleMap} onValueChange={() => { console.log("MapScreen.tsx/toggleMapMode - toggle MapMode Test"); toggleMapMode() }} />
     </View>
   );
 };

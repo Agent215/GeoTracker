@@ -26,7 +26,7 @@ it(`DisasterCard should not be null`, () => {
 });
 
 /**
- * try and press all buttons in
+ * try and press all buttons in modal
  */
 
 it('calls actions as expected when pressing buttons', () => {
