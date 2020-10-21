@@ -75,7 +75,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                Draught
+                severestorm
               </Text>
             </View>
             <View
@@ -110,7 +110,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
               }
             }
           >
-            Thirsty Thursday
+            Windy Wally
           </Text>
         </View>
         <View
@@ -287,7 +287,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                Earthquake
+                wildfire
               </Text>
             </View>
             <View
@@ -322,7 +322,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
               }
             }
           >
-            Broken Ground
+            Smokey
           </Text>
         </View>
         <View
@@ -499,7 +499,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                Tsunami
+                flood
               </Text>
             </View>
             <View
@@ -711,7 +711,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                Ice Berg
+                iceberg
               </Text>
             </View>
             <View
@@ -923,7 +923,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                Volcano
+                volcano
               </Text>
             </View>
             <View

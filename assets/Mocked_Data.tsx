@@ -1,12 +1,8 @@
-// Current hard coded data that will later be pulled data from EONET API.
-// Taking in Title, ID, Description, LatL, LongL, and an event icon.
 export const events = [
 
-    { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, icon: '../assets/Icons/Draught.png'},
-    { title: 'Broken Ground', id: 1, description: 'Earthquake', LatL: 11, LongL: 12, icon: '../assets/Icons/Earthquake.png' },
-    { title: 'Big Wave', id: 1, description: 'Tsunami', LatL: 11, LongL: 12, icon: '../assets/Icons/Tsunami2.png' },
-    { title: 'Ice', id: 1, description: 'Ice Berg', LatL: 11, LongL: 12, icon: '../assets/Icons/Iceberg' },
-    { title: 'Lava', id: 1, description: 'Volcano', LatL: 11, LongL: 12, icon: '../assets/Icons/Volcano.png' }
+    { title: 'Windy Wally', id: 1, description: 'severestorm', LatL: 40.108510, LongL: -75.187882, icon: 'hello', date: "" },
+    { title: 'Smokey', id: 1, description: 'wildfire', LatL: 39.915269, LongL: -75.171357, icon: 'hello', date: "" },
+    { title: 'Big Wave', id: 1, description: 'flood', LatL: 37.672760, LongL: -85.268529, icon: 'hello', date: "" },
+    { title: 'Ice', id: 1, description: 'iceberg', LatL: 39.941804, LongL: -74.949823, icon: 'hello', date: "" },
+    { title: 'Lava', id: 1, description: 'volcano', LatL: 40.059813, LongL: -75.190574, icon: 'hello', date: "" }
 ]
-
-
