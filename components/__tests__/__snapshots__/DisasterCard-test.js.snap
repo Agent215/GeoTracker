@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DisasterCard renders correctly 1`] = `
+exports[`Testing Disaster Card Component DisasterCard renders correctly 1`] = `
 <View
   style={
     Object {
@@ -180,7 +180,7 @@ exports[`DisasterCard renders correctly 1`] = `
     >
       <View
         accessible={true}
-        focusable={false}
+        focusable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
