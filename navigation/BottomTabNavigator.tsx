@@ -62,7 +62,7 @@ const EventFeedStack = createStackNavigator<EventScreenParamList>();
         component={EventFeedScreen}
         options={{ headerTitle: 'Event Screen Title' }}
       />
-      {props => <EventFeedScreen {...props} extraData={Navigator} />}
+ -
     </EventFeedStack.Navigator>
   );
 }
