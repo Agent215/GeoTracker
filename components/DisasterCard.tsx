@@ -4,17 +4,24 @@ import { Col, Grid } from "react-native-easy-grid";
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, TouchableOpacity, Image } from "react-native";
 import * as actions from '../store/actions/actions';
+import { useNavigation } from '@react-navigation/native';
+
+
+
+
 // DisasterCard holds the layout to each feed card.
 // The Card uses <Grid> to space objects out in header, and footer. 2/3 of header is description 1/3 is icon
 const DisasterCard = (props) => {
 
   const dispatch = useDispatch();
-
-  const goToDisaster =( event) => {
-
-    dispatch(actions.setCurrentDisaster(event)) ;
-  };
+  const navigation = useNavigation();
   
+  const goToDisaster = (event) => {
+    //set current disaster in store
+    dispatch(actions.setCurrentDisaster(event));
+    navigation.navigate("Map");
+  };
+
   return (
     <Card>
       <CardItem header bordered>
@@ -44,8 +51,8 @@ const DisasterCard = (props) => {
         <Col>
           <TouchableOpacity
             style={styles.button}
-            onPress ={ () =>goToDisaster(props.event)}
-            
+            onPress={() => goToDisaster(props.event)}
+
           >
             <Text>Go</Text>
           </TouchableOpacity>
