@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
-import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import { PROVIDER_GOOGLE, Marker, UrlTile } from "react-native-maps";
 
 import MapView from "react-native-map-clustering";
 
@@ -35,6 +35,24 @@ const INITIALREGION = {
 
 const MapScreen = (props) => {
   let mapRef = useRef(MapView.prototype);
+
+  //key and value pairs for use with urlTile for changing weather tile overlay
+  let weatherUrl = [
+    {key: 'clouds', 
+    value:'https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
+    {key: 'precipitation', 
+    value:'https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
+    {key: 'pressure', 
+    value:'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
+    {key: 'wind', 
+    value:'https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
+    {key: 'temp', 
+    value:'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
+
+  ]
+
+  //hook for setting state of weather overlay, currently set to default as temp
+  const [weatherUrlValue, setWeatherUrlValue] = useState('https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b');
   /*
   animateToUser 
   */
@@ -101,6 +119,23 @@ const MapScreen = (props) => {
             />
           </Marker>
         ))}
+          <UrlTile
+            /**
+             * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
+             * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
+             */
+            urlTemplate={weatherUrlValue}  //Add weather template value here, currently set from default value of hook
+            /**
+             * The maximum zoom level for this tile overlay. Corresponds to the maximumZ setting in
+             * MKTileOverlay. iOS only.
+             */
+            maximumZ={19}
+            /**
+             * flipY allows tiles with inverted y coordinates (origin at bottom left of map)
+             * to be used. Its default value is false.
+             */
+            flipY={false}
+          />
       </MapView>
 
       <GooglePlacesAutocomplete
