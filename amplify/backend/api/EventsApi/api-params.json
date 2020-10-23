@@ -1,0 +1,36 @@
+{
+    "paths": [
+        {
+            "name": "/events/test",
+            "lambdaFunction": "EventsApiLambda",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/events/test"
+        }
+    ],
+    "resourceName": "EventsApi",
+    "apiName": "EventsApi",
+    "functionArns": [
+        {
+            "lambdaFunction": "EventsApiLambda"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-geotracker-eonet-195426-authRole",
+        "unAuthRoleName": "amplify-geotracker-eonet-195426-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "EventsApiLambda",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "3c00084f"
+}

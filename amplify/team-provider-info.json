@@ -1,32 +1,14 @@
 {
-  "dev": {
+  "eonet": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-geotracker-dev-132225-authRole",
-      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-dev-132225-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-dev-132225-authRole",
+      "AuthRoleName": "amplify-geotracker-eonet-195426-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-eonet-195426-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-eonet-195426-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-geotracker-dev-132225-deployment",
-      "UnauthRoleName": "amplify-geotracker-dev-132225-unauthRole",
-      "StackName": "amplify-geotracker-dev-132225",
-      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-dev-132225/db3fc680-fb65-11ea-bee7-0e09be17e2fd",
-      "AmplifyAppId": "d3emtfa795r2dk"
-    },
-    "categories": {
-      "auth": {
-        "geotracker57620557": {}
-      }
-    }
-  },
-  "prod": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-geotracker-prod-154830-authRole",
-      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-prod-154830-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-prod-154830-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-geotracker-prod-154830-deployment",
-      "UnauthRoleName": "amplify-geotracker-prod-154830-unauthRole",
-      "StackName": "amplify-geotracker-prod-154830",
-      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-prod-154830/eb763c30-0355-11eb-9732-0e424e0e060d",
+      "DeploymentBucketName": "amplify-geotracker-eonet-195426-deployment",
+      "UnauthRoleName": "amplify-geotracker-eonet-195426-unauthRole",
+      "StackName": "amplify-geotracker-eonet-195426",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-eonet-195426/44478000-0ce6-11eb-bd1c-0a7162bf9a3d",
       "AmplifyAppId": "d3emtfa795r2dk"
     },
     "categories": {
