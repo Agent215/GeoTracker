@@ -56,7 +56,7 @@ function FilterScreen() {
   return (
 
     <View style={styles.container}>
-
+          
             <DropDownPicker
             items={weatherItems}
             controller={instance => weatherController = instance}
@@ -67,11 +67,11 @@ function FilterScreen() {
             }}
             defaultValue={weatherValue}
             placeholder='Select Weather'
-            containerStyle={{width: 180, height: 50}}
+            containerStyle={{flex:3, height: 50}}
             onChangeItem={item => setWeatherValue(item.value)}
             />
             <Switch
-              style={{width: 50, height: 50}}
+              style={{flex:1, height: 30}}
               trackColor={{ false: "#767577", true: "#81b0ff" }}
               thumbColor={isWeatherEnabled ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
@@ -88,11 +88,11 @@ function FilterScreen() {
             }}
             defaultValue={eventValue}
             placeholder='Select Event'
-            containerStyle={{width: 180, height: 50}}
+            containerStyle={{flex:3, height: 50}}
             onChangeItem={item => setEventValue(item.value)}
             />
             <Switch
-              style={{width: 50, height: 50}}
+              style={{flex:1, height: 30}}
               trackColor={{ false: "#767577", true: "#81b0ff" }}
               thumbColor={isEventEnabled ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"

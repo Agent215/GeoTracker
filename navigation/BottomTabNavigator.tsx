@@ -21,17 +21,17 @@ export default function BottomTabNavigator() {
       initialRouteName="Map"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="Filter"
-        component={FilterScreenNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="md-funnel" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
         name="Feed"
         component={EventFeedNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="md-paper" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Filter"
+        component={FilterScreenNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-funnel" color={color} />,
         }}
       />
       <BottomTab.Screen
