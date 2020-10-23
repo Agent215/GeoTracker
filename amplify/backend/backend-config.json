@@ -6,6 +6,14 @@
       "dependsOn": [
         {
           "category": "function",
+          "resourceName": "EventsApiGetAll",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
           "resourceName": "EventsApiLambda",
           "attributes": [
             "Name",
@@ -45,6 +53,12 @@
       "dependsOn": []
     },
     "EventsApiLambdaV2": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "EventsApiGetAll": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",

@@ -39,14 +39,14 @@ function SettingsScreen() {
       {<Button title='Sign out' onPress={signOut} />}
       <Text style={styles.title}>Click below to Delete User</Text>
       {<Button title='Delete User' onPress={onDeleteUser} />}
-      {<Button title='Test events/test' onPress={onEvents} />}
+      {<Button title='Test events/all api call' onPress={onEventsAll} />}
     </View>
   );
 }
 
-async function onEvents () {
+async function onEventsAll () {
   const apiName = 'EventsApi';
-  const path = '/events/test';
+  const path = '/events/all';
   const myInit = { // OPTIONAL
     headers: {}, // OPTIONAL
   };
@@ -59,6 +59,24 @@ async function onEvents () {
     .catch(error => {
       console.log(error.response)
     })
+}
+
+async function testAPI() {
+  const fetch = require('node-fetch');
+
+  let url = "https://eonet.sci.gsfc.nasa.gov/api/v3/events";
+
+  let settings = { method: "Get" };
+
+  let jsonObject = await fetch(url, settings)
+  .then(res => res.json())
+  .then((json) => {
+      // do something with JSON
+      return json;
+  });
+
+  
+  console.log(jsonObject)
 }
 
 const styles = StyleSheet.create({

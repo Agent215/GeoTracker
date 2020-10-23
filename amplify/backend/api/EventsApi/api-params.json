@@ -1,17 +1,26 @@
 {
     "paths": [
         {
+            "name": "/events/all",
+            "lambdaFunction": "EventsApiGetAll",
+            "privacy": {
+                "open": true
+            }
+        },
+        {
             "name": "/events/test",
             "lambdaFunction": "EventsApiLambda",
             "privacy": {
                 "open": true
-            },
-            "policyResourceName": "/events/test"
+            }
         }
     ],
     "resourceName": "EventsApi",
     "apiName": "EventsApi",
     "functionArns": [
+        {
+            "lambdaFunction": "EventsApiGetAll"
+        },
         {
             "lambdaFunction": "EventsApiLambda"
         }
@@ -25,6 +34,14 @@
     "dependsOn": [
         {
             "category": "function",
+            "resourceName": "EventsApiGetAll",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
             "resourceName": "EventsApiLambda",
             "attributes": [
                 "Name",
@@ -32,5 +49,5 @@
             ]
         }
     ],
-    "uuid": "3c00084f"
+    "uuid": "1ac509a0"
 }
