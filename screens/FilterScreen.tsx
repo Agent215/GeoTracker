@@ -3,109 +3,119 @@ import { useState } from 'react';
 import { StyleSheet, Switch } from 'react-native';
 //import { Picker } from 'react-native';
 //import { Picker } from '@react-native-community/picker'
-import { Dropdown } from 'react-native-material-dropdown'
+//import { Dropdown } from 'react-native-material-dropdown'
+//import ModalDropdown from 'react-native-modal-dropdown';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
 function FilterScreen() {
-  let weatherValues = [
-    {value: 'Temperature',},
-    {value: 'Precipitation',},
-    {value: 'Cloud Cover',},
-    {value: 'Wind Speed',},
-    {value: 'Barometric Pressure',},
+  let weather = [
+    {label: 'Temperature', value: 'Temperature',},
+    {label: 'Precipitation', value: 'Precipitation',},
+    {label: 'Cloud Cover', value: 'Cloud Cover',},
+    {label: 'Wind Speed', value: 'Wind Speed',},
+    {label: 'Barometric Pressure', value: 'Barometric Pressure',},
   ]
 
-  let eventValues = [
-    {value: 'All Events'},
-    {value: 'Drought'},
-    {value: 'Dust and Haze'},
-    {value: 'Earthquakes'},
-    {value: 'Floods'},
-    {value: 'Landslides'},
-    {value: 'Manmade'},
-    {value: 'Sea and Lake Ice'},
-    {value: 'Severe Storms'},
-    {value: 'Snow'},
-    {value: 'Temperature Extremes'},
-    {value: 'Volcanoes'},
-    {value: 'Water Color'},
-    {value: 'Wildfires'},
+  let event = [
+    {label: 'All Events', value: 'All Events'},
+    {label: 'Drought', value: 'Drought'},
+    {label: 'Dust and Haze', value: 'Dust and Haze'},
+    {label: 'Earthquakes', value: 'Earthquakes'},
+    {label: 'Floods', value: 'Floods'},
+    {label: 'Landslides', value: 'Landslides'},
+    {label: 'Manmade', value: 'Manmade'},
+    {label: 'Sea and Lake Ice', value: 'Sea and Lake Ice'},
+    {label: 'Severe Storms', value: 'Severe Storms'},
+    {label: 'Snow', value: 'Snow'},
+    {label: 'Temperature Extremes', value: 'Temperature Extremes'},
+    {label: 'Volcanoes', value: 'Volcanoes'},
+    {label: 'Water Color', value: 'Water Color'},
+    {label: 'Wildfires', value: 'Wildfires'},
   ]
 
-  const [selectedWeather, setSelectedWeather] = useState("temp");
-  const [selectedEvents, setSelectedEvents] = useState("drought");
+  const [weatherValue, setWeatherValue] = useState(null);
+  const [weatherItems, setWeatherItems] = useState(weather);
+  let weatherController;
+
+  const [eventValue, setEventValue] = useState(null);
+  const [eventItems, setEventItems] = useState(event);
+  let eventController;
+  
+  
+  //const [selectedEvents, setSelectedEvents] = useState("drought");
+  
   const [isWeatherEnabled, setWeatherIsEnabled] = useState(false);
   const toggleWeatherSwitch = () => setWeatherIsEnabled(previousState => !previousState);
   const [isEventEnabled, setEventIsEnabled] = useState(false);
   const toggleEventSwitch = () => setEventIsEnabled(previousState => !previousState);
+  
   return (
 
     <View style={styles.container}>
-      <View style={styles.groupBox}>
-        <Text style={styles.textBox}>Weather</Text>
-          <View style={styles.doubleGroup}>
-            <Dropdown
-              label='Choose Weather'
-              data={weatherValues}
-              containerStyle={{flex:1}}              
+
+            <DropDownPicker
+            items={weatherItems}
+            controller={instance => weatherController = instance}
+            onChangeList={(items, callback) => {
+                new Promise((resolve, reject) => resolve(setWeatherItems(items)))
+                    .then(() => callback())
+                    .catch(() => {});
+            }}
+            defaultValue={weatherValue}
+            placeholder='Select Weather'
+            containerStyle={{width: 180, height: 50}}
+            onChangeItem={item => setWeatherValue(item.value)}
             />
             <Switch
-              style={styles.switchBox}
+              style={{width: 50, height: 50}}
               trackColor={{ false: "#767577", true: "#81b0ff" }}
               thumbColor={isWeatherEnabled ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleWeatherSwitch}
               value={isWeatherEnabled}
             />
+            <DropDownPicker
+            items={eventItems}
+            controller={instance => eventController = instance}
+            onChangeList={(items, callback) => {
+                new Promise((resolve, reject) => resolve(setEventItems(items)))
+                    .then(() => callback())
+                    .catch(() => {});
+            }}
+            defaultValue={eventValue}
+            placeholder='Select Event'
+            containerStyle={{width: 180, height: 50}}
+            onChangeItem={item => setEventValue(item.value)}
+            />
+            <Switch
+              style={{width: 50, height: 50}}
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={isEventEnabled ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleEventSwitch}
+              value={isEventEnabled}
+            />
           </View>
-      </View>
-      <View style={styles.groupBox}>
-        <Text style={styles.textBox}>Events</Text>
-        <View style={styles.doubleGroup}>
-          <Dropdown
-            label='Choose Event'
-            data={eventValues}
-            containerStyle={{flex:1}}
-          />
-          <Switch
-            style={styles.switchBox}
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEventEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleEventSwitch}
-            value={isEventEnabled}
-          />
-
-        </View>
-      </View>
-      
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 0,
-    backgroundColor: '#eaeaea',
-    alignItems: 'stretch',
+    flexDirection: 'row',
   },
   groupBox: {
     height: 150,
     alignItems: 'stretch',
-    borderTopColor: 'darkgray',
-    borderTopWidth: 1,
-    backgroundColor: 'lightgray'
   },
   doubleGroup: {
     flex: 1,
     paddingHorizontal: 10,
     flexDirection: 'row',
-    borderBottomColor: 'darkgray',
-    borderBottomWidth: 1,
-    backgroundColor: 'lightgray'
   },
   textBox: {
     flex: 1,
