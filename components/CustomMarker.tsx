@@ -1,15 +1,15 @@
 import DroughtPin from '../assets/Pins/DroughtPin.svg';
-import DustStormPin from '../assets/Pins/DustStormPin.svg';
-import EarthquakePin from '../assets/Pins/EarthquakePin.svg';
-import ExtremeTempPin from '../assets/Pins/ExtremeTempPin.svg';
-import FloodPin from '../assets/Pins/FloodPin.svg';
-import IcebergPin from '../assets/Pins/IcebergPin.svg';
+import DustHazePin from '../assets/Pins/DustHazePin.svg';
+import EarthquakesPin from '../assets/Pins/EarthquakesPin.svg';
+import TempExtremesPin from '../assets/Pins/TempExtremesPin.svg';
+import FloodsPin from '../assets/Pins/FloodsPin.svg';
+import SeaLakeIcePin from '../assets/Pins/SeaLakeIcePin.svg';
 import LandslidesPin from '../assets/Pins/LandslidesPin.svg';
 import ManmadePin from '../assets/Pins/ManmadePin.svg';
-import SevereStormPin from '../assets/Pins/SevereStormPin.svg';
-import VolcanoPin from '../assets/Pins/VolcanoPin.svg'
-import WildfirePin from '../assets/Pins/WildfirePin.svg'
-import SnowFallPin from '../assets/Pins/SnowFallPin.svg'
+import SevereStormsPin from '../assets/Pins/SevereStormsPin.svg';
+import VolcanoesPin from '../assets/Pins/VolcanoesPin.svg'
+import WildfiresPin from '../assets/Pins/WildfiresPin.svg'
+import SnowPin from '../assets/Pins/SnowPin.svg'
 
 import React from 'react';
 
@@ -24,17 +24,17 @@ const DisasterPin = (props) => {
     there is probably a better way to do this so we dont have to repeat the height and width everytime.*/
     const categorySVG = {
         ["drought"]: <DroughtPin width={props.size} height={props.size} />,
-        ["duststorm"]: <DustStormPin width={props.size} height={props.size} />,
-        ["earthquake"]: <EarthquakePin width={props.size} height={props.size} />,
-        ["extremeTemp"]: <ExtremeTempPin width={props.size} height={props.size} />,
-        ["flood"]: <FloodPin width={props.size} height={props.size} />,
-        ["iceberg"]: <IcebergPin width={props.size} height={props.size} />,
-        ["landslide"]: <LandslidesPin width={props.size} height={props.size} />,
+        ["dustHaze"]: <DustHazePin width={props.size} height={props.size} />,
+        ["earthquakes"]: <EarthquakesPin width={props.size} height={props.size} />,
+        ["tempExtremes"]: <TempExtremesPin width={props.size} height={props.size} />,
+        ["floods"]: <FloodsPin width={props.size} height={props.size} />,
+        ["seaLakeIce"]: <SeaLakeIcePin width={props.size} height={props.size} />,
+        ["landslides"]: <LandslidesPin width={props.size} height={props.size} />,
         ["manmade"]: <ManmadePin width={props.size} height={props.size} />,
-        ["severestorm"]: <SevereStormPin width={props.size} height={props.size} />,
-        ["snowfall"]: <SnowFallPin width={props.size} height={props.size} />,
-        ["volcano"]: <VolcanoPin width={props.size} height={props.size} />,
-        ["wildfire"]: <WildfirePin width={props.size} height={props.size} />
+        ["severeStorms"]: <SevereStormsPin width={props.size} height={props.size} />,
+        ["snow"]: <SnowPin width={props.size} height={props.size} />,
+        ["volcanoes"]: <VolcanoesPin width={props.size} height={props.size} />,
+        ["wildfires"]: <WildfiresPin width={props.size} height={props.size} />
     }
 
     const eventPin = categorySVG[props.category];
