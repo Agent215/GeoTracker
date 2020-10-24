@@ -8,6 +8,8 @@ Amplify.configure({
   },
 });
 import React, { useEffect, useState } from 'react'
+import { AppLoading } from 'expo';
+import { API } from 'aws-amplify'
 
 
 // Added for tabs
@@ -16,12 +18,22 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 
+
+let eventList;
+
 const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
-  if (!isLoadingComplete) {
-    return null;
+  const [fetchedData, setDataFetched] = useState(false)
+  
+  if (!fetchedData) {
+    return (
+      <AppLoading
+        startAsync={getData}
+        onFinish={() => setDataFetched(true)}
+        />
+    );
   } else {
     return (
       <SafeAreaProvider>
@@ -33,4 +45,16 @@ const App = () => {
   }
 }
 
+async function getData() { 
+  const apiName = 'EventsApi';
+  const path = '/events/all';
+  const myInit = { // OPTIONAL
+      headers: {}, // OPTIONAL
+  };
+
+  eventList = await API.get(apiName, path, myInit);
+}
+
+
+export { eventList }
 export default App

@@ -1,11 +1,68 @@
 {
-  "api": {},
+  "api": {
+    "EventsApi": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "EventsApiGetAll",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "EventsApiLambda",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    },
+    "EventsApiV2": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "EventsApiLambdaV2",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    }
+  },
   "auth": {
     "geotracker57620557": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false
+    }
+  },
+  "function": {
+    "EventsApiLambda": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "EventsApiLambdaV2": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "EventsApiGetAll": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
     }
   }
 }
