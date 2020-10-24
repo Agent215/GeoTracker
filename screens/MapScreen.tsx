@@ -94,6 +94,7 @@ const MapScreen = (props) => {
             }}
             title={marker.title}
             description={marker.category}
+            tracksViewChanges= {false}
           >
             <DisasterPin
               size={50}

@@ -53,7 +53,9 @@
       },
       "function": {
         "EventsApiLambda": {},
-        "EventsApiLambdaGetAll": {}
+        "EventsApiLambdaGetAll": {},
+        "EventsApiLambdaV2": {},
+        "EventsApiGetAll": {}
       }
     }
   }
