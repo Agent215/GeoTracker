@@ -75,7 +75,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                severestorm
+                severeStorms
               </Text>
             </View>
             <View
@@ -114,16 +114,13 @@ exports[`EventFeedScreen renders correctly 1`] = `
           </Text>
         </View>
         <View
-          bordered={true}
           footer={true}
           style={
             Object {
               "alignItems": "center",
               "backgroundColor": "#fff",
-              "borderBottomWidth": 0.5,
-              "borderColor": "#ccc",
+              "borderBottomWidth": null,
               "borderRadius": 2,
-              "borderTopWidth": 0.5,
               "flexDirection": "row",
               "paddingBottom": 10,
               "paddingLeft": 15,
@@ -141,36 +138,46 @@ exports[`EventFeedScreen renders correctly 1`] = `
             }
           >
             <View
-              accessible={true}
-              focusable={false}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
               style={
-                Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#DDDDDD",
-                  "opacity": 1,
-                  "padding": 10,
-                }
+                Array [
+                  Object {
+                    "backgroundColor": "#fff",
+                  },
+                  undefined,
+                ]
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#007aff",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": "600",
+              <View>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "backgroundColor": "#DDDDDD",
+                      "opacity": 1,
+                      "padding": 11.9,
+                    }
                   }
-                }
-              >
-                Share
-              </Text>
+                >
+                  <Text
+                    style={
+                      Object {
+                        "fontWeight": "bold",
+                      }
+                    }
+                  >
+                     Share
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
           <View
@@ -203,7 +210,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#007aff",
+                    "color": "#000",
                     "fontFamily": "System",
                     "fontSize": 16,
                     "fontWeight": "600",
@@ -287,7 +294,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                wildfire
+                wildfires
               </Text>
             </View>
             <View
@@ -326,16 +333,13 @@ exports[`EventFeedScreen renders correctly 1`] = `
           </Text>
         </View>
         <View
-          bordered={true}
           footer={true}
           style={
             Object {
               "alignItems": "center",
               "backgroundColor": "#fff",
-              "borderBottomWidth": 0.5,
-              "borderColor": "#ccc",
+              "borderBottomWidth": null,
               "borderRadius": 2,
-              "borderTopWidth": 0.5,
               "flexDirection": "row",
               "paddingBottom": 10,
               "paddingLeft": 15,
@@ -353,36 +357,46 @@ exports[`EventFeedScreen renders correctly 1`] = `
             }
           >
             <View
-              accessible={true}
-              focusable={false}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
               style={
-                Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#DDDDDD",
-                  "opacity": 1,
-                  "padding": 10,
-                }
+                Array [
+                  Object {
+                    "backgroundColor": "#fff",
+                  },
+                  undefined,
+                ]
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#007aff",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": "600",
+              <View>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "backgroundColor": "#DDDDDD",
+                      "opacity": 1,
+                      "padding": 11.9,
+                    }
                   }
-                }
-              >
-                Share
-              </Text>
+                >
+                  <Text
+                    style={
+                      Object {
+                        "fontWeight": "bold",
+                      }
+                    }
+                  >
+                     Share
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
           <View
@@ -415,7 +429,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#007aff",
+                    "color": "#000",
                     "fontFamily": "System",
                     "fontSize": 16,
                     "fontWeight": "600",
@@ -499,7 +513,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                flood
+                floods
               </Text>
             </View>
             <View
@@ -538,16 +552,13 @@ exports[`EventFeedScreen renders correctly 1`] = `
           </Text>
         </View>
         <View
-          bordered={true}
           footer={true}
           style={
             Object {
               "alignItems": "center",
               "backgroundColor": "#fff",
-              "borderBottomWidth": 0.5,
-              "borderColor": "#ccc",
+              "borderBottomWidth": null,
               "borderRadius": 2,
-              "borderTopWidth": 0.5,
               "flexDirection": "row",
               "paddingBottom": 10,
               "paddingLeft": 15,
@@ -565,36 +576,46 @@ exports[`EventFeedScreen renders correctly 1`] = `
             }
           >
             <View
-              accessible={true}
-              focusable={false}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
               style={
-                Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#DDDDDD",
-                  "opacity": 1,
-                  "padding": 10,
-                }
+                Array [
+                  Object {
+                    "backgroundColor": "#fff",
+                  },
+                  undefined,
+                ]
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#007aff",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": "600",
+              <View>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "backgroundColor": "#DDDDDD",
+                      "opacity": 1,
+                      "padding": 11.9,
+                    }
                   }
-                }
-              >
-                Share
-              </Text>
+                >
+                  <Text
+                    style={
+                      Object {
+                        "fontWeight": "bold",
+                      }
+                    }
+                  >
+                     Share
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
           <View
@@ -627,7 +648,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#007aff",
+                    "color": "#000",
                     "fontFamily": "System",
                     "fontSize": 16,
                     "fontWeight": "600",
@@ -711,7 +732,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                iceberg
+                seaLakeIce
               </Text>
             </View>
             <View
@@ -750,16 +771,13 @@ exports[`EventFeedScreen renders correctly 1`] = `
           </Text>
         </View>
         <View
-          bordered={true}
           footer={true}
           style={
             Object {
               "alignItems": "center",
               "backgroundColor": "#fff",
-              "borderBottomWidth": 0.5,
-              "borderColor": "#ccc",
+              "borderBottomWidth": null,
               "borderRadius": 2,
-              "borderTopWidth": 0.5,
               "flexDirection": "row",
               "paddingBottom": 10,
               "paddingLeft": 15,
@@ -777,36 +795,46 @@ exports[`EventFeedScreen renders correctly 1`] = `
             }
           >
             <View
-              accessible={true}
-              focusable={false}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
               style={
-                Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#DDDDDD",
-                  "opacity": 1,
-                  "padding": 10,
-                }
+                Array [
+                  Object {
+                    "backgroundColor": "#fff",
+                  },
+                  undefined,
+                ]
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#007aff",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": "600",
+              <View>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "backgroundColor": "#DDDDDD",
+                      "opacity": 1,
+                      "padding": 11.9,
+                    }
                   }
-                }
-              >
-                Share
-              </Text>
+                >
+                  <Text
+                    style={
+                      Object {
+                        "fontWeight": "bold",
+                      }
+                    }
+                  >
+                     Share
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
           <View
@@ -839,7 +867,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#007aff",
+                    "color": "#000",
                     "fontFamily": "System",
                     "fontSize": 16,
                     "fontWeight": "600",
@@ -923,7 +951,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
                   }
                 }
               >
-                volcano
+                volcanoes
               </Text>
             </View>
             <View
@@ -962,16 +990,13 @@ exports[`EventFeedScreen renders correctly 1`] = `
           </Text>
         </View>
         <View
-          bordered={true}
           footer={true}
           style={
             Object {
               "alignItems": "center",
               "backgroundColor": "#fff",
-              "borderBottomWidth": 0.5,
-              "borderColor": "#ccc",
+              "borderBottomWidth": null,
               "borderRadius": 2,
-              "borderTopWidth": 0.5,
               "flexDirection": "row",
               "paddingBottom": 10,
               "paddingLeft": 15,
@@ -989,36 +1014,46 @@ exports[`EventFeedScreen renders correctly 1`] = `
             }
           >
             <View
-              accessible={true}
-              focusable={false}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
               style={
-                Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#DDDDDD",
-                  "opacity": 1,
-                  "padding": 10,
-                }
+                Array [
+                  Object {
+                    "backgroundColor": "#fff",
+                  },
+                  undefined,
+                ]
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "#007aff",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": "600",
+              <View>
+                <View
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "backgroundColor": "#DDDDDD",
+                      "opacity": 1,
+                      "padding": 11.9,
+                    }
                   }
-                }
-              >
-                Share
-              </Text>
+                >
+                  <Text
+                    style={
+                      Object {
+                        "fontWeight": "bold",
+                      }
+                    }
+                  >
+                     Share
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
           <View
@@ -1051,7 +1086,7 @@ exports[`EventFeedScreen renders correctly 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#007aff",
+                    "color": "#000",
                     "fontFamily": "System",
                     "fontSize": 16,
                     "fontWeight": "600",
