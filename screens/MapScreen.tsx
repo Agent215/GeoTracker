@@ -31,22 +31,19 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const MapScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const currentDisaster = useSelector(
-    (state) => state.disaster.currentDisaster
-  );
-  const counter = useSelector((state) => state.counterReducer.counter);
-  const isReRenderDisaster = useSelector(
-    (state) => state.renderDisaster.reRender
-  );
-
+  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);
+  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);
   //adding property isShow to each event, which determine if they shold show on the map
   //they all should when the Map first rendered
   let filteredEvent = events.map((params) => {
     return { ...params, isShow: true };
   });
 
+  // save all events for the all filter
+  const allEvents = filteredEvent;
 
   console.log("Mapscreen.tsx - current disaster " + currentDisaster);
+  console.log("Mapscreen.tsx - current disaster filter " + disasterFilter.value);
   let mapRef = useRef(MapView.prototype);
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -54,8 +51,6 @@ const MapScreen = ({ navigation }) => {
   const [toggleMap, setToggleMap] = useState(false);
   const [showEvent, setShowEvent] = useState(filteredEvent);
 
-  console.log("here is the initial show event:");
-  console.log({ showEvent });
 
   if (currentDisaster == "null") {
     var INITIALREGION = {
@@ -139,128 +134,112 @@ const MapScreen = ({ navigation }) => {
     animateToUser();
   }, []);
   useEffect(() => {
-
-  }, [filteredEvent[0]]);
+    if (disasterFilter != "all") filterDisasters();
+  }, [disasterFilter.value]);
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
     if (currentDisaster != "null") animateToDisaster();
   }, [currentDisaster.title]);
 
-  return (
-    <>
-      <DropDownPicker
-        items={[
-          { label: "severestorm", value: "severeStorms" },
-          { label: "wildfire", value: "wildfires" },
-          { label: "flood", value: "floods" },
-          { label: "iceberg", value: "seaLakeIce" },
-          { label: "volcano", value: "volcanoes" },
-        ]}
-        placeholder="---Select an item---"
-        containerStyle={{ height: 40 }}
-        style={styles.dropDownPicker}
-        itemStyle={{
-          justifyContent: "flex-start",
-        }}
-        dropDownStyle={{ backgroundColor: "#fafafa" }}
-        onChangeItem={(item) => {
-          console.log(
-            item.value + " is selected========================================"
-          );
-          console.log(filteredEvent);
-          filteredEvent.map((params) => {
-            if (params.description === item.value) {
-              params.isShow = true;
-            } else {
-              params.isShow = false;
-            }
-            return params;
-          });
+/**
+ * 
+ * filter the disaster markers
+ */
+  const filterDisasters = () => {
 
-          setShowEvent(filteredEvent);
-          // dispatch(actions.setRenderDisaster())
+    filteredEvent.map((params) => {
+
+      // if we have all set lets show all
+      if (disasterFilter.value === "all") { params.isShow = true }
+      else if (params.description === disasterFilter.value) {
+        params.isShow = true;   //else check if description matches filter and show those
+      } else {
+        params.isShow = false;
+      }
+      return params;
+    });
+    setShowEvent(filteredEvent);
+  };
+
+  return (
+
+    <View style={styles.container}>
+      <MapView
+        ref={mapRef}
+        initialRegion={INITIALREGION}
+        style={styles.mapStyle}
+        mapType={mapMode} // typescript error i think we can fix by going to index.d.ts and changing maptype to string
+        provider={PROVIDER_GOOGLE}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        rotateEnabled={false}
+        showsTraffic={false}
+        toolbarEnabled={true}
+        zoomEnabled={true}
+        zoomControlEnabled={true}
+        loadingEnabled={true}
+      >
+        <EventMarkersOnMap events={showEvent} callback={toggleModal} />
+      </MapView>
+
+      <CustomModal
+        title={currentDisaster.title}
+        visable={isModalVisible}
+        disaster={currentDisaster}
+        toggleModal={toggleModal}
+      />
+      <GooglePlacesAutocomplete
+        placeholder="Enter Location"
+        query={{
+          key: GOOGLE_PLACES_API_KEY,
+          language: "en", // language of the results
+        }}
+        onPress={(data, details = null) => {
+          console.log(data);
+          console.log("test");
+          Geocoder.from(data.description)
+            .then((json) => {
+              var location = json.results[0].geometry.location;
+              console.log(location);
+              let lat = location.lat;
+              let lng = location.lng;
+              let coords = {
+                latitude: lat,
+                longitude: lng,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,
+              };
+              mapRef.current.animateToRegion(coords, 0);
+            })
+            .catch((error) => console.warn(error));
+        }}
+        onFail={(error) => console.error(error)}
+        styles={searchStyles}
+        textInputProps={{ clearButtonMode: "always" }}
+      />
+
+      {/*current location button that shows on bottom right of the map */}
+
+      <IconButton
+        // icon={require('../assets/locationG-Icon.png')}
+        // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
+        icon="crosshairs-gps"
+        style={locationIcon.container}
+        color={Colors.blue600}
+        size={50}
+        onPress={() => {
+          animateToUser();
         }}
       />
 
-      <View style={styles.container}>
-        <MapView
-          ref={mapRef}
-          initialRegion={INITIALREGION}
-          style={styles.mapStyle}
-          mapType={mapMode} // typescript error i think we can fix by going to index.d.ts and changing maptype to string
-          provider={PROVIDER_GOOGLE}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          rotateEnabled={false}
-          showsTraffic={false}
-          toolbarEnabled={true}
-          zoomEnabled={true}
-          zoomControlEnabled={true}
-          loadingEnabled={true}
-        >
-          <EventMarkersOnMap events={showEvent} callback={toggleModal} />
-
-        </MapView>
-
-        <CustomModal
-          title={currentDisaster.title}
-          visable={isModalVisible}
-          disaster={currentDisaster}
-          toggleModal={toggleModal}
-        />
-        <GooglePlacesAutocomplete
-          placeholder="Enter Location"
-          query={{
-            key: GOOGLE_PLACES_API_KEY,
-            language: "en", // language of the results
-          }}
-          onPress={(data, details = null) => {
-            console.log(data);
-            console.log("test");
-            Geocoder.from(data.description)
-              .then((json) => {
-                var location = json.results[0].geometry.location;
-                console.log(location);
-                let lat = location.lat;
-                let lng = location.lng;
-                let coords = {
-                  latitude: lat,
-                  longitude: lng,
-                  latitudeDelta: LATITUDE_DELTA,
-                  longitudeDelta: LONGITUDE_DELTA,
-                };
-                mapRef.current.animateToRegion(coords, 0);
-              })
-              .catch((error) => console.warn(error));
-          }}
-          onFail={(error) => console.error(error)}
-          styles={searchStyles}
-          textInputProps={{ clearButtonMode: "always" }}
-        />
-
-        {/*current location button that shows on bottom right of the map */}
-
-        <IconButton
-          // icon={require('../assets/locationG-Icon.png')}
-          // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
-          icon="crosshairs-gps"
-          style={locationIcon.container}
-          color={Colors.blue600}
-          size={50}
-          onPress={() => {
-            animateToUser();
-          }}
-        />
-
-        <Switch
-          value={toggleMap}
-          onValueChange={() => {
-            console.log("MapScreen.tsx/toggleMapMode - toggle MapMode Test");
-            toggleMapMode();
-          }}
-        />
-      </View>
-    </>
+      <Switch
+        value={toggleMap}
+        onValueChange={() => {
+          console.log("MapScreen.tsx/toggleMapMode - toggle MapMode Test");
+          toggleMapMode();
+        }}
+      />
+    </View>
   );
 };
 

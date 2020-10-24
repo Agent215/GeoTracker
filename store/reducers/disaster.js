@@ -22,17 +22,16 @@ export default (state = initialState, action) => {
             };
         case SET_DISASTER_FILTER:
 
-            console.log("render changed!!");
+            console.log("setting disater filter");
             return {
                 ...state,
-                disasterFilter: state.disasterFilter
+                disasterFilter: action.disasterFilter
             };
         case SET_WEATHER_FILTER:
-
-            console.log("render changed!!");
+            console.log("setting weather filter");
             return {
                 ...state,
-                weatherFilter: state.weatherFilter
+                weatherFilter: action.weatherFilter
             };
 
         default:

@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Switch } from 'react-native';
-//import { Picker } from 'react-native';
-//import { Picker } from '@react-native-community/picker'
-//import { Dropdown } from 'react-native-material-dropdown'
-//import ModalDropdown from 'react-native-modal-dropdown';
 import DropDownPicker from 'react-native-dropdown-picker';
-
-
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../store/actions/actions";
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
 function FilterScreen() {
+
+  const dispatch = useDispatch();
+
   let weather = [
     {label: 'Temperature', value: 'Temperature',},
     {label: 'Precipitation', value: 'Precipitation',},
@@ -21,20 +20,20 @@ function FilterScreen() {
   ]
 
   let event = [
-    {label: 'All Events', value: 'All Events'},
-    {label: 'Drought', value: 'Drought'},
-    {label: 'Dust and Haze', value: 'Dust and Haze'},
-    {label: 'Earthquakes', value: 'Earthquakes'},
-    {label: 'Floods', value: 'Floods'},
-    {label: 'Landslides', value: 'Landslides'},
-    {label: 'Manmade', value: 'Manmade'},
-    {label: 'Sea and Lake Ice', value: 'Sea and Lake Ice'},
-    {label: 'Severe Storms', value: 'Severe Storms'},
-    {label: 'Snow', value: 'Snow'},
-    {label: 'Temperature Extremes', value: 'Temperature Extremes'},
-    {label: 'Volcanoes', value: 'Volcanoes'},
-    {label: 'Water Color', value: 'Water Color'},
-    {label: 'Wildfires', value: 'Wildfires'},
+    {label: 'All Events', value: 'all'},
+    {label: 'Drought', value: 'drought'},
+    {label: 'Dust and Haze', value: 'dustHaze'},
+    {label: 'Earthquakes', value: 'earthquakes'},
+    {label: 'Floods', value: 'floods'},
+    {label: 'Landslides', value: 'landslides'},
+    {label: 'Manmade', value: 'manmade'},
+    {label: 'Sea and Lake Ice', value: 'seaLakeIce'},
+    {label: 'Severe Storms', value: 'severeStorms'},
+    {label: 'Snow', value: 'snow'},
+    {label: 'Temperature Extremes', value: 'tempExtremes'},
+    {label: 'Volcanoes', value: 'volcanoes'},
+    {label: 'Water Color', value: 'waterColor'},
+    {label: 'Wildfires', value: 'wildfires'},
   ]
 
   const [weatherValue, setWeatherValue] = useState(null);
@@ -68,7 +67,7 @@ function FilterScreen() {
             defaultValue={weatherValue}
             placeholder='Select Weather'
             containerStyle={{flex:3, height: 50}}
-            onChangeItem={item => setWeatherValue(item.value)}
+            onChangeItem={(item)=> { dispatch(actions.setWeatherFilter(item));}}
             />
             <Switch
               style={{flex:1, height: 30}}
@@ -89,7 +88,7 @@ function FilterScreen() {
             defaultValue={eventValue}
             placeholder='Select Event'
             containerStyle={{flex:3, height: 50}}
-            onChangeItem={item => setEventValue(item.value)}
+            onChangeItem={(item)=> { dispatch(actions.setDisasterFilter(item));}}
             />
             <Switch
               style={{flex:1, height: 30}}

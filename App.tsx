@@ -17,8 +17,6 @@ import Navigation from './navigation';
 
 const rootReducer = combineReducers({
   disaster: disasterReducer,
-  counterReducer:counterReducer,
-  renderDisaster:reRenderDisasterReducer,
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)));
