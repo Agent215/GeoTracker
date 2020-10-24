@@ -5,8 +5,14 @@ import * as enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 enzyme.configure({ adapter: new Adapter() });
+const mockedToggle = jest.fn();
 // mock of a prop to pass CustomModal
-const mockProp = { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, icon: '../assets/Icons/Draught.png' };
+const mockProp =  {
+    title: "title",
+    visable: true,
+    disaster: { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, link: "www.google.com" },
+    toggleModal: mockedToggle
+};
 
 /*
 Check CustomModal against snapshot. run jest -u to update snapshot

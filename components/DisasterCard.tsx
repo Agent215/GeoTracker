@@ -7,6 +7,7 @@ import * as actions from '../store/actions/actions';
 import { useNavigation } from '@react-navigation/native';
 import FeedScreenShare from '../components/ShareFeat';
 import { View } from "./Themed";
+import { IconButton } from "react-native-paper";
 
 // DisasterCard holds the layout to each feed card.
 // The Card uses <Grid> to space objects out in header, and footer. 2/3 of header is description 1/3 is icon
@@ -14,7 +15,7 @@ const DisasterCard = (props) => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  
+
   const goToDisaster = (event) => {
     //set current disaster in store
     dispatch(actions.setCurrentDisaster(event));
@@ -42,16 +43,19 @@ const DisasterCard = (props) => {
       </Body>
       <CardItem footer>
         <Col>
-          <View>
-            <FeedScreenShare link={props.event.link} />
-          </View>
+          <FeedScreenShare link={props.event.link} color="black" size={50} />
+          <Text>Share</Text>
         </Col>
         <Col>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => goToDisaster(props.event)}
-
-          >
+            onPress={() => goToDisaster(props.event)} >
+            <IconButton
+              icon="crosshairs-gps"
+              color={"black"}
+              size={50}
+              onPress={() => goToDisaster(props.event)}
+            />
             <Text>Go</Text>
           </TouchableOpacity>
         </Col>
@@ -69,8 +73,9 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
+    backgroundColor: "white",
+    padding: 0,
+    margin: 0
   },
   countContainer: {
     alignItems: "center",

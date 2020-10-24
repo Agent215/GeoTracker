@@ -26,11 +26,11 @@ const EventMarkersOnMap = ({ events, callback }) => {
       {
         events.map
           (
-            (marker) => {
+            (marker, index) => {
               if (marker.isShow) {
                 return (
                   <Marker
-                    key={marker.id}
+                    key={index}
                     coordinate={{
                       latitude: marker.LatL,
                       longitude: marker.LongL

@@ -29,7 +29,7 @@ const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const MapScreen = ({navigation}) => {
+const MapScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const currentDisaster = useSelector(
     (state) => state.disaster.currentDisaster
@@ -203,6 +203,7 @@ const MapScreen = ({navigation}) => {
         <CustomModal
           title={currentDisaster.title}
           visable={isModalVisible}
+          disaster={currentDisaster}
           toggleModal={toggleModal}
         />
         <GooglePlacesAutocomplete

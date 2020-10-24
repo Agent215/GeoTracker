@@ -4,6 +4,7 @@ import Modal from 'react-native-modal';
 import { Dimensions } from 'react-native';
 import { IconButton, Colors } from "react-native-paper";
 import { Row } from 'native-base';
+import FeedScreenShare from './ShareFeat';
 
 const { width, height } = Dimensions.get('screen');
 const SCREEN_WIDTH = width;
@@ -33,13 +34,8 @@ const CustomModal = (props) => {
                 <ScrollView>
                     <View style={styles.container}>
                         <Text style={styles.title}>Title: {props.title}</Text>
-                        <View style ={{flexDirection: "row"}}>
-                            <IconButton
-                                icon="share-variant"
-                                color={Colors.white}
-                                size={50}
-                                onPress={() => { console.log("share button pressed on modal") }}
-                            />
+                        <View style={{ flexDirection: "row" }}>
+                            <FeedScreenShare link={props.link} color="white" size={50} />
                             <IconButton
                                 icon="content-save-outline"
                                 color={Colors.white}
