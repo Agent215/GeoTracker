@@ -68,8 +68,8 @@
         "Layers": [],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-geotracker-eonet-195426-deployment",
-          "S3Key": "amplify-builds/EventsApiLambda-52675a385a7558424333-build.zip"
+          "S3Bucket": "amplify-geotracker-dev-132225-deployment",
+          "S3Key": "amplify-builds/EventsApiLambda-586e6e54354f49567350-build.zip"
         }
       }
     },
