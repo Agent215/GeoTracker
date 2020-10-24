@@ -29,7 +29,7 @@ const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const MapScreen = (props) => {
+const MapScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const currentDisaster = useSelector(
     (state) => state.disaster.currentDisaster
@@ -45,7 +45,6 @@ const MapScreen = (props) => {
     return { ...params, isShow: true };
   });
 
-  // console.log(filteredEvent);
 
   console.log("Mapscreen.tsx - current disaster " + currentDisaster);
   let mapRef = useRef(MapView.prototype);
@@ -118,10 +117,11 @@ const MapScreen = (props) => {
       (error) =>
         console.log(
           "MapScreen.tsx/animateToUser() - Got error from navigator.geolocation.getCurrentPosition: " +
-            error
+          error
         )
     );
   };
+
 
   const animateToDisaster = () => {
     let coords = {
@@ -138,6 +138,7 @@ const MapScreen = (props) => {
   useEffect(() => {
     animateToUser();
   }, []);
+  /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
     if (currentDisaster != "null") animateToDisaster();
   }, [currentDisaster.title]);
@@ -160,9 +161,9 @@ const MapScreen = (props) => {
         }}
         dropDownStyle={{ backgroundColor: "#fafafa" }}
         onChangeItem={(item) => {
-          console.log(
-            item.value + " is selected========================================"
-          );
+          //   console.log(
+          //   item.value + " is selected========================================"
+          // );
           //  console.log(filteredEvent);
           filteredEvent.map((params) => {
             if (params.description === item.value) {
@@ -173,7 +174,7 @@ const MapScreen = (props) => {
             return params;
           });
 
-          console.log(filteredEvent);
+          // console.log(filteredEvent);
           setShowEvent(filteredEvent);
           // dispatch(actions.setRenderDisaster())
         }}
@@ -195,37 +196,8 @@ const MapScreen = (props) => {
           zoomControlEnabled={true}
           loadingEnabled={true}
         >
-          <EventMarkersOnMap events={showEvent} />
-          {/* <EventMarkersOnMap events={showEvent} /> */}
+          <EventMarkersOnMap events={showEvent} callback={toggleModal} />
 
-          {/* {
-          
-          
-          filteredEvent.map
-         (
-           (marker) =>{         
-            if(marker.isShow){
-            return(         
-              <Marker
-                key={marker.id}
-                coordinate={{
-                  latitude: marker.LatL,
-                  longitude: marker.LongL
-                }}
-                title={marker.title}
-                description={marker.description}
-                onPress={() => { dispatch(actions.setCurrentDisaster(marker)); toggleModal(marker); }}
-              >
-                <DisasterPin
-                  size={50}
-                  category={marker.description}
-                />
-              </Marker>
-
-            );}
-            }
-          )
-        } */}
         </MapView>
 
         <CustomModal
@@ -281,7 +253,7 @@ const MapScreen = (props) => {
             dispatch(actions.changeCounter());
           }}
         >
-          
+
           <Text
             style={{
               backgroundColor: "purple",

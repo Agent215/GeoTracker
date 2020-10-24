@@ -48,7 +48,7 @@ const CustomModal = (props) => {
                             />
                         </View>
 
-                        <Button title="Hide modal" onPress={props.toggleModal} />
+
                     </View >
                 </ScrollView>
             </Modal>
