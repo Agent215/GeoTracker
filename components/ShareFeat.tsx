@@ -1,11 +1,11 @@
 import React from 'react';
 import { Share, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function FeedScreenShare() {
+const FeedScreenShare =({link}) => {
     const onShare = async () => {
         try {
             const result = await Share.share({
-                message: 'This is a test share',
+                message: link,
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
@@ -46,3 +46,5 @@ const styles = StyleSheet.create({
         padding: 10
     }
 });
+
+export default FeedScreenShare;

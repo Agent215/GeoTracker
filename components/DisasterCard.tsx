@@ -30,7 +30,7 @@ const DisasterCard = (props) => {
       <CardItem footer>
         <Col>
           <View>
-            {FeedScreenShare()}
+            <FeedScreenShare link={props.event.link} />
           </View>
         </Col>
         <Col>
