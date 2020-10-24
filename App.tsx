@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import disasterReducer from './store/reducers/disaster';
+import counterReducer from './store/reducers/counterReducer.js';
+import reRenderDisasterReducer from './store/reducers/renderDisasterReducer.js';
 // Added for tabs
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
@@ -14,7 +16,9 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 
 const rootReducer = combineReducers({
-  disaster: disasterReducer
+  disaster: disasterReducer,
+  counterReducer:counterReducer,
+  renderDisaster:reRenderDisasterReducer,
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)));

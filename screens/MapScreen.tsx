@@ -4,20 +4,23 @@ import { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
 import { View, Text } from "../components/Themed";
-import { events } from '../assets/Mocked_Data'
+import { events } from "../assets/Mocked_Data";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
-import DisasterPin from '../components/CustomMarker';
-import CustomModal from '../components/CustomModal'
-import * as actions from '../store/actions/actions';
+import DisasterPin from "../components/CustomMarker";
+import CustomModal from "../components/CustomModal";
+import * as actions from "../store/actions/actions";
+import { State, TouchableOpacity } from "react-native-gesture-handler";
+import Icon from "react-native-vector-icons/Feather";
+import DropDownPicker from "react-native-dropdown-picker";
+import EventMarkersOnMap from "../components/EventMarkersOnMap";
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
 Geocoder.init(Keys.geocoderKey, { language: "en" }); // use a valid API key
-
 
 const LATITUDE_DELTA = 0.0922;
 const { width, height } = Dimensions.get("window");
@@ -27,15 +30,33 @@ const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const MapScreen = (props) => {
-
   const dispatch = useDispatch();
-  const currentDisaster = useSelector(state => state.disaster.currentDisaster);
-  console.log("Mapscreen.tsx - current disaster " + currentDisaster.title);
+  const currentDisaster = useSelector(
+    (state) => state.disaster.currentDisaster
+  );
+  const counter = useSelector((state) => state.counterReducer.counter);
+  const isReRenderDisaster = useSelector(
+    (state) => state.renderDisaster.reRender
+  );
+
+  //adding property isShow to each event, which determine if they shold show on the map
+  //they all should when the Map first rendered
+  let filteredEvent = events.map((params) => {
+    return { ...params, isShow: true };
+  });
+
+  // console.log(filteredEvent);
+
+  console.log("Mapscreen.tsx - current disaster " + currentDisaster);
   let mapRef = useRef(MapView.prototype);
 
   const [isModalVisible, setModalVisible] = useState(false);
-  const [mapMode, setMapMode] = useState("hybrid")
-  const [toggleMap, setToggleMap] = useState(false)
+  const [mapMode, setMapMode] = useState("hybrid");
+  const [toggleMap, setToggleMap] = useState(false);
+  const [showEvent, setShowEvent] = useState(filteredEvent);
+
+  console.log("here is the initial show event:");
+  console.log({ showEvent });
 
   if (currentDisaster == "null") {
     var INITIALREGION = {
@@ -46,7 +67,6 @@ const MapScreen = (props) => {
       longitudeDelta: 0.0421,
     };
   } else {
-
     // delcare types
     let lat: number = currentDisaster.LatL;
     let long: number = currentDisaster.LongL;
@@ -59,18 +79,23 @@ const MapScreen = (props) => {
   }
 
   const toggleMapMode = () => {
-
-    if (!toggleMap) { setMapMode("standard"); setToggleMap(true); }
-    else { setMapMode("hybrid"); setToggleMap(false); }
-
-  }
+    if (!toggleMap) {
+      setMapMode("standard");
+      setToggleMap(true);
+    } else {
+      setMapMode("hybrid");
+      setToggleMap(false);
+    }
+  };
 
   /**
    * Toggle disaster modal
    */
   const toggleModal = (event) => {
     setModalVisible(!isModalVisible);
-    console.log("MapScreen.tsx-toggleModal()-current disaster " + currentDisaster.title);
+    console.log(
+      "MapScreen.tsx-toggleModal()-current disaster " + currentDisaster.title
+    );
   };
 
   /*
@@ -93,121 +118,190 @@ const MapScreen = (props) => {
       (error) =>
         console.log(
           "MapScreen.tsx/animateToUser() - Got error from navigator.geolocation.getCurrentPosition: " +
-          error
+            error
         )
     );
   };
 
-
-  const animateToDisaster =() => {
-
+  const animateToDisaster = () => {
     let coords = {
       latitude: currentDisaster.LatL,
       longitude: currentDisaster.LongL,
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     };
-   
+
     mapRef.current.animateToRegion(coords, 0);
-  }
+  };
 
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
-
   }, []);
   useEffect(() => {
-    if (currentDisaster != "null")
-    animateToDisaster();
-
+    if (currentDisaster != "null") animateToDisaster();
   }, [currentDisaster.title]);
 
-
-
   return (
-    <View style={styles.container}>
-      <MapView
-        ref={mapRef}
-        initialRegion={INITIALREGION}
-        style={styles.mapStyle}
-        mapType={mapMode}  // typescript error i think we can fix by going to index.d.ts and changing maptype to string
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-        rotateEnabled={false}
-        showsTraffic={false}
-        toolbarEnabled={true}
-        zoomEnabled={true}
-        zoomControlEnabled={true}
-        loadingEnabled={true}
-      >
-        {events.map((marker) => (
+    <>
+      <DropDownPicker
+        items={[
+          { label: "severestorm", value: "severestorm" },
+          { label: "wildfire", value: "wildfire" },
+          { label: "flood", value: "flood" },
+          { label: "iceberg", value: "iceberg" },
+          { label: "volcano", value: "volcano" },
+        ]}
+        placeholder="---Select an item---"
+        containerStyle={{ height: 40 }}
+        style={styles.dropDownPicker}
+        itemStyle={{
+          justifyContent: "flex-start",
+        }}
+        dropDownStyle={{ backgroundColor: "#fafafa" }}
+        onChangeItem={(item) => {
+          console.log(
+            item.value + " is selected========================================"
+          );
+          //  console.log(filteredEvent);
+          filteredEvent.map((params) => {
+            if (params.description === item.value) {
+              params.isShow = true;
+            } else {
+              params.isShow = false;
+            }
+            return params;
+          });
 
-          <Marker
-            key={marker.id}
-            coordinate={{
-              latitude: marker.LatL,
-              longitude: marker.LongL
+          console.log(filteredEvent);
+          setShowEvent(filteredEvent);
+          // dispatch(actions.setRenderDisaster())
+        }}
+      />
+
+      <View style={styles.container}>
+        <MapView
+          ref={mapRef}
+          initialRegion={INITIALREGION}
+          style={styles.mapStyle}
+          mapType={mapMode} // typescript error i think we can fix by going to index.d.ts and changing maptype to string
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          rotateEnabled={false}
+          showsTraffic={false}
+          toolbarEnabled={true}
+          zoomEnabled={true}
+          zoomControlEnabled={true}
+          loadingEnabled={true}
+        >
+          <EventMarkersOnMap events={showEvent} />
+          {/* <EventMarkersOnMap events={showEvent} /> */}
+
+          {/* {
+          
+          
+          filteredEvent.map
+         (
+           (marker) =>{         
+            if(marker.isShow){
+            return(         
+              <Marker
+                key={marker.id}
+                coordinate={{
+                  latitude: marker.LatL,
+                  longitude: marker.LongL
+                }}
+                title={marker.title}
+                description={marker.description}
+                onPress={() => { dispatch(actions.setCurrentDisaster(marker)); toggleModal(marker); }}
+              >
+                <DisasterPin
+                  size={50}
+                  category={marker.description}
+                />
+              </Marker>
+
+            );}
+            }
+          )
+        } */}
+        </MapView>
+
+        <CustomModal
+          title={currentDisaster.title}
+          visable={isModalVisible}
+          toggleModal={toggleModal}
+        />
+        <GooglePlacesAutocomplete
+          placeholder="Enter Location"
+          query={{
+            key: GOOGLE_PLACES_API_KEY,
+            language: "en", // language of the results
+          }}
+          onPress={(data, details = null) => {
+            console.log(data);
+            console.log("test");
+            Geocoder.from(data.description)
+              .then((json) => {
+                var location = json.results[0].geometry.location;
+                console.log(location);
+                let lat = location.lat;
+                let lng = location.lng;
+                let coords = {
+                  latitude: lat,
+                  longitude: lng,
+                  latitudeDelta: LATITUDE_DELTA,
+                  longitudeDelta: LONGITUDE_DELTA,
+                };
+                mapRef.current.animateToRegion(coords, 0);
+              })
+              .catch((error) => console.warn(error));
+          }}
+          onFail={(error) => console.error(error)}
+          styles={searchStyles}
+          textInputProps={{ clearButtonMode: "always" }}
+        />
+
+        {/*current location button that shows on bottom right of the map */}
+
+        <IconButton
+          // icon={require('../assets/locationG-Icon.png')}
+          // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
+          icon="crosshairs-gps"
+          style={locationIcon.container}
+          color={Colors.blue600}
+          size={50}
+          onPress={() => {
+            animateToUser();
+          }}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(actions.changeCounter());
+          }}
+        >
+          
+          <Text
+            style={{
+              backgroundColor: "purple",
+              fontSize: 30,
+              alignSelf: "flex-start",
             }}
-            title={marker.title}
-            description={marker.description}
-            onPress={() => { dispatch(actions.setCurrentDisaster(marker)); toggleModal(marker); }}
           >
-            <DisasterPin
-              size={50}
-              category={marker.description}
-            />
-          </Marker>
-        ))}
-      </MapView>
-      <CustomModal
-        title={currentDisaster.title}
-        visable={isModalVisible}
-        toggleModal={toggleModal}
-      />
-      <GooglePlacesAutocomplete
-        placeholder="Enter Location"
-        query={{
-          key: GOOGLE_PLACES_API_KEY,
-          language: "en", // language of the results
-        }}
-        onPress={(data, details = null) => {
-          console.log(data);
-          console.log("test");
-          Geocoder.from(data.description)
-            .then((json) => {
-              var location = json.results[0].geometry.location;
-              console.log(location);
-              let lat = location.lat;
-              let lng = location.lng;
-              let coords = {
-                latitude: lat,
-                longitude: lng,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA,
-              };
-              mapRef.current.animateToRegion(coords, 0);
-            })
-            .catch((error) => console.warn(error));
-        }}
-        onFail={(error) => console.error(error)}
-        styles={searchStyles}
-        textInputProps={{ clearButtonMode: "always" }}
-      />
+            {counter}
+          </Text>
+        </TouchableOpacity>
 
-      {/*current location button that shows on bottom right of the map */}
-
-      <IconButton
-        // icon={require('../assets/locationG-Icon.png')}
-        // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
-        icon="crosshairs-gps"
-        style={locationIcon.container}
-        color={Colors.blue600}
-        size={50}
-        onPress={() => { animateToUser(); }}
-      />
-      <Switch value={toggleMap} onValueChange={() => { console.log("MapScreen.tsx/toggleMapMode - toggle MapMode Test"); toggleMapMode() }} />
-    </View>
+        <Switch
+          value={toggleMap}
+          onValueChange={() => {
+            console.log("MapScreen.tsx/toggleMapMode - toggle MapMode Test");
+            toggleMapMode();
+          }}
+        />
+      </View>
+    </>
   );
 };
 
@@ -238,9 +332,14 @@ const styles = StyleSheet.create({
   },
   plainView: {
     flex: 1,
-    width: 'auto',
-    backgroundColor: '#107B67'
-
+    width: "auto",
+    backgroundColor: "#107B67",
+  },
+  dropDownPicker: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    backgroundColor: "#fafafa",
   },
 });
 
@@ -282,8 +381,6 @@ const searchStyles = StyleSheet.create({
     width: SCREEN_WIDTH,
   },
 });
-
-
 
 //style for the current location button
 const locationIcon = StyleSheet.create({
