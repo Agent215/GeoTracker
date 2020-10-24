@@ -8,7 +8,7 @@ import MapView from "react-native-map-clustering";
 import { View } from "../components/Themed";
 import { IconButton, Colors } from "react-native-paper";
 
-import { events } from '../assets/Mocked_Data'
+import { eventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -84,20 +84,20 @@ const MapScreen = (props) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-        {events.map((marker, index) => (
+        {eventList.events.map((marker: EventEntity, index) => (
 
           <Marker
             key={index}
             coordinate={{
-              latitude: marker.LatL,
-              longitude: marker.LongL
+              latitude: parseFloat(marker.currentLat),
+              longitude: parseFloat(marker.currentLong)
             }}
             title={marker.title}
-            description={marker.description}
+            description={marker.category}
           >
             <DisasterPin
               size={50}
-              category={marker.description}
+              category={marker.category}
             />
           </Marker>
         ))}

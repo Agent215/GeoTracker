@@ -9,6 +9,7 @@ module.exports = class EventEntity {
         this.currentLat = undefined;
         this.currentLong = undefined;
         this.id = undefined;
+        this.currentDate = undefined;
     }
 
     setTitle(title){
@@ -41,5 +42,9 @@ module.exports = class EventEntity {
 
     setId(id) {
         this.id = id;
+    }
+
+    setDate(date) {
+	this.currentDate = date;
     }
 }

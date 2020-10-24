@@ -39,6 +39,7 @@ function createListFromJsonResponse(json) {
         currentEvent.setCurrentLat(item.geometry[0].coordinates[1]);
         currentEvent.setCurrentLong(item.geometry[0].coordinates[0]);
         currentEvent.setId(item.id);
+	    currentEvent.setDate(item.geometry[0].date);
 
         parsedList.events.push(currentEvent);
     });
