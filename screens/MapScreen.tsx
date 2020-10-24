@@ -138,6 +138,9 @@ const MapScreen = ({ navigation }) => {
   useEffect(() => {
     animateToUser();
   }, []);
+  useEffect(() => {
+
+  }, [filteredEvent[0]]);
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
     if (currentDisaster != "null") animateToDisaster();
@@ -147,11 +150,11 @@ const MapScreen = ({ navigation }) => {
     <>
       <DropDownPicker
         items={[
-          { label: "severestorm", value: "severestorm" },
-          { label: "wildfire", value: "wildfire" },
-          { label: "flood", value: "flood" },
-          { label: "iceberg", value: "iceberg" },
-          { label: "volcano", value: "volcano" },
+          { label: "severestorm", value: "severeStorms" },
+          { label: "wildfire", value: "wildfires" },
+          { label: "flood", value: "floods" },
+          { label: "iceberg", value: "seaLakeIce" },
+          { label: "volcano", value: "volcanoes" },
         ]}
         placeholder="---Select an item---"
         containerStyle={{ height: 40 }}
@@ -161,10 +164,10 @@ const MapScreen = ({ navigation }) => {
         }}
         dropDownStyle={{ backgroundColor: "#fafafa" }}
         onChangeItem={(item) => {
-          //   console.log(
-          //   item.value + " is selected========================================"
-          // );
-          //  console.log(filteredEvent);
+          console.log(
+            item.value + " is selected========================================"
+          );
+          console.log(filteredEvent);
           filteredEvent.map((params) => {
             if (params.description === item.value) {
               params.isShow = true;
@@ -174,7 +177,6 @@ const MapScreen = ({ navigation }) => {
             return params;
           });
 
-          // console.log(filteredEvent);
           setShowEvent(filteredEvent);
           // dispatch(actions.setRenderDisaster())
         }}
@@ -249,22 +251,6 @@ const MapScreen = ({ navigation }) => {
             animateToUser();
           }}
         />
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(actions.changeCounter());
-          }}
-        >
-
-          <Text
-            style={{
-              backgroundColor: "purple",
-              fontSize: 30,
-              alignSelf: "flex-start",
-            }}
-          >
-            {counter}
-          </Text>
-        </TouchableOpacity>
 
         <Switch
           value={toggleMap}

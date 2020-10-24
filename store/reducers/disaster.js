@@ -1,8 +1,10 @@
 import { SET_CURRENT_DISASTER } from '../actions/actions'
+import { RENDER_DISASTER } from '../actions/actions'
 
 const initialState = {
 
-    currentDisaster : "null"
+    currentDisaster: "null",
+    reRender : false
 };
 
 
@@ -12,7 +14,15 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 currentDisaster: action.disaster
-            }
+            };
+        case RENDER_DISASTER:
+
+            console.log("render changed!!");
+            return {
+                ...state,
+                reRender: !state.reRender
+            };
+
         default:
             return state;
     }
