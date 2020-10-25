@@ -35,12 +35,11 @@ const MapScreen = ({ navigation }) => {
   const disasterFilter = useSelector((state) => state.disaster.disasterFilter);
   //adding property isShow to each event, which determine if they shold show on the map
   //they all should when the Map first rendered
-  let filteredEvent = events.map((params) => {
-    return { ...params, isShow: true };
+  let filteredEvent = events.map((event) => {
+    return { ...event, isShow: true };
   });
 
-  // save all events for the all filter
-  const allEvents = filteredEvent;
+
 
   console.log("Mapscreen.tsx - current disaster " + currentDisaster);
   console.log("Mapscreen.tsx - current disaster filter " + disasterFilter.value);
@@ -49,7 +48,7 @@ const MapScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  const [showEvent, setShowEvent] = useState(filteredEvent);
+  const [filteredEvents, setFilteredEvents] = useState(filteredEvent);
 
 
   if (currentDisaster == "null") {
@@ -133,32 +132,44 @@ const MapScreen = ({ navigation }) => {
   useEffect(() => {
     animateToUser();
   }, []);
+
   useEffect(() => {
-    if (disasterFilter != "all") filterDisasters();
+    if (disasterFilter != "null") filterDisasters();
   }, [disasterFilter.value]);
+
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
     if (currentDisaster != "null") animateToDisaster();
   }, [currentDisaster.title]);
 
-/**
- * 
- * filter the disaster markers
- */
+  /**
+   * 
+   * filter the disaster markers
+   */
   const filterDisasters = () => {
 
-    filteredEvent.map((params) => {
+    // filteredEvent.map((event) => {
+    //   // if we have all set lets show all
+    //   if (disasterFilter.value === "all" || disasterFilter.value === "null") { event.isShow = true }
+    //   else if (event.description === disasterFilter.value) {
+    //     event.isShow = true;   //else check if description matches filter and show those
+    //   } else {
+    //     event.isShow = false;
+    //   }
 
-      // if we have all set lets show all
-      if (disasterFilter.value === "all") { params.isShow = true }
-      else if (params.description === disasterFilter.value) {
-        params.isShow = true;   //else check if description matches filter and show those
+    // });
+
+
+    filteredEvents.forEach(event => {
+      if (disasterFilter.value === "all" || disasterFilter.value === "null") { event.isShow = true }
+      else if (event.description === disasterFilter.value) {
+        event.isShow = true;   //else check if description matches filter and show those
       } else {
-        params.isShow = false;
+        event.isShow = false;
       }
-      return params;
     });
-    setShowEvent(filteredEvent);
+    setFilteredEvents(filteredEvents)
+
   };
 
   return (
@@ -179,7 +190,7 @@ const MapScreen = ({ navigation }) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-        <EventMarkersOnMap events={showEvent} callback={toggleModal} />
+        <EventMarkersOnMap events={filteredEvents} callback={toggleModal} />
       </MapView>
 
       <CustomModal

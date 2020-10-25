@@ -7,8 +7,8 @@ const initialState = {
 
     currentDisaster: "null",
     reRender: false,
-    disasterFilter: "all",
-    weatherFilter: "none",
+    disasterFilter: "null",
+    weatherFilter: "null",
 
 };
 
