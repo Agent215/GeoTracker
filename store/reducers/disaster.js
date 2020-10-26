@@ -1,5 +1,5 @@
 import { SET_CURRENT_DISASTER } from '../actions/actions';
-import { RENDER_DISASTER } from '../actions/actions';
+import { SET_FILTERED_DISASTERS } from '../actions/actions'
 import { SET_DISASTER_FILTER } from '../actions/actions';
 import { SET_WEATHER_FILTER } from '../actions/actions';
 
@@ -7,8 +7,9 @@ const initialState = {
 
     currentDisaster: "null",
     reRender: false,
-    disasterFilter: "null",
+    disasterFilter: "",
     weatherFilter: "null",
+    filteredDisasters: []
 
 };
 
@@ -22,16 +23,21 @@ export default (state = initialState, action) => {
             };
         case SET_DISASTER_FILTER:
 
-            console.log("setting disater filter");
             return {
                 ...state,
                 disasterFilter: action.disasterFilter
             };
         case SET_WEATHER_FILTER:
-            console.log("setting weather filter");
+
             return {
                 ...state,
                 weatherFilter: action.weatherFilter
+            };
+        case SET_FILTERED_DISASTERS:
+
+            return {
+                ...state,
+                filteredDisasters: action.filteredDisasters
             };
 
         default:

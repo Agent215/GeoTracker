@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { StyleSheet, Dimensions } from "react-native";
-import { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
+import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
@@ -13,10 +13,6 @@ import * as Keys from "../constants/APIkeys";
 import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
-import { State, TouchableOpacity } from "react-native-gesture-handler";
-import Icon from "react-native-vector-icons/Feather";
-import DropDownPicker from "react-native-dropdown-picker";
-import EventMarkersOnMap from "../components/EventMarkersOnMap";
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
@@ -28,49 +24,47 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+var INITIALREGION = {
+  // this is philly for now, we can change this to whatever
+  latitude: 39.9526,
+  longitude: -75.16522,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
+};
 
 const MapScreen = ({ navigation }) => {
+  //get state from redux store
   const dispatch = useDispatch();
-  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);
-  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);
-  //adding property isShow to each event, which determine if they shold show on the map
-  //they all should when the Map first rendered
-  let filteredEvent = events.map((event) => {
-    return { ...event, isShow: true };
-  });
+  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker
+  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
+  const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
 
-
-
-  console.log("Mapscreen.tsx - current disaster " + currentDisaster);
-  console.log("Mapscreen.tsx - current disaster filter " + disasterFilter.value);
   let mapRef = useRef(MapView.prototype);
-
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  const [filteredEvents, setFilteredEvents] = useState(filteredEvent);
+  let tempArray = [];
 
+  /*adding property isShow to all events, which determine if they shold show on the map
+  they all should when the Map first rendered*/
+  let allEvents = events.map((event) => {
+    return { ...event, isShow: true };
+  });
 
-  if (currentDisaster == "null") {
-    var INITIALREGION = {
-      // this is philly for now, we can change this to whatever
-      latitude: 39.9526,
-      longitude: -75.16522,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    };
-  } else {
-    // delcare types
-    let lat: number = currentDisaster.LatL;
-    let long: number = currentDisaster.LongL;
-    var INITIALREGION = {
-      latitude: lat,
-      longitude: long,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    };
-  }
+  // uncomment these for debugging 
+  // console.log("Mapscreen.tsx - current disaster " + currentDisaster);
+  // console.log("Mapscreen.tsx - current disaster filter " + disasterFilter.value);
 
+  // filteredDisasters.forEach(element => {
+  //   console.log("store values :" + element.isShow + " " + element.title);
+
+  // });
+ 
+  
+  /**
+   * standard shows streets 
+   * hybrid shows town and city names over satilite view
+   */
   const toggleMapMode = () => {
     if (!toggleMap) {
       setMapMode("standard");
@@ -84,11 +78,8 @@ const MapScreen = ({ navigation }) => {
   /**
    * Toggle disaster modal
    */
-  const toggleModal = (event) => {
+  const toggleModal = () => {
     setModalVisible(!isModalVisible);
-    console.log(
-      "MapScreen.tsx-toggleModal()-current disaster " + currentDisaster.title
-    );
   };
 
   /*
@@ -116,7 +107,9 @@ const MapScreen = ({ navigation }) => {
     );
   };
 
-
+/**
+ * take coordinates from currently selected disaster
+ */
   const animateToDisaster = () => {
     let coords = {
       latitude: currentDisaster.LatL,
@@ -133,42 +126,47 @@ const MapScreen = ({ navigation }) => {
     animateToUser();
   }, []);
 
+  /**
+   * When the disaster filter is changed lets filter the disasters
+   */
   useEffect(() => {
-    if (disasterFilter != "null") filterDisasters();
-  }, [disasterFilter.value]);
+    filterDisasters()
+  }, [disasterFilter, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
     if (currentDisaster != "null") animateToDisaster();
-  }, [currentDisaster.title]);
+  }, [currentDisaster.title, dispatch]);
 
   /**
    * 
    * filter the disaster markers
+   * create a new temporary array composed of only filtered disasters
+   * then dispatch that to the redux store. Make sure we reset this array
+   * each time arround.
    */
   const filterDisasters = () => {
 
-    // filteredEvent.map((event) => {
-    //   // if we have all set lets show all
-    //   if (disasterFilter.value === "all" || disasterFilter.value === "null") { event.isShow = true }
-    //   else if (event.description === disasterFilter.value) {
-    //     event.isShow = true;   //else check if description matches filter and show those
-    //   } else {
-    //     event.isShow = false;
-    //   }
-
-    // });
-
-
-    filteredEvents.forEach(event => {
-      if (disasterFilter.value === "all" || disasterFilter.value === "null") { event.isShow = true }
-      else if (event.description === disasterFilter.value) {
-        event.isShow = true;   //else check if description matches filter and show those
-      } else {
+    tempArray = [];   // reset temp array
+    // go through all events and mark which ones need to be filtered.
+    const disasterToFilter = allEvents.map((event) => {
+      if (disasterFilter.value === "all"      // filter for all
+        || disasterFilter.value === ""        // first time we render
+        || disasterFilter.value == undefined  //just in case
+        || event.description === disasterFilter.value) { event.isShow = true }
+      else {
         event.isShow = false;
       }
+      return event
     });
-    setFilteredEvents(filteredEvents)
+
+    // create a new array from the array with correctly marked isShow prop
+    disasterToFilter.forEach(element => {
+      if (element.isShow) tempArray.push(element)
+    })
+
+    // send only the filtered events to the redux store
+    dispatch(actions.setFilteredDisasters(tempArray));
 
   };
 
@@ -190,7 +188,31 @@ const MapScreen = ({ navigation }) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-        <EventMarkersOnMap events={filteredEvents} callback={toggleModal} />
+        {
+          filteredDisasters.map
+            (
+              (marker) => {
+                return (
+                  <Marker
+                    key={marker.id}
+                    coordinate={{
+                      latitude: marker.LatL,
+                      longitude: marker.LongL
+                    }}
+                    title={marker.title}
+                    description={marker.description}
+                    onPress={()=>{toggleModal() ; dispatch(actions.setCurrentDisaster(marker))}}
+                    tracksViewChanges={false}  // keep this to optimize performence of custom pins
+                  >
+                    <DisasterPin
+                      size={50}
+                      category={marker.description}
+                    />
+                  </Marker>
+                );
+              }
+            )
+        }
       </MapView>
 
       <CustomModal
@@ -230,10 +252,7 @@ const MapScreen = ({ navigation }) => {
       />
 
       {/*current location button that shows on bottom right of the map */}
-
       <IconButton
-        // icon={require('../assets/locationG-Icon.png')}
-        // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
         icon="crosshairs-gps"
         style={locationIcon.container}
         color={Colors.blue600}
@@ -242,7 +261,6 @@ const MapScreen = ({ navigation }) => {
           animateToUser();
         }}
       />
-
       <Switch
         value={toggleMap}
         onValueChange={() => {

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../store/actions/actions";
 import React, { useState } from 'react';
 
-const EventMarkersOnMap = ({ events, callback }) => {
+const EventMarkersOnMap = ({ events, callback, categories }) => {
 
 
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const EventMarkersOnMap = ({ events, callback }) => {
     (state) => state.disaster.currentDisaster
   );
 
- //set current disaster on press of pin and call togglemodal callback
+  //set current disaster on press of pin and call togglemodal callback
   const markerPress = (disaster) => {
     dispatch(actions.setCurrentDisaster(disaster));
     callback();
@@ -27,7 +27,7 @@ const EventMarkersOnMap = ({ events, callback }) => {
         events.map
           (
             (marker, index) => {
-              if (marker.isShow) {
+              if (marker.isShow || categories == undefined || categories.value == "" || categories.value == "all") {
                 return (
                   <Marker
                     key={index}
