@@ -1,7 +1,9 @@
-import React from 'react'
+import React, {  useState } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import Amplify from 'aws-amplify'
 import config from './aws-exports'
+import { AppLoading } from 'expo';
+import { API } from 'aws-amplify'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider, useDispatch } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
@@ -32,12 +34,21 @@ Amplify.configure({
 });
 
 
+let eventList;
+
 const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  console.disableYellowBox = true
+  const [fetchedData, setDataFetched] = useState(false)
   
-  if (!isLoadingComplete) {
-    return null;
+  if (!fetchedData) {
+    return (
+      <AppLoading
+        startAsync={getData}
+        onFinish={() => setDataFetched(true)}
+        />
+    );
   } else {
     return (
       <Provider store={store} >
@@ -54,4 +65,16 @@ const App = () => {
   }
 }
 
+async function getData() { 
+  const apiName = 'EventsApi';
+  const path = '/events/all';
+  const myInit = { // OPTIONAL
+      headers: {}, // OPTIONAL
+  };
+
+  eventList = await API.get(apiName, path, myInit);
+}
+
+
+export { eventList }
 export default App

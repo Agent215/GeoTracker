@@ -2,11 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
+import { eventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import FilterScreen from '../screens/FilterScreen'
-import { View, Text } from "../components/Themed";
+import { View } from "../components/Themed";
 import { events } from "../assets/Mocked_Data";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -47,7 +47,7 @@ const MapScreen = ({ navigation }) => {
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
-  let allEvents = events.map((event) => {
+  let allEvents = eventList.events.map((event) => {
     return { ...event, isShow: true };
   });
 
@@ -111,8 +111,8 @@ const MapScreen = ({ navigation }) => {
  */
   const animateToDisaster = () => {
     let coords = {
-      latitude: currentDisaster.LatL,
-      longitude: currentDisaster.LongL,
+      latitude: currentDisaster.currentLat,
+      longitude: currentDisaster.currentLong,
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     };
@@ -152,7 +152,7 @@ const MapScreen = ({ navigation }) => {
       if (disasterFilter.value === "all"      // filter for all
         || disasterFilter.value === ""        // first time we render
         || disasterFilter.value == undefined  //just in case
-        || event.description === disasterFilter.value) { event.isShow = true }
+        || event.category === disasterFilter.value) { event.isShow = true }
       else {
         event.isShow = false;
       }
@@ -187,31 +187,26 @@ const MapScreen = ({ navigation }) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-        {
-          filteredDisasters.map
-            (
-              (marker) => {
-                return (
-                  <Marker
-                    key={marker.id}
-                    coordinate={{
-                      latitude: marker.LatL,
-                      longitude: marker.LongL
-                    }}
-                    title={marker.title}
-                    description={marker.description}
-                    onPress={()=>{toggleModal() ; dispatch(actions.setCurrentDisaster(marker))}}
-                    tracksViewChanges={false}  // keep this to optimize performence of custom pins
-                  >
-                    <DisasterPin
-                      size={50}
-                      category={marker.description}
-                    />
-                  </Marker>
-                );
-              }
-            )
-        }
+        
+        {filteredDisasters.map((marker: EventEntity, index) => (
+
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: parseFloat(marker.currentLat),
+              longitude: parseFloat(marker.currentLong)
+            }}
+            title={marker.title}
+            description={marker.category}
+            tracksViewChanges= {false}
+            onPress={()=>{toggleModal() ; dispatch(actions.setCurrentDisaster(marker))}}
+          >
+            <DisasterPin
+              size={50}
+              category={marker.category}
+            />
+          </Marker>
+        ))}
       </MapView>
       
       <CustomModal
