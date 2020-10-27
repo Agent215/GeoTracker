@@ -38,7 +38,8 @@ const MapScreen = ({ navigation }) => {
   const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker
   const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
   const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
-  const weatherFilter =useSelector((state) => state.disaster.weatherFilter);
+  const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
+  const savedDisaters = useSelector((state) => state.disaster.savedDisasters);
   let mapRef = useRef(MapView.prototype);
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
@@ -52,14 +53,22 @@ const MapScreen = ({ navigation }) => {
   });
 
   // uncomment these for debugging 
-  // console.log("Mapscreen.tsx - current disaster " + currentDisaster);
+  console.log("Mapscreen.tsx - current disaster " + currentDisaster);
   // console.log("Mapscreen.tsx - current disaster filter " + disasterFilter.value);
-    console.log( "Mapscreen.tsx - current weather filter :"+ weatherFilter.value )
+  console.log("Mapscreen.tsx - current weather filter :" + weatherFilter.value)
+
   // filteredDisasters.forEach(element => {
   //   console.log("store values :" + element.isShow + " " + element.title);
   // });
- 
-  
+  console.log("Mapscreen.tsx - Saved Disaster :" +savedDisaters )
+  // if (savedDisaters != undefined) {
+  //   savedDisaters.forEach(element => {
+  //     console.log("Mapscreen.tsx - Saved Disaster :" + element.title)
+  //   });
+  // }
+
+
+
   /**
    * standard shows streets 
    * hybrid shows town and city names over satilite view
@@ -106,9 +115,9 @@ const MapScreen = ({ navigation }) => {
     );
   };
 
-/**
- * take coordinates from currently selected disaster
- */
+  /**
+   * take coordinates from currently selected disaster
+   */
   const animateToDisaster = () => {
     let coords = {
       latitude: currentDisaster.currentLat,
@@ -134,7 +143,8 @@ const MapScreen = ({ navigation }) => {
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
-    if (currentDisaster != "null") animateToDisaster();
+   
+    if (currentDisaster != "") {animateToDisaster();}
   }, [currentDisaster.title, dispatch]);
 
   /**
@@ -174,6 +184,7 @@ const MapScreen = ({ navigation }) => {
     <View style={styles.container}>
       <MapView
         ref={mapRef}
+        onRegionChange={()=>{dispatch(actions.setCurrentDisaster(""))}} // if we move the map reset the current disaster
         initialRegion={INITIALREGION}
         style={styles.mapStyle}
         mapType={mapMode} // typescript error i think we can fix by going to index.d.ts and changing maptype to string
@@ -187,7 +198,7 @@ const MapScreen = ({ navigation }) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-        
+
         {filteredDisasters.map((marker: EventEntity, index) => (
 
           <Marker
@@ -198,8 +209,8 @@ const MapScreen = ({ navigation }) => {
             }}
             title={marker.title}
             description={marker.category}
-            tracksViewChanges= {false}
-            onPress={()=>{toggleModal() ; dispatch(actions.setCurrentDisaster(marker))}}
+            tracksViewChanges={false}
+            onPress={() => { toggleModal(); dispatch(actions.setCurrentDisaster(marker)) }}
           >
             <DisasterPin
               size={50}
@@ -208,14 +219,14 @@ const MapScreen = ({ navigation }) => {
           </Marker>
         ))}
       </MapView>
-      
+
       <CustomModal
         title={currentDisaster.title}
         visable={isModalVisible}
         disaster={currentDisaster}
         toggleModal={toggleModal}
       />
-     
+
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
         query={{

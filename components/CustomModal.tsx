@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, Button, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
 import { Dimensions } from 'react-native';
+import * as actions from '../store/actions/actions';
 import { IconButton, Colors } from "react-native-paper";
 import { Row } from 'native-base';
 import FeedScreenShare from './ShareFeat';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { width, height } = Dimensions.get('screen');
 const SCREEN_WIDTH = width;
@@ -14,7 +16,14 @@ const MODAL_HEIGHT = height / 4;
 // contains event data
 const CustomModal = (props) => {
 
+    const dispatch = useDispatch();
+    
 
+    const onSave = (disaster) => {
+
+        dispatch(actions.saveDisaster(disaster));
+
+    }
     return (
         <View style={{ flex: 1 }}>
 
@@ -40,7 +49,7 @@ const CustomModal = (props) => {
                                 icon="content-save-outline"
                                 color={Colors.white}
                                 size={50}
-                                onPress={() => { console.log("save button pressed on modal") }}
+                                onPress={() => { onSave(props.disaster); console.log("save button pressed on modal") }}
                             />
                         </View>
 

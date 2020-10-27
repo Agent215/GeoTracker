@@ -18,6 +18,9 @@ const DisasterCard = (props) => {
 
   const goToDisaster = (event) => {
     //set current disaster in store
+    console.log(event.title)
+    console.log(event.currentLat)
+    console.log(event.currentLong)
     dispatch(actions.setCurrentDisaster(event));
     navigation.navigate("Map");
   };
@@ -47,9 +50,7 @@ const DisasterCard = (props) => {
           <Text>Share</Text>
         </Col>
         <Col>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => goToDisaster(props.event)} >
+         
             <IconButton
               icon="crosshairs-gps"
               color={"black"}
@@ -57,7 +58,7 @@ const DisasterCard = (props) => {
               onPress={() => goToDisaster(props.event)}
             />
             <Text>Go</Text>
-          </TouchableOpacity>
+      
         </Col>
       </CardItem>
     </Card>
