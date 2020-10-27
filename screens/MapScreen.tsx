@@ -184,7 +184,7 @@ const MapScreen = ({ navigation }) => {
     <View style={styles.container}>
       <MapView
         ref={mapRef}
-        onRegionChange={()=>{dispatch(actions.setCurrentDisaster(""))}} // if we move the map reset the current disaster
+       // onRegionChange={()=>{dispatch(actions.setCurrentDisaster(""))}} // if we move the map reset the current disaster
         initialRegion={INITIALREGION}
         style={styles.mapStyle}
         mapType={mapMode} // typescript error i think we can fix by going to index.d.ts and changing maptype to string
