@@ -14,6 +14,10 @@
     "categories": {
       "auth": {
         "geotracker57620557": {}
+      },
+      "function": {
+        "EventsApiLambda": {},
+        "EventsApiGetAll": {}
       }
     }
   },
@@ -32,6 +36,34 @@
     "categories": {
       "auth": {
         "geotracker57620557": {}
+      },
+      "function": {
+        "EventsApiLambda": {},
+        "EventsApiGetAll": {}
+      }
+    }
+  },
+  "eonet": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-eonet-195426-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-eonet-195426-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-eonet-195426-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-eonet-195426-deployment",
+      "UnauthRoleName": "amplify-geotracker-eonet-195426-unauthRole",
+      "StackName": "amplify-geotracker-eonet-195426",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-eonet-195426/44478000-0ce6-11eb-bd1c-0a7162bf9a3d",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      },
+      "function": {
+        "EventsApiLambda": {},
+        "EventsApiLambdaGetAll": {},
+        "EventsApiLambdaV2": {},
+        "EventsApiGetAll": {}
       }
     }
   }

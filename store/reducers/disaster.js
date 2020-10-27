@@ -2,14 +2,17 @@ import { SET_CURRENT_DISASTER } from '../actions/actions';
 import { SET_FILTERED_DISASTERS } from '../actions/actions'
 import { SET_DISASTER_FILTER } from '../actions/actions';
 import { SET_WEATHER_FILTER } from '../actions/actions';
+import {SAVE_DISASTER} from '../actions/actions'
+
 
 const initialState = {
 
-    currentDisaster: "null",
+    currentDisaster: "",
     reRender: false,
     disasterFilter: "",
-    weatherFilter: "null",
-    filteredDisasters: []
+    weatherFilter: "",
+    filteredDisasters: [],
+    savedDisasters: []
 
 };
 
@@ -38,6 +41,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 filteredDisasters: action.filteredDisasters
+            };
+
+        case SAVE_DISASTER:
+
+            return {
+                ...state,
+                savedDisasters: state.savedDisasters.concat(action.saveDisaster)
             };
 
         default:
