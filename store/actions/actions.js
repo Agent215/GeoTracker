@@ -5,6 +5,7 @@ export const SET_WEATHER_FILTER = "SET_WEATHER_FILTER";
 export const SET_FILTERED_DISASTERS = "SET_FILTERED_DISASTERS"
 
 
+
 export const setCurrentDisaster = (disaster) => {
     return { type: SET_CURRENT_DISASTER, disaster: disaster }
 };
@@ -21,6 +22,10 @@ export const setDisasterFilter = (disasterFilter) => {
 export const setFilteredDisasters = (filteredDisasters) => {
     return { type: SET_FILTERED_DISASTERS, filteredDisasters: filteredDisasters }
 };
+
+
+
+
 
 
 

@@ -3,13 +3,14 @@ import { SET_FILTERED_DISASTERS } from '../actions/actions'
 import { SET_DISASTER_FILTER } from '../actions/actions';
 import { SET_WEATHER_FILTER } from '../actions/actions';
 
+
 const initialState = {
 
     currentDisaster: "null",
     reRender: false,
     disasterFilter: "",
-    weatherFilter: "null",
-    filteredDisasters: []
+    weatherFilter: "",
+    filteredDisasters: [],
 
 };
 
@@ -39,6 +40,7 @@ export default (state = initialState, action) => {
                 ...state,
                 filteredDisasters: action.filteredDisasters
             };
+      
 
         default:
             return state;

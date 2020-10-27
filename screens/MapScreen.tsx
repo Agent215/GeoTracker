@@ -5,7 +5,7 @@ import MapView from "react-native-map-clustering";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-
+import FilterScreen from '../screens/FilterScreen'
 import { View, Text } from "../components/Themed";
 import { events } from "../assets/Mocked_Data";
 import Geocoder from "react-native-geocoding";
@@ -38,7 +38,7 @@ const MapScreen = ({ navigation }) => {
   const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker
   const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
   const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
-
+  const weatherFilter =useSelector((state) => state.disaster.weatherFilter);
   let mapRef = useRef(MapView.prototype);
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
@@ -54,10 +54,9 @@ const MapScreen = ({ navigation }) => {
   // uncomment these for debugging 
   // console.log("Mapscreen.tsx - current disaster " + currentDisaster);
   // console.log("Mapscreen.tsx - current disaster filter " + disasterFilter.value);
-
+    console.log( "Mapscreen.tsx - current weather filter :"+ weatherFilter.value )
   // filteredDisasters.forEach(element => {
   //   console.log("store values :" + element.isShow + " " + element.title);
-
   // });
  
   
@@ -214,13 +213,14 @@ const MapScreen = ({ navigation }) => {
             )
         }
       </MapView>
-
+      
       <CustomModal
         title={currentDisaster.title}
         visable={isModalVisible}
         disaster={currentDisaster}
         toggleModal={toggleModal}
       />
+     
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
         query={{
