@@ -1,11 +1,13 @@
 import React from 'react';
 import { Share, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { IconButton, Colors } from "react-native-paper";
 
-const FeedScreenShare =({link}) => {
+const FeedScreenShare = ({ sourceLink , size, color }) => {
     const onShare = async () => {
         try {
+            console.log("source link "+sourceLink)
             const result = await Share.share({
-                message: link,
+                message: sourceLink,
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
@@ -21,12 +23,15 @@ const FeedScreenShare =({link}) => {
         }
     };
     return (
-        <View>
-            <TouchableOpacity
-                style={styles.button} onPress={onShare}>
-                <Text style={{fontWeight: "bold"}}> Share</Text>
-            </TouchableOpacity>
-        </View>
+       
+            <IconButton
+                style ={{justifyContent: "center"}}
+                icon="share-variant"
+                color={color}
+                size={size}
+                onPress={() => onShare()}
+            />
+        
     );
 }
 

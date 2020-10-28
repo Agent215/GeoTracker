@@ -62,7 +62,7 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const EventFeedStack = createStackNavigator<EventScreenParamList>();
 
-function EventFeedNavigator() {
+ function EventFeedNavigator() {
   return (
     <EventFeedStack.Navigator>
       <EventFeedStack.Screen
@@ -90,7 +90,7 @@ function MapScreenNavigator() {
 
 const SettingsStack = createStackNavigator<SettingsScreenParamList>();
 
-function SettingsScreenNavigator() {
+ function SettingsScreenNavigator() {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
