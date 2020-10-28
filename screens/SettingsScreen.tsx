@@ -1,8 +1,9 @@
-import { Auth } from 'aws-amplify';
+import { Auth, API } from 'aws-amplify';
 import * as React from 'react';
 import { Button, StyleSheet, TextInput } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native'
 import { Text, View } from '../components/Themed';
+
 
 
 export async function signOut() {
@@ -38,8 +39,26 @@ function SettingsScreen() {
       {<Button title='Sign out' onPress={signOut} />}
       <Text style={styles.title}>Click below to Delete User</Text>
       {<Button title='Delete User' onPress={onDeleteUser} />}
+      {<Button title='Log response from API for event/all query' onPress={testAPI} />}
     </View>
   );
+}
+
+async function testAPI() {
+  const apiName = 'EventsApi';
+  const path = '/events/all';
+  const myInit = { // OPTIONAL
+    headers: {}, // OPTIONAL
+  };
+
+  API
+    .get(apiName, path, myInit)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
 }
 
 const styles = StyleSheet.create({

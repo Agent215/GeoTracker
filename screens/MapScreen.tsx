@@ -1,19 +1,19 @@
 import React, { useRef, useEffect, useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker, UrlTile } from "react-native-maps";
-
 import MapView from "react-native-map-clustering";
-
-
-import { View } from "../components/Themed";
-import { IconButton, Colors } from "react-native-paper";
-
-import { events } from '../assets/Mocked_Data'
+import { eventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { IconButton, Colors, Switch } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+
+import { weatherUrls } from "../constants/WeatherUrls"
+import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
-import DisasterPin from '../components/CustomMarker';
-
+import DisasterPin from "../components/CustomMarker";
+import CustomModal from "../components/CustomModal";
+import * as actions from "../store/actions/actions";
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
@@ -25,34 +25,58 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const INITIALREGION = {
-  // this is philly for now, we can change this to whatever
+let INITIALREGION = {  // this is philly for now, we can change this to whatever
   latitude: 39.9526,
   longitude: -75.16522,
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
 
-const MapScreen = (props) => {
+const MapScreen = ({ navigation }) => {
+  //get state from redux store
+  const dispatch = useDispatch();
+  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker
+  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
+  const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
+  const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
   let mapRef = useRef(MapView.prototype);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [mapMode, setMapMode] = useState("hybrid");
+  const [toggleMap, setToggleMap] = useState(false);
+  const [urlTile, setUrlTile] = useState("")
+  const [tileShowing, SetTileShowing] = useState(false);
+  let tempArray = [];           // temp array to store filtered events
+  
 
-  //key and value pairs for use with urlTile for changing weather tile overlay
-  let weatherUrl = [
-    {key: 'clouds', 
-    value:'https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
-    {key: 'precipitation', 
-    value:'https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
-    {key: 'pressure', 
-    value:'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
-    {key: 'wind', 
-    value:'https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
-    {key: 'temp', 
-    value:'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'},
+  /*adding property isShow to all events, which determine if they shold show on the map
+  they all should when the Map first rendered*/
+  let allEvents = eventList.events.map((event) => {
+    return { ...event, isShow: true };
+  });
 
-  ]
 
-  //hook for setting state of weather overlay, currently set to default as temp
-  const [weatherUrlValue, setWeatherUrlValue] = useState('https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b');
+
+  /**
+   * standard shows streets 
+   * hybrid shows town and city names over satilite view
+   */
+  const toggleMapMode = () => {
+    if (!toggleMap) {
+      setMapMode("standard");
+      setToggleMap(true);
+    } else {
+      setMapMode("hybrid");
+      setToggleMap(false);
+    }
+  };
+
+  /**
+   * Toggle disaster modal
+   */
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   /*
   animateToUser 
   */
@@ -78,20 +102,91 @@ const MapScreen = (props) => {
     );
   };
 
+  /**
+   * take coordinates from currently selected disaster
+   */
+  const animateToDisaster = () => {
+    let coords = {
+      latitude: currentDisaster.currentLat,
+      longitude: currentDisaster.currentLong,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    };
+
+    mapRef.current.animateToRegion(coords, 0);
+  };
+
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
   }, []);
 
+  /*
+    set weather tiles on weather filter change
+   */
+  useEffect(() => {
+    // set flag
+    if (weatherFilter == "" || weatherFilter == undefined || weatherFilter.value == "none") {
+      SetTileShowing(false)
+    }
+    else {
+      SetTileShowing(true);
+      setUrlTile(weatherUrls[weatherFilter.value]);
+    }
+  }, [weatherFilter])
+  /**
+   * When the disaster filter is changed lets filter the disasters
+   */
+  useEffect(() => {
+    filterDisasters()
+  }, [disasterFilter, dispatch]);
 
+  /* check if current disaster has changed, if so then force rerender */
+  useEffect(() => {
+
+    if (currentDisaster != "") { animateToDisaster(); }
+  }, [currentDisaster.title, dispatch]);
+
+  /**
+   * 
+   * filter the disaster markers
+   * create a new temporary array composed of only filtered disasters
+   * then dispatch that to the redux store. Make sure we reset this array
+   * each time arround.
+   */
+  const filterDisasters = () => {
+
+    tempArray = [];   // reset temp array
+    // go through all events and mark which ones need to be filtered.
+    const disasterToFilter = allEvents.map((event) => {
+      if (disasterFilter.value === "all"      // filter for all
+        || disasterFilter.value === ""        // first time we render
+        || disasterFilter.value == undefined  //just in case
+        || event.category === disasterFilter.value) { event.isShow = true }
+      else {
+        event.isShow = false;
+      }
+      return event
+    });
+
+    // create a new array from the array with correctly marked isShow prop
+    disasterToFilter.forEach(element => {
+      if (element.isShow) tempArray.push(element)
+    })
+
+    // send only the filtered events to the redux store
+    dispatch(actions.setFilteredDisasters(tempArray));
+
+  };
 
   return (
+
     <View style={styles.container}>
       <MapView
         ref={mapRef}
         initialRegion={INITIALREGION}
         style={styles.mapStyle}
-        mapType="hybrid"
+        mapType={mapMode} // typescript error i think we can fix by going to index.d.ts and changing maptype to string
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
         showsMyLocationButton={true}
@@ -102,29 +197,35 @@ const MapScreen = (props) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-        {events.map((marker, index) => (
+
+        {filteredDisasters.map((marker: EventEntity, index) => (
 
           <Marker
             key={index}
             coordinate={{
-              latitude: marker.LatL,
-              longitude: marker.LongL
+              latitude: parseFloat(marker.currentLat),
+              longitude: parseFloat(marker.currentLong)
             }}
             title={marker.title}
-            description={marker.description}
+            description={marker.category}
+            tracksViewChanges={false}
+            onPress={() => { toggleModal(); dispatch(actions.setCurrentDisaster(marker)) }}
           >
             <DisasterPin
               size={50}
-              category={marker.description}
+              category={marker.category}
             />
           </Marker>
         ))}
-          <UrlTile
+
+
+        {tileShowing &&
+          (<UrlTile
             /**
              * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
              * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
              */
-            urlTemplate={weatherUrlValue}  //Add weather template value here, currently set from default value of hook
+            urlTemplate={urlTile}  //Add weather template value here, currently set from default value of hook
             /**
              * The maximum zoom level for this tile overlay. Corresponds to the maximumZ setting in
              * MKTileOverlay. iOS only.
@@ -135,8 +236,17 @@ const MapScreen = (props) => {
              * to be used. Its default value is false.
              */
             flipY={false}
-          />
+          />)}
+
       </MapView>
+
+      <CustomModal
+        title={currentDisaster.title}
+        sourceLink={currentDisaster.sourceLink}
+        visable={isModalVisible}
+        disaster={currentDisaster}
+        toggleModal={toggleModal}
+      />
 
       <GooglePlacesAutocomplete
         placeholder="Enter Location"
@@ -170,13 +280,17 @@ const MapScreen = (props) => {
 
       {/*current location button that shows on bottom right of the map */}
       <IconButton
-        // icon={require('../assets/locationG-Icon.png')}
-        // icon={{ uri: 'https://avatars0.githubusercontent.com/u/17571969?v=3&s=400' }}
         icon="crosshairs-gps"
         style={locationIcon.container}
         color={Colors.blue600}
         size={50}
-        onPress={() => { animateToUser(); }}
+        onPress={() => {
+          animateToUser();
+        }}
+      />
+      <Switch
+        value={toggleMap}
+        onValueChange={() => { toggleMapMode(); }}
       />
     </View>
   );
@@ -206,6 +320,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  plainView: {
+    flex: 1,
+    width: "auto",
+    backgroundColor: "#107B67",
+  },
+  dropDownPicker: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    backgroundColor: "#fafafa",
   },
 });
 
@@ -247,8 +372,6 @@ const searchStyles = StyleSheet.create({
     width: SCREEN_WIDTH,
   },
 });
-
-
 
 //style for the current location button
 const locationIcon = StyleSheet.create({
