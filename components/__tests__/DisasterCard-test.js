@@ -21,7 +21,7 @@ jest.mock('@react-navigation/native', () => {
 
 enzyme.configure({ adapter: new Adapter() });
 // mock of a prop to pass disaster card
-const mockProp = { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, link: "www.google.com" };
+const mockProp = { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, sourceLink: "www.google.com" };
 
 
 describe('Testing Disaster Card Component', () => {

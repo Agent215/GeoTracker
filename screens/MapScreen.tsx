@@ -204,6 +204,7 @@ const MapScreen = ({ navigation }) => {
 
       <CustomModal
         title={currentDisaster.title}
+        sourceLink = {currentDisaster.sourceLink}
         visable={isModalVisible}
         disaster={currentDisaster}
         toggleModal={toggleModal}

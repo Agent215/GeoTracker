@@ -44,7 +44,7 @@ const CustomModal = (props) => {
                     <View style={styles.container}>
                         <Text style={styles.title}>Title: {props.title}</Text>
                         <View style={{ flexDirection: "row" }}>
-                            <FeedScreenShare sourceLink={props.disaster.sourceLink} color="white" size={50} />
+                            <FeedScreenShare sourceLink={props.sourceLink} color="white" size={50} />
                             <IconButton
                                 icon="content-save-outline"
                                 color={Colors.white}

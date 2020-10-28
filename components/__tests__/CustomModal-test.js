@@ -12,8 +12,9 @@ const mockedToggle = jest.fn();
 // mock of a prop to pass CustomModal
 const mockProp = {
     title: "title",
+    sourceLink : "www.google.com",
     visable: true,
-    disaster: { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, link: "www.google.com" },
+    disaster: { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, sourceLink: "www.google.com" },
     toggleModal: mockedToggle
 };
 
