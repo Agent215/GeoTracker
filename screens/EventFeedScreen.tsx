@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { ScrollView, View, Button,Dimensions } from 'react-native';
+import { ScrollView, View,Dimensions } from 'react-native';
 import { Text } from "../components/Themed";
 import DisasterCard from '../components/DisasterCard';
-import { events } from '../assets/Mocked_Data';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 
 export default function EventFeedScreen({ navigation }) {
 
   const savedDisaters = useSelector((state) => state.disaster.savedDisasters);
-  const { width, height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
   let hasSaved = false;
   // check if we have any saved disasters
   if (savedDisaters.length > 0) { hasSaved = true }

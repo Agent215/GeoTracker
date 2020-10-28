@@ -1,16 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
-import { StyleSheet, Button } from "react-native";
+import { StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch } from "react-redux";
 import * as actions from "../store/actions/actions";
-import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import ConfettiCannon from "react-native-confetti-cannon";
-import { FontAwesome5 } from "@expo/vector-icons";
+
 
 function FilterScreen() {
   const dispatch = useDispatch();
@@ -49,7 +47,7 @@ function FilterScreen() {
   const [eventValue, setEventValue] = useState(null);
   const [eventItems, setEventItems] = useState(event);
   let eventController;
-  let ref;
+
 
   const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(
     false
@@ -77,7 +75,7 @@ function FilterScreen() {
     hideStartDatePicker();
   };
 
-  ////
+
   const showEndDatePicker = () => {
     setEndDatePickerVisibility(true);
   };
@@ -95,12 +93,12 @@ function FilterScreen() {
   return (
     <View style={styles.grandContainer}>
       <View style={styles.datePickerContianer}>
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}>
           <Text
-            style={{ flex: 3, fontSize: 16 }}
+            style={{ flex: 3, fontSize: 16, color: "black" }}
           >{`Start date: ${startDate.toDateString()}`}</Text>
 
-          <TouchableOpacity style={{ flex: 1 }} onPress={showStartDatePicker}>
+          <TouchableOpacity style={{ flex: 1, backgroundColor: "white" }} onPress={showStartDatePicker} >
             <Fontisto name="date" size={35} color="black" />
             <DateTimePickerModal
               isVisible={isStartDatePickerVisible}
@@ -108,13 +106,14 @@ function FilterScreen() {
               display="spinner"
               onConfirm={handleStartDateConfirm}
               onCancel={hideStartDatePicker}
+
             />
           </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}>
           <Text
-            style={{ flex: 3, fontSize: 16 }}
+            style={{ flex: 3, fontSize: 16, color: "black" }}
           >{`End date:  ${endDate.toDateString()}`}</Text>
 
           <TouchableOpacity style={{ flex: 1 }} onPress={showEndDatePicker}>
@@ -138,7 +137,7 @@ function FilterScreen() {
           onChangeList={(items, callback) => {
             new Promise((resolve, reject) => resolve(setWeatherItems(items)))
               .then(() => callback())
-              .catch(() => {});
+              .catch(() => { });
           }}
           defaultValue={weatherValue}
           dropDownMaxHeight={400}
@@ -156,7 +155,7 @@ function FilterScreen() {
           onChangeList={(items, callback) => {
             new Promise((resolve, reject) => resolve(setEventItems(items)))
               .then(() => callback())
-              .catch(() => {});
+              .catch(() => { });
           }}
           defaultValue={eventValue}
           placeholder="Select Event"
@@ -166,24 +165,6 @@ function FilterScreen() {
           }}
         />
       </View>
-
-      {/* <View style={styles.bottomContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            ref.start();
-          }}
-        >
-          <FontAwesome5 name="candy-cane" size={36} color="red" />
-        </TouchableOpacity>
-      </View>
-
-      <ConfettiCannon
-        count={300}
-        origin={{ x: -10, y: 0 }}
-        fadeOut={true}
-        autoStart={false}
-        ref={(_ref) => (ref = _ref)}
-      /> */}
     </View>
   );
 }
@@ -193,6 +174,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "stretch",
+    backgroundColor: "white"
   },
 
   filterContainer: {
@@ -206,6 +188,7 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     flex: 1,
     flexDirection: "column",
+    backgroundColor: "white"
   },
   bottomContainer: {
     flex: 1,

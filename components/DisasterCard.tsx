@@ -1,8 +1,8 @@
 import React from "react";
 import { Card, CardItem, Text, Body } from "native-base";
 import { Col, Grid } from "react-native-easy-grid";
-import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet, TouchableOpacity, Image } from "react-native";
+import { useDispatch } from 'react-redux';
+import { StyleSheet, Image } from "react-native";
 import * as actions from '../store/actions/actions';
 import { useNavigation } from '@react-navigation/native';
 import FeedScreenShare from '../components/ShareFeat';
@@ -46,7 +46,7 @@ const DisasterCard = (props) => {
       </Body>
       <CardItem footer>
         <Col>
-          <FeedScreenShare link={props.event.link} color="black" size={50} />
+          <FeedScreenShare sourceLink={props.event.sourceLink} color="black" size={50} />
           <Text>Share</Text>
         </Col>
         <Col>

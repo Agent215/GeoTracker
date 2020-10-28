@@ -5,13 +5,10 @@ import config from './aws-exports'
 import { AppLoading } from 'expo';
 import { API } from 'aws-amplify'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { events } from './assets/Mocked_Data'
-import * as actions from "./store/actions/actions";
 import disasterReducer from './store/reducers/disaster';
-import counterReducer from './store/reducers/counterReducer.js';
 // Added for tabs
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';

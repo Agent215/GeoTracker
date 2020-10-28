@@ -7,7 +7,6 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { View } from "../components/Themed";
-import { events } from "../assets/Mocked_Data";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
 import DisasterPin from "../components/CustomMarker";
@@ -24,7 +23,7 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-var INITIALREGION = {
+let INITIALREGION = {
   // this is philly for now, we can change this to whatever
   latitude: 39.9526,
   longitude: -75.16522,
@@ -39,7 +38,6 @@ const MapScreen = ({ navigation }) => {
   const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
   const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
   const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
-  const savedDisaters = useSelector((state) => state.disaster.savedDisasters);
   let mapRef = useRef(MapView.prototype);
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
@@ -51,22 +49,6 @@ const MapScreen = ({ navigation }) => {
   let allEvents = eventList.events.map((event) => {
     return { ...event, isShow: true };
   });
-
-  // uncomment these for debugging 
-  console.log("Mapscreen.tsx - current disaster " + currentDisaster);
-  // console.log("Mapscreen.tsx - current disaster filter " + disasterFilter.value);
-  console.log("Mapscreen.tsx - current weather filter :" + weatherFilter.value)
-
-  // filteredDisasters.forEach(element => {
-  //   console.log("store values :" + element.isShow + " " + element.title);
-  // });
-  console.log("Mapscreen.tsx - Saved Disaster :" +savedDisaters )
-  // if (savedDisaters != undefined) {
-  //   savedDisaters.forEach(element => {
-  //     console.log("Mapscreen.tsx - Saved Disaster :" + element.title)
-  //   });
-  // }
-
 
 
   /**
