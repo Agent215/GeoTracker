@@ -20,6 +20,10 @@ export const setDisasterFilter = (disasterFilter) => {
     return { type: SET_DISASTER_FILTER, disasterFilter: disasterFilter }
 };
 
+export const setDateFilter = (startDate, endDate) => {
+    return { type: SET_DATE_FILTER, startDate: startDate, endDate: endDate}
+};
+
 export const setFilteredDisasters = (filteredDisasters) => {
     return { type: SET_FILTERED_DISASTERS, filteredDisasters: filteredDisasters }
 };

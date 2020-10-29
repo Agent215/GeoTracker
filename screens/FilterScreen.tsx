@@ -242,6 +242,15 @@ function FilterScreen() {
 
             }
 
+            console.log("start date:"+ startDate);
+            console.log("end date is: "+endDate);
+            //only triger date filter if the date range is valid
+            if(checkValidDateRange(startDate,endDate)){
+              console.log("date filter triggered");
+              dispatch(actions.setDateFilter(startDate,endDate));
+            }
+
+
             //weatehrItem is empty by default,
             //only triger weatehr filter if weaterh dropdown is changed.
             if(weatherItem==null)
@@ -252,12 +261,7 @@ function FilterScreen() {
               dispatch(actions.setWeatherFilter(weatherItem));
             }
 
-            console.log("start date:"+ startDate);
-            console.log("end date is: "+endDate);
-            //only triger date filter if the date range is valid
-            if(checkValidDateRange(startDate,endDate)){
-              console.log("date filter triggered");
-            }
+            
           }}
         >Start Filter</Button>
       </View>
