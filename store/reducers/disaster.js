@@ -3,7 +3,7 @@ import { SET_FILTERED_DISASTERS } from '../actions/actions'
 import { SET_DISASTER_FILTER } from '../actions/actions';
 import { SET_WEATHER_FILTER } from '../actions/actions';
 import { SAVE_DISASTER } from '../actions/actions'
-import { SET_URL_TILE } from '../actions/actions'
+
 
 
 const initialState = {
@@ -14,7 +14,8 @@ const initialState = {
     weatherFilter: "",
     filteredDisasters: [],
     savedDisasters: [],
-   
+
+
 
 };
 
@@ -51,7 +52,7 @@ export default (state = initialState, action) => {
                 ...state,
                 savedDisasters: state.savedDisasters.concat(action.saveDisaster)
             };
-       
+
 
         default:
             return state;
