@@ -9,6 +9,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button } from 'react-native-paper';
+import { Item } from "react-native-paper/lib/typescript/src/components/List/List";
 
 function FilterScreen() {
   const dispatch = useDispatch();
@@ -62,7 +63,15 @@ function FilterScreen() {
 
   //test commit
 
-  
+  let eventItem=null;
+  let weatherItem=null;
+  const setEventItem=(eventItemPicked) => {
+    eventItem=eventItemPicked;
+  }
+  const setWeatherItem=(weatherItemPicked) => {
+    weatherItem = weatherItemPicked;
+  }
+
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -121,8 +130,8 @@ function FilterScreen() {
   // have a function to set the date range first,
   // then dispatch somthing to the redux store.
   const checkValidDateRange = (startDate, endDate) => {
-    console.log("check validation start: " + startDate);
-    console.log("check validation end: " + endDate);
+    // console.log("check validation start: " + startDate);
+    // console.log("check validation end: " + endDate);
     return endDate >= startDate;
   };
 
@@ -186,7 +195,7 @@ function FilterScreen() {
           placeholder="Select Weather"
           containerStyle={{ flex: 3, height: 50 }}
           onChangeItem={(item) => {
-            dispatch(actions.setWeatherFilter(item));
+            setWeatherItem(item);
           }}
         />
 
@@ -204,10 +213,10 @@ function FilterScreen() {
           containerStyle={{ flex: 3, height: 50 }}
           onChangeItem={(item) => {
             
-            console.log("item filter is:");
-            console.log(item);
+            // console.log("item filter is:");
+            // console.log(item);
+            setEventItem(item);
             
-            dispatch(actions.setDisasterFilter(item));
           }}
         />
       </View>
@@ -217,7 +226,38 @@ function FilterScreen() {
         <Button
           icon="camera" mode="contained"
           onPress={() => {
-            console.log("press me");
+            // console.log("eventItem");
+            // console.log(eventItem);
+            // console.log("weatherItem");
+            // console.log(weatherItem);
+
+            //eventItem is empty by default,
+            // only triger event filter if event dropdown is changed 
+            if(eventItem==null)
+            {//donothing for default event filter option, hence reduce render burden
+            }
+            else{
+              console.log("event filter triggered!");
+              dispatch(actions.setDisasterFilter(eventItem));
+
+            }
+
+            //weatehrItem is empty by default,
+            //only triger weatehr filter if weaterh dropdown is changed.
+            if(weatherItem==null)
+            {//do nothing for default weather filter option, hence reduce render burden              
+            }
+            else{
+              console.log("weather filter triggered!");
+              dispatch(actions.setWeatherFilter(weatherItem));
+            }
+
+            console.log("start date:"+ startDate);
+            console.log("end date is: "+endDate);
+            //only triger date filter if the date range is valid
+            if(checkValidDateRange(startDate,endDate)){
+              console.log("date filter triggered");
+            }
           }}
         >Start Filter</Button>
       </View>
