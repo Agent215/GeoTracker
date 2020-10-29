@@ -8,7 +8,7 @@ import { Text, View } from "../components/Themed";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
+import { Button } from 'react-native-paper';
 
 function FilterScreen() {
   const dispatch = useDispatch();
@@ -48,7 +48,6 @@ function FilterScreen() {
   const [eventItems, setEventItems] = useState(event);
   let eventController;
 
-
   const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(
     false
   );
@@ -61,9 +60,9 @@ function FilterScreen() {
 
   const [endDate, setEndDate] = useState(initialEndDate);
 
+  //test commit
 
-    //test commit
-
+  
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -75,10 +74,23 @@ function FilterScreen() {
 
   const handleStartDateConfirm = (date) => {
     console.log("Start Date Picked: ", date);
-    setStartDate(date);
-    hideStartDatePicker();
-  };
 
+    //VALID start date chosen
+    if (checkValidDateRange(date, endDate)) {
+      console.log("valid start date!!!!");
+      setStartDate(date);
+
+      hideStartDatePicker();
+    }
+    //invalid start date chosen
+    else {
+      console.log("invalid starting date");
+
+      setStartDate(date);
+
+      hideStartDatePicker();
+    }
+  };
 
   const showEndDatePicker = () => {
     setEndDatePickerVisibility(true);
@@ -90,19 +102,44 @@ function FilterScreen() {
 
   const handleEndDateConfirm = (date) => {
     console.log("End Date Picked: ", date);
-    setEndDate(date);
-    hideEndDatePicker();
+
+    //valid end date chosen
+    if (checkValidDateRange(startDate, date)) {
+      console.log("valid end date!!");
+      setEndDate(date);
+      hideEndDatePicker();
+    }
+    //invalid end date chosen
+    else {
+      console.log("invalid end date");
+      setEndDate(date);
+      hideEndDatePicker();
+    }
+  };
+
+  //idea:
+  // have a function to set the date range first,
+  // then dispatch somthing to the redux store.
+  const checkValidDateRange = (startDate, endDate) => {
+    console.log("check validation start: " + startDate);
+    console.log("check validation end: " + endDate);
+    return endDate >= startDate;
   };
 
   return (
     <View style={styles.grandContainer}>
       <View style={styles.datePickerContianer}>
-        <View style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}>
+        <View
+          style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}
+        >
           <Text
             style={{ flex: 3, fontSize: 16, color: "black" }}
           >{`Start date: ${startDate.toDateString()}`}</Text>
 
-          <TouchableOpacity style={{ flex: 1, backgroundColor: "white" }} onPress={showStartDatePicker} >
+          <TouchableOpacity
+            style={{ flex: 1, backgroundColor: "white" }}
+            onPress={showStartDatePicker}
+          >
             <Fontisto name="date" size={35} color="black" />
             <DateTimePickerModal
               isVisible={isStartDatePickerVisible}
@@ -110,12 +147,13 @@ function FilterScreen() {
               display="spinner"
               onConfirm={handleStartDateConfirm}
               onCancel={hideStartDatePicker}
-
             />
           </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}>
+        <View
+          style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}
+        >
           <Text
             style={{ flex: 3, fontSize: 16, color: "black" }}
           >{`End date:  ${endDate.toDateString()}`}</Text>
@@ -141,7 +179,7 @@ function FilterScreen() {
           onChangeList={(items, callback) => {
             new Promise((resolve, reject) => resolve(setWeatherItems(items)))
               .then(() => callback())
-              .catch(() => { });
+              .catch(() => {});
           }}
           defaultValue={weatherValue}
           dropDownMaxHeight={400}
@@ -159,15 +197,29 @@ function FilterScreen() {
           onChangeList={(items, callback) => {
             new Promise((resolve, reject) => resolve(setEventItems(items)))
               .then(() => callback())
-              .catch(() => { });
+              .catch(() => {});
           }}
           defaultValue={eventValue}
           placeholder="Select Event"
           containerStyle={{ flex: 3, height: 50 }}
           onChangeItem={(item) => {
+            
+            console.log("item filter is:");
+            console.log(item);
+            
             dispatch(actions.setDisasterFilter(item));
           }}
         />
+      </View>
+
+      
+      <View style={styles.buttonContainer}>
+        <Button
+          icon="camera" mode="contained"
+          onPress={() => {
+            console.log("press me");
+          }}
+        >Start Filter</Button>
       </View>
     </View>
   );
@@ -178,24 +230,26 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "stretch",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
 
   filterContainer: {
-    flex: 4,
+    flex: 5,
     flexDirection: "row",
-    // backgroundColor: "purple",
+    backgroundColor: "purple",
   },
 
   datePickerContianer: {
+    
     justifyContent: "space-evenly",
     alignItems: "stretch",
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
-  bottomContainer: {
-    flex: 1,
+  buttonContainer: {
+    flexDirection:"column-reverse",
+       flex: 1,
     backgroundColor: "green",
   },
 });
