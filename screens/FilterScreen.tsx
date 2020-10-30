@@ -149,7 +149,7 @@ function FilterScreen() {
           >
             <Fontisto name="date" size={35} color="green" />
             <DateTimePickerModal
-              date={initialStartDate}
+              // date={initialStartDate}
               // isDarkModeEnabled={true}
               isVisible={isStartDatePickerVisible}
               mode="date"
@@ -233,7 +233,7 @@ function FilterScreen() {
                   zIndex:-1,
                   alignSelf:"center",
                    alignItems:"flex-start",
-                   width:"25%"
+                   width:"48%"
             }}
             onPress={() => {
             
@@ -270,7 +270,7 @@ function FilterScreen() {
          
          <Image
           style={{ resizeMode:"stretch", flex:1,}}
-         source={require("../assets/Icons/FilterButton2.png")}></Image>
+         source={require("../assets/Icons/FilterButton.png")}></Image>
 
         </TouchableOpacity>
 
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     alignSelf:"center",
     alignItems:"center",
     justifyContent:"center",
-       height:"25%",
+       height:"28%",
       //  width:"30%",
       //  zIndex:-1, //freeze up the dropdown button, bug of the component    
        
