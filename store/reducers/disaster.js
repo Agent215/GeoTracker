@@ -2,7 +2,7 @@ import { SET_CURRENT_DISASTER } from '../actions/actions';
 import { SET_FILTERED_DISASTERS } from '../actions/actions'
 import { SET_DISASTER_FILTER } from '../actions/actions';
 import { SET_WEATHER_FILTER } from '../actions/actions';
-import {SAVE_DISASTER} from '../actions/actions'
+import { SAVE_DISASTER } from '../actions/actions'
 
 
 const initialState = {
@@ -45,10 +45,20 @@ export default (state = initialState, action) => {
 
         case SAVE_DISASTER:
 
-            return {
-                ...state,
-                savedDisasters: state.savedDisasters.concat(action.saveDisaster)
-            };
+            const savedIndex = state.savedDisasters.findIndex(disaster => disaster.id === action.saveDisaster.id)
+            if (savedIndex >= 0) {  // if we already saved the event dont add
+
+                return {
+                    ...state,
+                    savedDisasters: state.savedDisasters
+                }
+            } else {
+                return {
+                    ...state,
+                    savedDisasters: state.savedDisasters.concat(action.saveDisaster)
+                };
+            }
+
 
         default:
             return state;

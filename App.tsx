@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import Amplify from 'aws-amplify'
 import config from './aws-exports'
@@ -6,7 +6,7 @@ import { AppLoading } from 'expo';
 import { API } from 'aws-amplify'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { Root } from "native-base";
+
 import ReduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import disasterReducer from './store/reducers/disaster';
@@ -39,24 +39,22 @@ const App = () => {
   const colorScheme = useColorScheme();
   console.disableYellowBox = true
   const [fetchedData, setDataFetched] = useState(false)
-
+  
   if (!fetchedData) {
     return (
       <AppLoading
         startAsync={getData}
         onFinish={() => setDataFetched(true)}
-      />
+        />
     );
   } else {
     return (
       <Provider store={store} >
-
+      
         <SafeAreaProvider>
-          <Root>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
-          </Root>
-
+  
+          <Navigation colorScheme={colorScheme} />
+          <StatusBar />
 
         </SafeAreaProvider>
       </Provider>
@@ -65,11 +63,11 @@ const App = () => {
   }
 }
 
-async function getData() {
+async function getData() { 
   const apiName = 'EventsApi';
   const path = '/events/all';
   const myInit = { // OPTIONAL
-    headers: {}, // OPTIONAL
+      headers: {}, // OPTIONAL
   };
 
   eventList = await API.get(apiName, path, myInit);
