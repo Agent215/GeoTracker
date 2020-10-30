@@ -6,8 +6,9 @@ import { StyleSheet, Image } from "react-native";
 import * as actions from '../store/actions/actions';
 import { useNavigation } from '@react-navigation/native';
 import FeedScreenShare from '../components/ShareFeat';
-import { View } from "./Themed";
 import { IconButton } from "react-native-paper";
+import DisasterIcon from '../components/CustomIcon';
+import { accessibilityProps } from "react-native-paper/lib/typescript/src/components/MaterialCommunityIcon";
 
 // DisasterCard holds the layout to each feed card.
 // The Card uses <Grid> to space objects out in header, and footer. 2/3 of header is description 1/3 is icon
@@ -35,7 +36,10 @@ const DisasterCard = (props) => {
             </Text>
           </Col>
           <Col>
-            <Image source={require('../assets/Icons/Iceberg.png')} />
+            <DisasterIcon
+              size={50}
+              event = {props.event}
+            />
           </Col>
         </Grid>
       </CardItem>
@@ -50,15 +54,15 @@ const DisasterCard = (props) => {
           <Text>Share</Text>
         </Col>
         <Col>
-         
-            <IconButton
-              icon="crosshairs-gps"
-              color={"black"}
-              size={50}
-              onPress={() => goToDisaster(props.event)}
-            />
-            <Text>Go</Text>
-      
+
+          <IconButton
+            icon="crosshairs-gps"
+            color={"black"}
+            size={50}
+            onPress={() => goToDisaster(props.event)}
+          />
+          <Text>Go</Text>
+
         </Col>
       </CardItem>
     </Card>
