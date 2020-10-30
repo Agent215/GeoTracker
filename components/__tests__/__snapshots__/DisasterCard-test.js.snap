@@ -64,15 +64,20 @@ exports[`Testing Disaster Card Component DisasterCard renders correctly 1`] = `
       >
         <Text
           style={
-            Object {
-              "color": "#007aff",
-              "fontFamily": "System",
-              "fontSize": 16,
-              "fontWeight": "600",
-            }
+            Array [
+              Object {
+                "color": "#007aff",
+                "fontFamily": "System",
+                "fontSize": 16,
+                "fontWeight": "600",
+              },
+              Object {
+                "fontSize": 25,
+              },
+            ]
           }
         >
-          Draught
+          Thirsty Thursday
         </Text>
       </View>
       <View
@@ -80,35 +85,12 @@ exports[`Testing Disaster Card Component DisasterCard renders correctly 1`] = `
           Object {
             "flex": 1,
             "flexDirection": "column",
+            "marginLeft": 60,
+            "marginTop": 5,
           }
         }
-      >
-        <Image
-          source={1}
-        />
-      </View>
+      />
     </View>
-  </View>
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "alignSelf": "center",
-        "flex": 1,
-      }
-    }
-  >
-    <Text
-      style={
-        Object {
-          "color": "#000",
-          "fontFamily": "System",
-          "fontSize": 16,
-        }
-      }
-    >
-      Thirsty Thursday
-    </Text>
   </View>
   <View
     footer={true}
@@ -189,12 +171,17 @@ exports[`Testing Disaster Card Component DisasterCard renders correctly 1`] = `
       </View>
       <Text
         style={
-          Object {
-            "color": "#000",
-            "fontFamily": "System",
-            "fontSize": 16,
-            "fontWeight": "600",
-          }
+          Array [
+            Object {
+              "color": "#000",
+              "fontFamily": "System",
+              "fontSize": 16,
+              "fontWeight": "600",
+            },
+            Object {
+              "marginLeft": 25,
+            },
+          ]
         }
       >
         Share
@@ -261,15 +248,123 @@ exports[`Testing Disaster Card Component DisasterCard renders correctly 1`] = `
       </View>
       <Text
         style={
-          Object {
-            "color": "#000",
-            "fontFamily": "System",
-            "fontSize": 16,
-            "fontWeight": "600",
-          }
+          Array [
+            Object {
+              "color": "#000",
+              "fontFamily": "System",
+              "fontSize": 16,
+              "fontWeight": "600",
+            },
+            Object {
+              "marginLeft": 33,
+            },
+          ]
         }
       >
         Go
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "flex": 1,
+          "flexDirection": "column",
+        }
+      }
+    >
+      <RNGestureHandlerButton
+        collapsable={false}
+        onGestureEvent={[Function]}
+        onGestureHandlerEvent={[Function]}
+        onGestureHandlerStateChange={[Function]}
+        onHandlerStateChange={[Function]}
+        rippleColor={0}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          accessible={true}
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          <View
+            accessibilityRole="button"
+            accessibilityState={
+              Object {
+                "disabled": undefined,
+              }
+            }
+            accessible={true}
+            focusable={false}
+            hitSlop={
+              Object {
+                "bottom": 6,
+                "left": 6,
+                "right": 6,
+                "top": 6,
+              }
+            }
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Array [
+                Object {
+                  "overflow": "hidden",
+                },
+                Array [
+                  Object {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "margin": 6,
+                    "overflow": "hidden",
+                  },
+                  Object {
+                    "borderRadius": 37.5,
+                    "height": 75,
+                    "width": 75,
+                  },
+                  undefined,
+                  undefined,
+                ],
+              ]
+            }
+          >
+            <View>
+              <Text />
+            </View>
+          </View>
+        </View>
+      </RNGestureHandlerButton>
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#000",
+              "fontFamily": "System",
+              "fontSize": 16,
+              "fontWeight": "600",
+            },
+            Object {
+              "marginLeft": 13,
+            },
+          ]
+        }
+      >
+        Remove
       </Text>
     </View>
   </View>
