@@ -3,7 +3,8 @@ export const RENDER_DISASTER = "RENDER_DISASTER";
 export const SET_DISASTER_FILTER = "SET_DISASTER_FILTER";
 export const SET_WEATHER_FILTER = "SET_WEATHER_FILTER";
 export const SET_FILTERED_DISASTERS = "SET_FILTERED_DISASTERS";
-export const SAVE_DISASTER = "SAVE_DISASTER"
+export const SAVE_DISASTER = "SAVE_DISASTER";
+
 
 
 
@@ -27,7 +28,6 @@ export const setFilteredDisasters = (filteredDisasters) => {
 export const saveDisaster = (saveDisaster) => {
     return { type: SAVE_DISASTER, saveDisaster: saveDisaster }
 };
-
 
 
 
