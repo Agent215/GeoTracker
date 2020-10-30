@@ -13,8 +13,8 @@ const initialState = {
     weatherFilter: "",
     filteredDisasters: [],
     savedDisasters: [],
-    startDate:new Date(),
-    endDate:new Date(),
+    startDate:new Date(2019,0,1),  //if triggered, default value 2019/1/1
+    endDate:new Date(),    //if griggered, default value is current date
 
 };
 

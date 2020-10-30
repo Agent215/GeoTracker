@@ -12,6 +12,7 @@ import * as Keys from "../constants/APIkeys";
 import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
+import { State } from "ionicons/dist/types/stencil-public-runtime";
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
@@ -31,6 +32,7 @@ let INITIALREGION = {
   longitudeDelta: 0.0421,
 };
 
+
 const MapScreen = ({ navigation }) => {
   //get state from redux store
   const dispatch = useDispatch();
@@ -38,6 +40,10 @@ const MapScreen = ({ navigation }) => {
   const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
   const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
   const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
+
+  const startDate = useSelector((state)=>state.disaster.startDate); // start date of the time range from date picker
+  const endDate = useSelector((state)=>state.disaster.endDate); //end date of time range from date picker
+  
   let mapRef = useRef(MapView.prototype);
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
@@ -121,7 +127,7 @@ const MapScreen = ({ navigation }) => {
    */
   useEffect(() => {
     filterDisasters()
-  }, [disasterFilter, dispatch]);
+  }, [disasterFilter, startDate, endDate, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
@@ -137,14 +143,26 @@ const MapScreen = ({ navigation }) => {
    * each time arround.
    */
   const filterDisasters = () => {
+    let startDate_ISO=startDate.toISOString();
+    let endDate_ISO=endDate.toISOString();
 
     tempArray = [];   // reset temp array
     // go through all events and mark which ones need to be filtered.
     const disasterToFilter = allEvents.map((event) => {
-      if (disasterFilter.value === "all"      // filter for all
+      
+
+      if
+      (
+        (disasterFilter.value === "all"      // filter for all
         || disasterFilter.value === ""        // first time we render
         || disasterFilter.value == undefined  //just in case
-        || event.category === disasterFilter.value) { event.isShow = true }
+        || event.category === disasterFilter.value
+        )
+        &&
+        (
+          startDate_ISO<=event.currentDate && event.currentDate<=endDate_ISO
+        ) 
+      ) { event.isShow = true }
       else {
         event.isShow = false;
       }

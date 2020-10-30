@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Image,Platform } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch } from "react-redux";
 import * as actions from "../store/actions/actions";
@@ -8,8 +8,6 @@ import { Text, View } from "../components/Themed";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Button } from 'react-native-paper';
-import { Item } from "react-native-paper/lib/typescript/src/components/List/List";
 
 function FilterScreen() {
   const dispatch = useDispatch();
@@ -55,7 +53,7 @@ function FilterScreen() {
 
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
-  const initialStartDate = new Date();
+  const initialStartDate = new Date(2019,0,1);
   const initialEndDate = new Date();
   const [startDate, setStartDate] = useState(initialStartDate);
 
@@ -149,8 +147,10 @@ function FilterScreen() {
             style={{ flex: 1, backgroundColor: "white" }}
             onPress={showStartDatePicker}
           >
-            <Fontisto name="date" size={35} color="black" />
+            <Fontisto name="date" size={35} color="green" />
             <DateTimePickerModal
+              date={initialStartDate}
+              // isDarkModeEnabled={true}
               isVisible={isStartDatePickerVisible}
               mode="date"
               display="spinner"
@@ -168,10 +168,11 @@ function FilterScreen() {
           >{`End date:  ${endDate.toDateString()}`}</Text>
 
           <TouchableOpacity style={{ flex: 1 }} onPress={showEndDatePicker}>
-            <Fontisto name="date" size={35} color="black" />
+            <Fontisto name="date" size={35} color="green" />
 
             <DateTimePickerModal
               isVisible={isEndDatePickerVisible}
+              // isDarkModeEnabled={true}
               mode="date"
               display="spinner"
               onConfirm={handleEndDateConfirm}
@@ -191,9 +192,11 @@ function FilterScreen() {
               .catch(() => {});
           }}
           defaultValue={weatherValue}
-          dropDownMaxHeight={400}
+          dropDownMaxHeight={300}
           placeholder="Select Weather"
           containerStyle={{ flex: 3, height: 50 }}
+          selectedLabelStyle={{color:"blue"}}
+          
           onChangeItem={(item) => {
             setWeatherItem(item);
           }}
@@ -202,7 +205,7 @@ function FilterScreen() {
         <DropDownPicker
           items={eventItems}
           controller={(instance) => (eventController = instance)}
-          dropDownMaxHeight={400}
+          dropDownMaxHeight={300}
           onChangeList={(items, callback) => {
             new Promise((resolve, reject) => resolve(setEventItems(items)))
               .then(() => callback())
@@ -211,6 +214,7 @@ function FilterScreen() {
           defaultValue={eventValue}
           placeholder="Select Event"
           containerStyle={{ flex: 3, height: 50 }}
+          selectedLabelStyle={{color:"blue"}}
           onChangeItem={(item) => {
             
             // console.log("item filter is:");
@@ -223,14 +227,16 @@ function FilterScreen() {
 
       
       <View style={styles.buttonContainer}>
-        <Button
-          icon="camera" mode="contained"
-          onPress={() => {
-            // console.log("eventItem");
-            // console.log(eventItem);
-            // console.log("weatherItem");
-            // console.log(weatherItem);
 
+        <TouchableOpacity
+            style={{flexDirection:"row",
+                  zIndex:-1,
+                  alignSelf:"center",
+                   alignItems:"flex-start",
+                   width:"25%"
+            }}
+            onPress={() => {
+            
             //eventItem is empty by default,
             // only triger event filter if event dropdown is changed 
             if(eventItem==null)
@@ -241,15 +247,6 @@ function FilterScreen() {
               dispatch(actions.setDisasterFilter(eventItem));
 
             }
-
-            console.log("start date:"+ startDate);
-            console.log("end date is: "+endDate);
-            //only triger date filter if the date range is valid
-            if(checkValidDateRange(startDate,endDate)){
-              console.log("date filter triggered");
-              dispatch(actions.setDateFilter(startDate,endDate));
-            }
-
 
             //weatehrItem is empty by default,
             //only triger weatehr filter if weaterh dropdown is changed.
@@ -262,8 +259,22 @@ function FilterScreen() {
             }
 
             
+            //only triger date filter if the date range is valid
+            if(checkValidDateRange(startDate,endDate)){
+              console.log("date filter triggered");
+              dispatch(actions.setDateFilter(startDate,endDate));
+            }
+
           }}
-        >Start Filter</Button>
+        >
+         
+         <Image
+          style={{ resizeMode:"stretch", flex:1,}}
+         source={require("../assets/Icons/FilterButton2.png")}></Image>
+
+        </TouchableOpacity>
+
+
       </View>
     </View>
   );
@@ -278,9 +289,23 @@ const styles = StyleSheet.create({
   },
 
   filterContainer: {
-    flex: 5,
+    flex: 3.5,
     flexDirection: "row",
-    backgroundColor: "purple",
+    // backgroundColor: "purple",
+    // ...Platform.select({
+    //   ios: {
+       
+    //   },
+    //   android: {
+        
+    //   }
+    // })
+    
+    // The solution: Apply zIndex to any device except Android
+    ...(Platform.OS !== 'android' && {
+      zIndex: 10
+    }),
+        
   },
 
   datePickerContianer: {
@@ -289,12 +314,17 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "white",
+    // backgroundColor: "white",
   },
   buttonContainer: {
-    flexDirection:"column-reverse",
-       flex: 1,
-    backgroundColor: "green",
+    alignSelf:"center",
+    alignItems:"center",
+    justifyContent:"center",
+       height:"25%",
+      //  width:"30%",
+      //  zIndex:-1, //freeze up the dropdown button, bug of the component    
+       
+    // backgroundColor: "green",
   },
 });
 

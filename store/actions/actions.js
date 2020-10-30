@@ -5,6 +5,7 @@ export const SET_WEATHER_FILTER = "SET_WEATHER_FILTER";
 export const SET_FILTERED_DISASTERS = "SET_FILTERED_DISASTERS";
 export const SAVE_DISASTER = "SAVE_DISASTER"
 
+export const SET_DATE_FILTER = "SET_DATE_FILTER"
 
 
 export const setCurrentDisaster = (disaster) => {
