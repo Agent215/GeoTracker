@@ -1,15 +1,15 @@
-import Drought from '../assets/Icons/Drought.svg';
-import DustStorm from '../assets/Icons/DustStorm.svg';
-import Earthquakes from '../assets/Icons/Earthquake.svg';
-import TempExtremes from '../assets/Icons/ExtremeTemp.svg';
-import Floods from '../assets/Icons/Flood.svg';
+import Drought from '../assets/Icons/drought.svg';
+import DustStorm from '../assets/Icons/dustStorm.svg';
+import Earthquakes from '../assets/Icons/earthQuake.svg';
+import TempExtremes from '../assets/Icons/extremeTemp.svg';
+import Floods from '../assets/Icons/flood.svg';
 import SeaLakeIce from '../assets/Icons/SeaLakeIce.svg';
-import RockMudSlide from '../assets/Icons/RockMudSlide.svg';
-import Manmade from '../assets/Icons/Manmade.svg';
-import SevereStorm from '../assets/Icons/SevereStorm.svg';
-import Volcano from '../assets/Icons/Volcano.svg'
-import Wildfire from '../assets/Icons/Wildfire.svg'
-import SnowFall from '../assets/Icons/SnowFall.svg'
+import RockMudSlide from '../assets/Icons/rockMudSlide.svg';
+import Manmade from '../assets/Icons/manmade.svg';
+import SevereStorm from '../assets/Icons/severeStorm.svg';
+import Volcano from '../assets/Icons/volcano.svg'
+import Wildfire from '../assets/Icons/wildfire.svg'
+import SnowFall from '../assets/Icons/snowFall.svg'
 
 import React from 'react';
 
