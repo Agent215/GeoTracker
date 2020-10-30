@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
@@ -6,6 +6,8 @@ import { eventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
+
+import WeatherOverlay from '../components/WeatherOverlay'
 import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -24,8 +26,7 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-let INITIALREGION = {
-  // this is philly for now, we can change this to whatever
+let INITIALREGION = {  // this is philly for now, we can change this to whatever
   latitude: 39.9526,
   longitude: -75.16522,
   latitudeDelta: 0.0922,
@@ -48,13 +49,33 @@ const MapScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  let tempArray = [];
+  let tempArray = [];           // temp array to store filtered events
+
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
   let allEvents = eventList.events.map((event) => {
     return { ...event, isShow: true };
   });
+
+
+  /**
+   * When the disaster filter is changed lets filter the disasters
+   */
+  useEffect(() => {
+    filterDisasters()
+  }, [disasterFilter, dispatch]);
+
+  /* check if current disaster has changed, if so then force rerender */
+  useEffect(() => {
+
+    if (currentDisaster != "") { animateToDisaster(); }
+  }, [currentDisaster.title, dispatch]);
+
+  /* run once on component mount */
+  useEffect(() => {
+    animateToUser();
+  }, []);
 
 
   /**
@@ -135,6 +156,7 @@ const MapScreen = ({ navigation }) => {
     if (currentDisaster != "") {animateToDisaster();}
   }, [currentDisaster.title, dispatch]);
 
+
   /**
    * 
    * filter the disaster markers
@@ -168,114 +190,112 @@ const MapScreen = ({ navigation }) => {
       }
       return event
     });
-
     // create a new array from the array with correctly marked isShow prop
     disasterToFilter.forEach(element => {
       if (element.isShow) tempArray.push(element)
     })
-
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
-
   };
 
   return (
+    <>
+      <View style={styles.container}>
+        <MapView
+          ref={mapRef}
+          initialRegion={INITIALREGION}
+          style={styles.mapStyle}
+          mapType={mapMode} // typescript error i think we can fix by going to index.d.ts and changing maptype to string
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          rotateEnabled={false}
+          showsTraffic={false}
+          toolbarEnabled={true}
+          zoomEnabled={true}
+          zoomControlEnabled={true}
+          loadingEnabled={true}
+        >
 
-    <View style={styles.container}>
-      <MapView
-        ref={mapRef}
-       // onRegionChange={()=>{dispatch(actions.setCurrentDisaster(""))}} // if we move the map reset the current disaster
-        initialRegion={INITIALREGION}
-        style={styles.mapStyle}
-        mapType={mapMode} // typescript error i think we can fix by going to index.d.ts and changing maptype to string
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-        rotateEnabled={false}
-        showsTraffic={false}
-        toolbarEnabled={true}
-        zoomEnabled={true}
-        zoomControlEnabled={true}
-        loadingEnabled={true}
-      >
+          {filteredDisasters.map((marker: EventEntity, index) => (
 
-        {filteredDisasters.map((marker: EventEntity, index) => (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: parseFloat(marker.currentLat),
+                longitude: parseFloat(marker.currentLong)
+              }}
+              title={marker.title}
+              description={marker.category}
+              tracksViewChanges={false}
+              onPress={() => { toggleModal(); dispatch(actions.setCurrentDisaster(marker)) }}
+            >
+              <DisasterPin
+                size={50}
+                category={marker.category}
+              />
+            </Marker>
+          ))}
 
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: parseFloat(marker.currentLat),
-              longitude: parseFloat(marker.currentLong)
-            }}
-            title={marker.title}
-            description={marker.category}
-            tracksViewChanges={false}
-            onPress={() => { toggleModal(); dispatch(actions.setCurrentDisaster(marker)) }}
-          >
-            <DisasterPin
-              size={50}
-              category={marker.category}
-            />
-          </Marker>
-        ))}
-      </MapView>
+          <WeatherOverlay
+            category={weatherFilter.value} />
 
-      <CustomModal
-        title={currentDisaster.title}
-        sourceLink = {currentDisaster.sourceLink}
-        visable={isModalVisible}
-        disaster={currentDisaster}
-        toggleModal={toggleModal}
-      />
+        </MapView>
 
-      <GooglePlacesAutocomplete
-        placeholder="Enter Location"
-        query={{
-          key: GOOGLE_PLACES_API_KEY,
-          language: "en", // language of the results
-        }}
-        onPress={(data, details = null) => {
-          console.log(data);
-          console.log("test");
-          Geocoder.from(data.description)
-            .then((json) => {
-              var location = json.results[0].geometry.location;
-              console.log(location);
-              let lat = location.lat;
-              let lng = location.lng;
-              let coords = {
-                latitude: lat,
-                longitude: lng,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA,
-              };
-              mapRef.current.animateToRegion(coords, 0);
-            })
-            .catch((error) => console.warn(error));
-        }}
-        onFail={(error) => console.error(error)}
-        styles={searchStyles}
-        textInputProps={{ clearButtonMode: "always" }}
-      />
+        <CustomModal
+          title={currentDisaster.title}
+          sourceLink={currentDisaster.sourceLink}
+          visable={isModalVisible}
+          disaster={currentDisaster}
+          toggleModal={toggleModal}
+        />
 
-      {/*current location button that shows on bottom right of the map */}
-      <IconButton
-        icon="crosshairs-gps"
-        style={locationIcon.container}
-        color={Colors.blue600}
-        size={50}
-        onPress={() => {
-          animateToUser();
-        }}
-      />
-      <Switch
-        value={toggleMap}
-        onValueChange={() => {
-          console.log("MapScreen.tsx/toggleMapMode - toggle MapMode Test");
-          toggleMapMode();
-        }}
-      />
-    </View>
+        <GooglePlacesAutocomplete
+          placeholder="Enter Location"
+          query={{
+            key: GOOGLE_PLACES_API_KEY,
+            language: "en", // language of the results
+          }}
+          onPress={(data, details = null) => {
+            console.log(data);
+            console.log("test");
+            Geocoder.from(data.description)
+              .then((json) => {
+                var location = json.results[0].geometry.location;
+                console.log(location);
+                let lat = location.lat;
+                let lng = location.lng;
+                let coords = {
+                  latitude: lat,
+                  longitude: lng,
+                  latitudeDelta: LATITUDE_DELTA,
+                  longitudeDelta: LONGITUDE_DELTA,
+                };
+                mapRef.current.animateToRegion(coords, 0);
+              })
+              .catch((error) => console.warn(error));
+          }}
+          onFail={(error) => console.error(error)}
+          styles={searchStyles}
+          textInputProps={{ clearButtonMode: "always" }}
+        />
+
+        {/*current location button that shows on bottom right of the map */}
+        <IconButton
+          icon="crosshairs-gps"
+          style={locationIcon.container}
+          color={Colors.blue600}
+          size={50}
+          onPress={() => {
+            animateToUser();
+          }}
+        />
+        <Switch
+          value={toggleMap}
+          onValueChange={() => { toggleMapMode(); }}
+        />
+      </View>
+    </>
   );
 };
 

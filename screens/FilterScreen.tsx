@@ -14,11 +14,11 @@ function FilterScreen() {
   const dispatch = useDispatch();
 
   let weather = [
-    { label: "Temperature", value: "Temperature" },
-    { label: "Precipitation", value: "Precipitation" },
-    { label: "Cloud Cover", value: "Cloud Cover" },
-    { label: "Wind Speed", value: "Wind Speed" },
-    { label: "Barometric Pressure", value: "Barometric Pressure" },
+    { label: "Temperature", value: "temp" },
+    { label: "Precipitation", value: "precipitation" },
+    { label: "Cloud Cover", value: "clouds" },
+    { label: "Wind Speed", value: "wind" },
+    { label: "Barometric Pressure", value: "pressure" },
     { label: "None", value: "none" },
   ];
 
