@@ -9,6 +9,7 @@ import FeedScreenShare from '../components/ShareFeat';
 import { IconButton } from "react-native-paper";
 import DisasterIcon from '../components/CustomIcon';
 import { accessibilityProps } from "react-native-paper/lib/typescript/src/components/MaterialCommunityIcon";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 // DisasterCard holds the layout to each feed card.
 // The Card uses <Grid> to space objects out in header, and footer. 2/3 of header is description 1/3 is icon
@@ -31,23 +32,18 @@ const DisasterCard = (props) => {
       <CardItem header bordered>
         <Grid>
           <Col size={2}>
-            <Text>
-              {props.event.description}
+            <Text style={{ fontSize: 25 }}>
+              {props.event.title}
             </Text>
           </Col>
           <Col>
             <DisasterIcon
               size={50}
-              event = {props.event}
+              event={props.event}
             />
           </Col>
         </Grid>
       </CardItem>
-      <Body>
-        <Text>
-          {props.event.title}
-        </Text>
-      </Body>
       <CardItem footer>
         <Col>
           <FeedScreenShare sourceLink={props.event.sourceLink} color="black" size={50} />
@@ -63,6 +59,15 @@ const DisasterCard = (props) => {
           />
           <Text>Go</Text>
 
+        </Col>
+        <Col>
+          <TouchableOpacity>
+            <IconButton
+              icon="trash-can"
+              color={"black"}
+              size={50}
+            />
+          </TouchableOpacity>
         </Col>
       </CardItem>
     </Card>
