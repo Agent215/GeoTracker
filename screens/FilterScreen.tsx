@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { StyleSheet, Image,Platform } from "react-native";
+import { StyleSheet, Image, Platform } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch } from "react-redux";
 import * as actions from "../store/actions/actions";
@@ -8,6 +8,7 @@ import { Text, View } from "../components/Themed";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Button } from "react-native-paper";
 
 function FilterScreen() {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ function FilterScreen() {
 
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
-  const initialStartDate = new Date(2019,0,1);
+  const initialStartDate = new Date(2019, 0, 1);
   const initialEndDate = new Date();
   const [startDate, setStartDate] = useState(initialStartDate);
 
@@ -61,15 +62,14 @@ function FilterScreen() {
 
   //test commit
 
-  let eventItem=null;
-  let weatherItem=null;
-  const setEventItem=(eventItemPicked) => {
-    eventItem=eventItemPicked;
-  }
-  const setWeatherItem=(weatherItemPicked) => {
+  let eventItem = null;
+  let weatherItem = null;
+  const setEventItem = (eventItemPicked) => {
+    eventItem = eventItemPicked;
+  };
+  const setWeatherItem = (weatherItemPicked) => {
     weatherItem = weatherItemPicked;
-  }
-
+  };
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -135,6 +135,42 @@ function FilterScreen() {
 
   return (
     <View style={styles.grandContainer}>
+      <View style={styles.buttonContainer}>
+        <Button
+          icon="play-circle-outline"
+          mode="contained"
+          contentStyle={{ backgroundColor: "green" }}
+          labelStyle={{ fontSize: 20 }}
+          onPress={() => {
+            //eventItem is empty by default,
+            // only triger event filter if event dropdown is changed
+            if (eventItem == null) {
+              //donothing for default event filter option, hence reduce render burden
+            } else {
+              console.log("event filter triggered!");
+              dispatch(actions.setDisasterFilter(eventItem));
+            }
+
+            //weatehrItem is empty by default,
+            //only triger weatehr filter if weaterh dropdown is changed.
+            if (weatherItem == null) {
+              //do nothing for default weather filter option, hence reduce render burden
+            } else {
+              console.log("weather filter triggered!");
+              dispatch(actions.setWeatherFilter(weatherItem));
+            }
+
+            //only triger date filter if the date range is valid
+            if (checkValidDateRange(startDate, endDate)) {
+              console.log("date filter triggered");
+              dispatch(actions.setDateFilter(startDate, endDate));
+            }
+          }}
+        >
+          Start Filter
+        </Button>
+      </View>
+
       <View style={styles.datePickerContianer}>
         <View
           style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}
@@ -195,8 +231,7 @@ function FilterScreen() {
           dropDownMaxHeight={300}
           placeholder="Select Weather"
           containerStyle={{ flex: 3, height: 50 }}
-          selectedLabelStyle={{color:"blue"}}
-          
+          selectedLabelStyle={{ color: "blue" }}
           onChangeItem={(item) => {
             setWeatherItem(item);
           }}
@@ -214,67 +249,13 @@ function FilterScreen() {
           defaultValue={eventValue}
           placeholder="Select Event"
           containerStyle={{ flex: 3, height: 50 }}
-          selectedLabelStyle={{color:"blue"}}
+          selectedLabelStyle={{ color: "blue" }}
           onChangeItem={(item) => {
-            
             // console.log("item filter is:");
             // console.log(item);
             setEventItem(item);
-            
           }}
         />
-      </View>
-
-      
-      <View style={styles.buttonContainer}>
-
-        <TouchableOpacity
-            style={{flexDirection:"row",
-                  zIndex:-1,
-                  alignSelf:"center",
-                   alignItems:"flex-start",
-                   width:"48%"
-            }}
-            onPress={() => {
-            
-            //eventItem is empty by default,
-            // only triger event filter if event dropdown is changed 
-            if(eventItem==null)
-            {//donothing for default event filter option, hence reduce render burden
-            }
-            else{
-              console.log("event filter triggered!");
-              dispatch(actions.setDisasterFilter(eventItem));
-
-            }
-
-            //weatehrItem is empty by default,
-            //only triger weatehr filter if weaterh dropdown is changed.
-            if(weatherItem==null)
-            {//do nothing for default weather filter option, hence reduce render burden              
-            }
-            else{
-              console.log("weather filter triggered!");
-              dispatch(actions.setWeatherFilter(weatherItem));
-            }
-
-            
-            //only triger date filter if the date range is valid
-            if(checkValidDateRange(startDate,endDate)){
-              console.log("date filter triggered");
-              dispatch(actions.setDateFilter(startDate,endDate));
-            }
-
-          }}
-        >
-         
-         <Image
-          style={{ resizeMode:"stretch", flex:1,}}
-         source={require("../assets/Icons/FilterButton.png")}></Image>
-
-        </TouchableOpacity>
-
-
       </View>
     </View>
   );
@@ -294,22 +275,20 @@ const styles = StyleSheet.create({
     // backgroundColor: "purple",
     // ...Platform.select({
     //   ios: {
-       
+
     //   },
     //   android: {
-        
+
     //   }
     // })
-    
+
     // The solution: Apply zIndex to any device except Android
-    ...(Platform.OS !== 'android' && {
-      zIndex: 10
+    ...(Platform.OS !== "android" && {
+      zIndex: 10,
     }),
-        
   },
 
   datePickerContianer: {
-    
     justifyContent: "space-evenly",
     alignItems: "stretch",
     flex: 1,
@@ -317,13 +296,13 @@ const styles = StyleSheet.create({
     // backgroundColor: "white",
   },
   buttonContainer: {
-    alignSelf:"center",
-    alignItems:"center",
-    justifyContent:"center",
-       height:"28%",
-      //  width:"30%",
-      //  zIndex:-1, //freeze up the dropdown button, bug of the component    
-       
+    // alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "20%",
+    //  width:"30%",
+    //  zIndex:-1, //this will freeze up the dropdown button, bug of the component
+
     // backgroundColor: "green",
   },
 });
