@@ -67,6 +67,7 @@ const DisasterCard = (props) => {
               icon="trash-can"
               color={"black"}
               size={50}
+              onPress={() => { dispatch(actions.unSaveDisaster(props.event)) }}
             />
           </TouchableOpacity>
           <Text style={styles.remove}>Remove</Text>

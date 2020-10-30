@@ -3,6 +3,7 @@ import { SET_FILTERED_DISASTERS } from '../actions/actions'
 import { SET_DISASTER_FILTER } from '../actions/actions';
 import { SET_WEATHER_FILTER } from '../actions/actions';
 import { SAVE_DISASTER } from '../actions/actions'
+import { UNSAVE_DISASTER } from '../actions/actions'
 
 
 const initialState = {
@@ -58,7 +59,13 @@ export default (state = initialState, action) => {
                     savedDisasters: state.savedDisasters.concat(action.saveDisaster)
                 };
             }
-
+        case UNSAVE_DISASTER:
+            const unSavedIndex = state.savedDisasters.findIndex(disaster => disaster.id === action.unsaveDisaster.id)
+            if (unSavedIndex >= 0) { // splice out event to unsave
+                const updatedSavedDisaster = [...state.savedDisasters];
+                updatedSavedDisaster.splice(savedIndex, 1);
+                return { ...state, savedDisasters: updatedSavedDisaster };
+            }
 
         default:
             return state;
