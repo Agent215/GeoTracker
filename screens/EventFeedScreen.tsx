@@ -1,72 +1,40 @@
-import { API, Auth, graphqlOperation } from 'aws-amplify';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { Button, StyleSheet, TextInput } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
-import { createTodo } from '../src/graphql/mutations';
-import { listTodos } from '../src/graphql/queries'
-import { Image, ScrollView } from 'react-native';
-import { Card, ListItem, Icon } from 'react-native-elements'
+import { ScrollView, View,Dimensions } from 'react-native';
+import { Text } from "../components/Themed";
+import DisasterCard from '../components/DisasterCard';
+import { useSelector } from "react-redux";
 
 
+export default function EventFeedScreen({ navigation }) {
 
-
-export default function EventFeedScreen() {
+  const savedDisaters = useSelector((state) => state.disaster.savedDisasters);
+  const { width } = Dimensions.get("window");
+  let hasSaved = false;
+  // check if we have any saved disasters
+  if (savedDisaters.length > 0) { hasSaved = true }
   return (
-    
-    <View style={styles.container}>
-      <ScrollView>
-        <Text style={{ fontSize: 96 }}>Demo 1</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Try and scroll!</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Scroll down</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Scroll down</Text>
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Image source={logo} />
-        <Text style={{ fontSize: 60 }}>Scroll back up!</Text>
-      </ScrollView>
-    </View>
+
+    <ScrollView>
+      <View>
+
+        {
+          hasSaved ?
+            savedDisaters.map(function (data, index) {
+              return (<DisasterCard
+                key={index}
+                event={data}
+              />)
+            }) :
+
+            <Text style={{marginTop:30, fontSize:25, width:width  }}>
+              User has no saved disasters
+            </Text>
+
+
+        }
+
+      </View>
+    </ScrollView>
   );
 }
 
-const logo = {
-  uri: 'https://reactnative.dev/img/tiny_logo.png',
-  width: 64,
-  height: 64
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});

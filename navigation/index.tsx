@@ -24,7 +24,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
+export function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Root" component={BottomTabNavigator} />

@@ -1,0 +1,277 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Disaster Card Component DisasterCard renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#fff",
+      "borderBottomWidth": 0.5,
+      "borderColor": "#ccc",
+      "borderLeftWidth": 0.5,
+      "borderRadius": 2,
+      "borderRightWidth": 0.5,
+      "borderTopWidth": 0.5,
+      "elevation": 3,
+      "flexWrap": "nowrap",
+      "marginBottom": 5,
+      "marginLeft": 2,
+      "marginRight": 2,
+      "marginTop": 5,
+      "shadowColor": "#000",
+      "shadowOffset": Object {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.1,
+      "shadowRadius": 1.5,
+    }
+  }
+>
+  <View
+    bordered={true}
+    header={true}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#fff",
+        "borderBottomWidth": 0.5,
+        "borderColor": "#ccc",
+        "borderRadius": 2,
+        "flexDirection": "row",
+        "paddingBottom": 15,
+        "paddingLeft": 15,
+        "paddingRight": 15,
+        "paddingTop": 15,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flex": 1,
+          "flexDirection": "row",
+        }
+      }
+    >
+      <View
+        size={2}
+        style={
+          Object {
+            "flex": 2,
+            "flexDirection": "column",
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#007aff",
+              "fontFamily": "System",
+              "fontSize": 16,
+              "fontWeight": "600",
+            }
+          }
+        >
+          Draught
+        </Text>
+      </View>
+      <View
+        style={
+          Object {
+            "flex": 1,
+            "flexDirection": "column",
+          }
+        }
+      >
+        <Image
+          source={1}
+        />
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "alignSelf": "center",
+        "flex": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000",
+          "fontFamily": "System",
+          "fontSize": 16,
+        }
+      }
+    >
+      Thirsty Thursday
+    </Text>
+  </View>
+  <View
+    footer={true}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#fff",
+        "borderBottomWidth": null,
+        "borderRadius": 2,
+        "flexDirection": "row",
+        "paddingBottom": 10,
+        "paddingLeft": 15,
+        "paddingRight": 15,
+        "paddingTop": 10,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flex": 1,
+          "flexDirection": "column",
+        }
+      }
+    >
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Array [
+              Object {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "margin": 6,
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 37.5,
+                "height": 75,
+                "width": 75,
+              },
+              undefined,
+              Object {
+                "justifyContent": "center",
+              },
+            ],
+          ]
+        }
+      >
+        <View>
+          <Text />
+        </View>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#000",
+            "fontFamily": "System",
+            "fontSize": 16,
+            "fontWeight": "600",
+          }
+        }
+      >
+        Share
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "flex": 1,
+          "flexDirection": "column",
+        }
+      }
+    >
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Array [
+              Object {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "margin": 6,
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 37.5,
+                "height": 75,
+                "width": 75,
+              },
+              undefined,
+              undefined,
+            ],
+          ]
+        }
+      >
+        <View>
+          <Text />
+        </View>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#000",
+            "fontFamily": "System",
+            "fontSize": 16,
+            "fontWeight": "600",
+          }
+        }
+      >
+        Go
+      </Text>
+    </View>
+  </View>
+</View>
+`;

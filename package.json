@@ -5,9 +5,24 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "setupFilesAfterEnv": [
+      "jest-enzyme"
+    ],
+    "testEnvironment": "enzyme",
+    "testEnvironmentOptions": {
+      "enzymeAdapter": "react16"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|@codler|react-native-keyboard-aware-scroll-view|listenToKeyboardEvents|sentry-expo|native-base|@sentry/.*)"
+    ]
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "2.4.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "^5.9.7",
     "@react-navigation/bottom-tabs": "^5.8.0",
@@ -19,24 +34,52 @@
     "expo": "~38.0.8",
     "expo-status-bar": "^1.0.2",
     "expo-web-browser": "~8.3.1",
+    "graphql": "^15.4.0",
     "ionicons": "^5.2.3",
+    "jest-environment-enzyme": "^7.1.2",
+    "jest-enzyme": "^7.1.2",
+    "native-base": "^2.13.14",
+    "node-fetch": "^2.6.1",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+    "react-native-confetti-cannon": "^1.5.1",
+    "react-native-date-picker": "^3.2.5",
+    "react-native-dropdown-picker": "^3.7.0",
+    "react-native-easy-grid": "^0.2.2",
     "react-native-geocoding": "^0.4.0",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-places-autocomplete": "^2.0.2",
     "react-native-map-clustering": "^3.3.9",
     "react-native-maps": "0.27.1",
+    "react-native-material-dropdown": "^0.11.1",
+    "react-native-modal": "^11.5.6",
+    "react-native-modal-datetime-picker": "^9.0.0",
+    "react-native-modal-dropdown": "^0.7.0",
+    "react-native-modal-picker": "0.0.16",
     "react-native-paper": "^4.2.0",
     "react-native-screens": "~2.9.0",
-    "react-native-web": "~0.11.7"
+    "react-native-svg": "^12.1.0",
+    "react-native-svg-transformer": "^0.14.3",
+    "react-native-web": "~0.11.7",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
-    "@types/react": "~16.9.41",
-    "@types/react-native": "~0.62.13",
-    "typescript": "~3.9.5"
+    "@types/jest": "^26.0.14",
+    "@types/react": "^16.9.53",
+    "@types/react-native": "^0.62.18",
+    "@types/react-test-renderer": "^16.9.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
+    "jest": "^26.6.0",
+    "jest-expo": "^39.0.0",
+    "react-test-renderer": "^16.14.0",
+    "redux-mock-store": "^1.5.4",
+    "typescript": "^3.9.7"
   },
   "private": true
 }
