@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState,useRef } from "react";
 import { StyleSheet, Image, Platform } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch } from "react-redux";
@@ -54,11 +54,11 @@ function FilterScreen() {
 
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
-  const initialStartDate = new Date(2019, 0, 1);
-  const initialEndDate = new Date();
-  const [startDate, setStartDate] = useState(initialStartDate);
+  const startDateOnPicker = useRef(new Date(2019, 0, 1));
+  const endDateOnPicker = useRef(new Date());
+  const [startDate, setStartDate] = useState(new Date(2019, 0, 1));
 
-  const [endDate, setEndDate] = useState(initialEndDate);
+  const [endDate, setEndDate] = useState(new Date());
 
   //test commit
 
@@ -81,17 +81,17 @@ function FilterScreen() {
 
   const handleStartDateConfirm = (date) => {
     console.log("Start Date Picked: ", date);
-
+    
+    
     //VALID start date chosen
     if (checkValidDateRange(date, endDate)) {
-      console.log("valid start date!!!!");
+      // console.log("valid start date!!!!");
       setStartDate(date);
-
       hideStartDatePicker();
     }
     //invalid start date chosen
     else {
-      console.log("invalid starting date");
+      // console.log("invalid starting date");
 
       setStartDate(date);
 
@@ -112,13 +112,13 @@ function FilterScreen() {
 
     //valid end date chosen
     if (checkValidDateRange(startDate, date)) {
-      console.log("valid end date!!");
+      // console.log("valid end date!!");
       setEndDate(date);
       hideEndDatePicker();
     }
     //invalid end date chosen
     else {
-      console.log("invalid end date");
+      // console.log("invalid end date");
       setEndDate(date);
       hideEndDatePicker();
     }
@@ -185,12 +185,15 @@ function FilterScreen() {
           >
             <Fontisto name="date" size={35} color="green" />
             <DateTimePickerModal
-              // date={initialStartDate}
+              date={startDateOnPicker.current}
               // isDarkModeEnabled={true}
               isVisible={isStartDatePickerVisible}
               mode="date"
               display="spinner"
-              onConfirm={handleStartDateConfirm}
+              onConfirm={(date) => {
+                handleStartDateConfirm(date);
+                startDateOnPicker.current=date;
+              } }
               onCancel={hideStartDatePicker}
             />
           </TouchableOpacity>
@@ -208,10 +211,16 @@ function FilterScreen() {
 
             <DateTimePickerModal
               isVisible={isEndDatePickerVisible}
+              date={endDateOnPicker.current}
               // isDarkModeEnabled={true}
               mode="date"
               display="spinner"
-              onConfirm={handleEndDateConfirm}
+              onConfirm={(date) => {
+                handleEndDateConfirm(date);
+                endDateOnPicker.current=date;
+              }
+                
+              }
               onCancel={hideEndDatePicker}
             />
           </TouchableOpacity>
