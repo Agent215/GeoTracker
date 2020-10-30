@@ -13,6 +13,7 @@ import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 
+
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
 Geocoder.init(Keys.geocoderKey, { language: "en" }); // use a valid API key
@@ -70,6 +71,7 @@ const MapScreen = ({ navigation }) => {
    */
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+
   };
 
   /*
@@ -114,6 +116,7 @@ const MapScreen = ({ navigation }) => {
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
+   
   }, []);
 
   /**
@@ -180,7 +183,7 @@ const MapScreen = ({ navigation }) => {
         zoomControlEnabled={true}
         loadingEnabled={true}
       >
-
+   
         {filteredDisasters.map((marker: EventEntity, index) => (
 
           <Marker
@@ -189,10 +192,9 @@ const MapScreen = ({ navigation }) => {
               latitude: parseFloat(marker.currentLat),
               longitude: parseFloat(marker.currentLong)
             }}
-            title={marker.title}
-            description={marker.category}
+           
             tracksViewChanges={false}
-            onPress={() => { toggleModal(); dispatch(actions.setCurrentDisaster(marker)) }}
+            onPress={() => {   toggleModal(); dispatch(actions.setCurrentDisaster(marker)) }}
           >
             <DisasterPin
               size={50}

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, ScrollView } from 'react-native';
+import React, { useRef } from 'react';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import CustomToast from '../components/CustomToast';
 import Modal from 'react-native-modal';
 import { Dimensions } from 'react-native';
 import * as actions from '../store/actions/actions';
@@ -7,6 +8,7 @@ import { IconButton, Colors } from "react-native-paper";
 import { Row } from 'native-base';
 import FeedScreenShare from './ShareFeat';
 import { useDispatch, useSelector } from 'react-redux';
+
 
 const { width, height } = Dimensions.get('screen');
 const SCREEN_WIDTH = width;
@@ -17,17 +19,19 @@ const MODAL_HEIGHT = height / 4;
 const CustomModal = (props) => {
 
     const dispatch = useDispatch();
-    
+    const toastRef = useRef(CustomToast.prototype);
+
 
     const onSave = (disaster) => {
 
         dispatch(actions.saveDisaster(disaster));
+        toastRef.current.show(`EventSaved`, 500);
 
     }
     return (
         <View style={{ flex: 1 }}>
 
-
+            <CustomToast ref={toastRef} />
             <Modal
                 isVisible={props.visable}
                 onSwipeComplete={() => props.toggleModal()}
