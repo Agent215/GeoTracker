@@ -77,7 +77,6 @@ const MapScreen = ({ navigation }) => {
     animateToUser();
   }, []);
 
-
   /**
    * standard shows streets 
    * hybrid shows town and city names over satilite view
