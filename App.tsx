@@ -31,7 +31,8 @@ Amplify.configure({
 });
 
 
-let eventList;
+let currentEventList = [];
+let historicalEventList = [];
 
 const App = () => {
   const isLoadingComplete = useCachedResources();
@@ -42,7 +43,7 @@ const App = () => {
   if (!fetchedData) {
     return (
       <AppLoading
-        startAsync={getData}
+        startAsync={loadAllData}
         onFinish={() => setDataFetched(true)}
         />
     );
@@ -62,16 +63,32 @@ const App = () => {
   }
 }
 
-async function getData() { 
+async function loadAllData() {
+  await getCurrentData();
+  getHistoricalData();
+}
+
+async function getCurrentData() { 
   const apiName = 'EventsApi';
   const path = '/events/all';
   const myInit = { // OPTIONAL
       headers: {}, // OPTIONAL
   };
 
-  eventList = await API.get(apiName, path, myInit);
+  currentEventList = await API.get(apiName, path, myInit);
+
 }
 
+async function getHistoricalData() { 
+  const apiName = 'EventsApi';
+  const path = '/events/closed';
+  const myInit = { // OPTIONAL
+      headers: {}, // OPTIONAL
+  };
 
-export { eventList }
+  historicalEventList = await API.get(apiName, path, myInit);
+
+}
+
+export { currentEventList, historicalEventList }
 export default App

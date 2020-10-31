@@ -8,8 +8,8 @@
             }
         },
         {
-            "name": "/events/test",
-            "lambdaFunction": "EventsApiLambda",
+            "name": "/events/closed",
+            "lambdaFunction": "EventsApiHistoricalLambda",
             "privacy": {
                 "open": true
             }
@@ -22,7 +22,7 @@
             "lambdaFunction": "EventsApiGetAll"
         },
         {
-            "lambdaFunction": "EventsApiLambda"
+            "lambdaFunction": "EventsApiHistoricalLambda"
         }
     ],
     "privacy": {
@@ -42,12 +42,12 @@
         },
         {
             "category": "function",
-            "resourceName": "EventsApiLambda",
+            "resourceName": "EventsApiHistoricalLambda",
             "attributes": [
                 "Name",
                 "Arn"
             ]
         }
     ],
-    "uuid": "1ac509a0"
+    "uuid": "3aaf682b"
 }

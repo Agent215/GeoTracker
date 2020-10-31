@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
-import { eventList } from '../App'
+import { currentEventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,7 +48,7 @@ const MapScreen = ({ navigation }) => {
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
-  let allEvents = eventList.events.map((event) => {
+  let allEvents = currentEventList.events.map((event) => {
     return { ...event, isShow: true };
   });
 
