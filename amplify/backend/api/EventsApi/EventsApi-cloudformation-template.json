@@ -69,8 +69,8 @@
             "Fn::Join": [
               "-",
               [
-                {"Ref": "env"},
-                "EventsApi"
+                "EventsApi",
+                {"Ref": "env"}
               ]
             ]
           },
