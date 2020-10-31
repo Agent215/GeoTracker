@@ -31,8 +31,8 @@ Amplify.configure({
 });
 
 
-let currentEventList = [];
-let historicalEventList = [];
+let currentEventList: EventEntity[] = [];
+let historicalEventList: EventEntity[] = [];
 
 const App = () => {
   const isLoadingComplete = useCachedResources();

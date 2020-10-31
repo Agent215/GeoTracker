@@ -48,7 +48,7 @@ const MapScreen = ({ navigation }) => {
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
-  let allEvents = currentEventList.events.map((event) => {
+  let allEvents = currentEventList.map((event) => {
     return { ...event, isShow: true };
   });
 

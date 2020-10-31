@@ -44,5 +44,5 @@ function createListFromJsonResponse(json) {
         parsedList.events.push(currentEvent);
     });
 
-    return parsedList;
+    return parsedList.events;
 }
