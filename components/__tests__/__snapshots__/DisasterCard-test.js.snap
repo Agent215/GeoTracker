@@ -304,7 +304,7 @@ exports[`Testing Disaster Card Component DisasterCard renders correctly 1`] = `
               }
             }
             accessible={true}
-            focusable={true}
+            focusable={false}
             hitSlop={
               Object {
                 "bottom": 6,
