@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
-import { currentEventList, combinedEvents ,historicalEventList} from '../App'
+import { currentEventList, combinedEvents, historicalEventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,9 +42,9 @@ const MapScreen = ({ navigation }) => {
   const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
   const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
 
-  const startDate = useSelector((state)=>state.disaster.startDate); // start date of the time range from date picker
-  const endDate = useSelector((state)=>state.disaster.endDate); //end date of time range from date picker
-  
+  const startDate = useSelector((state) => state.disaster.startDate); // start date of the time range from date picker
+  const endDate = useSelector((state) => state.disaster.endDate); //end date of time range from date picker
+
   let mapRef = useRef(MapView.prototype);
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
@@ -151,8 +151,8 @@ const MapScreen = ({ navigation }) => {
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
-   
-    if (currentDisaster != "") {animateToDisaster();}
+
+    if (currentDisaster != "") { animateToDisaster(); }
   }, [currentDisaster.title, dispatch]);
 
 
@@ -164,25 +164,29 @@ const MapScreen = ({ navigation }) => {
    * each time arround.
    */
   const filterDisasters = () => {
-    let startDate_ISO=startDate.toISOString();
-    let endDate_ISO=endDate.toISOString();
+    let startDate_ISO = startDate.toISOString();
+    let endDate_ISO = endDate.toISOString();
 
     tempArray = [];   // reset temp array
     // go through all events and mark which ones need to be filtered.
     const disasterToFilter = allEvents.map((event) => {
-      
+
+      let endDate;
+      if (event.isClosed == "null") { endDate = new Date() }
+      else { endDate = event.isClosed }
+     
 
       if
-      (
+        (
         (disasterFilter.value === "all"      // filter for all
-        || disasterFilter.value === ""        // first time we render
-        || disasterFilter.value == undefined  //just in case
-        || event.category === disasterFilter.value
+          || disasterFilter.value === ""        // first time we render
+          || disasterFilter.value == undefined  //just in case
+          || event.category === disasterFilter.value
         )
         &&
         (
-          startDate_ISO<=event.currentDate && event.currentDate<=endDate_ISO
-        ) 
+          startDate_ISO <= event.currentDate && endDate <= endDate_ISO
+        )
       ) { event.isShow = true }
       else {
         event.isShow = false;
