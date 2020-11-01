@@ -1,4 +1,4 @@
-const ALL_EVENTS_URL = "https://eonet.sci.gsfc.nasa.gov/api/v3/events";
+const HISTORICAL_EVENTS_URL = "https://eonet.sci.gsfc.nasa.gov/api/v3/events?start=2020-01-01&end=2020-12-31&status=closed";
 const fetch = require('node-fetch');
 const EventEntity = require('./EventEntity');
 
@@ -6,7 +6,7 @@ const EventEntity = require('./EventEntity');
 exports.handler = async (event) => {
     let settings = { method: "Get" };
 
-    let fetchedJsonObject = await fetch(ALL_EVENTS_URL, settings)
+    let fetchedJsonObject = await fetch(HISTORICAL_EVENTS_URL, settings)
         .then(res => res.json())
         .then((json) => {
             return json;

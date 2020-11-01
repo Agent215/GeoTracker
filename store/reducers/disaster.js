@@ -4,6 +4,7 @@ import { SET_DISASTER_FILTER } from '../actions/actions';
 import { SET_WEATHER_FILTER } from '../actions/actions';
 import { SAVE_DISASTER } from '../actions/actions'
 import { UNSAVE_DISASTER } from '../actions/actions'
+import {SET_DATE_FILTER} from '../actions/actions';
 
 
 const initialState = {
@@ -13,7 +14,11 @@ const initialState = {
     disasterFilter: "",
     weatherFilter: "",
     filteredDisasters: [],
-    savedDisasters: []
+    savedDisasters: [],
+
+    startDate:new Date(2019,0,1),  //if triggered, default value 2019/1/1
+    endDate:new Date(),    //if griggered, default value is current date
+
 
 };
 
@@ -31,12 +36,20 @@ export default (state = initialState, action) => {
                 ...state,
                 disasterFilter: action.disasterFilter
             };
+    
+
         case SET_WEATHER_FILTER:
 
             return {
                 ...state,
                 weatherFilter: action.weatherFilter
             };
+        case SET_DATE_FILTER:
+            return {
+                ...state,
+                startDate:action.startDate,
+                endDate:action.endDate
+            };   
         case SET_FILTERED_DISASTERS:
 
             return {
@@ -66,6 +79,7 @@ export default (state = initialState, action) => {
                 updatedSavedDisaster.splice(savedIndex, 1);
                 return { ...state, savedDisasters: updatedSavedDisaster };
             }
+
 
         default:
             return state;

@@ -36,8 +36,8 @@ const DisasterCard = (props) => {
               {props.event.title}
             </Text>
           </Col>
-          <Col>
-            <DisasterIcon
+          <Col style={styles.iconStyle}>
+            <DisasterIcon 
               size={50}
               event={props.event}
             />
@@ -102,6 +102,11 @@ const styles = StyleSheet.create({
   },
   remove: {
     marginLeft: 13
+  },
+  iconStyle: {
+    marginLeft: 60,
+    marginTop: 5
+  
   }
 });
 

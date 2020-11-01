@@ -85,6 +85,8 @@ exports[`Testing Disaster Card Component DisasterCard renders correctly 1`] = `
           Object {
             "flex": 1,
             "flexDirection": "column",
+            "marginLeft": 60,
+            "marginTop": 5,
           }
         }
       />
