@@ -167,12 +167,19 @@ const MapScreen = ({ navigation }) => {
     let startDate_ISO = startDate.toISOString();
     let endDate_ISO = endDate.toISOString();
 
+
     tempArray = [];   // reset temp array
     // go through all events and mark which ones need to be filtered.
     const disasterToFilter = allEvents.map((event) => {
 
+
       let endDate;
-      if (event.isClosed == "null") { endDate = new Date() }
+      if (event.isClosed == null) {
+         endDate = new Date().toISOString();
+         console.log("line 180 of map screen");
+         console.log(endDate);
+
+      }
       else { endDate = event.isClosed }
      
 
@@ -193,10 +200,17 @@ const MapScreen = ({ navigation }) => {
       }
       return event
     });
+
+
     // create a new array from the array with correctly marked isShow prop
     disasterToFilter.forEach(element => {
       if (element.isShow) tempArray.push(element)
     })
+
+
+    tempArray.forEach(element => {
+      console.log("current date: "+element.currentDate+", is closed? "+element.isClosed);
+    });
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
   };
