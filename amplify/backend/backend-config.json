@@ -14,7 +14,21 @@
         },
         {
           "category": "function",
-          "resourceName": "EventsApiLambda",
+          "resourceName": "EventsApiHistoricalLambda",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    },
+    "EventsApiV2": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "EventsApiLambdaV2",
           "attributes": [
             "Name",
             "Arn"
@@ -32,13 +46,19 @@
     }
   },
   "function": {
-    "EventsApiLambda": {
+    "EventsApiLambdaV2": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": []
     },
     "EventsApiGetAll": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "EventsApiHistoricalLambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
