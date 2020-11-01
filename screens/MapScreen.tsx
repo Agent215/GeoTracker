@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
-import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import { PROVIDER_GOOGLE, Marker, UrlTile } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { eventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -8,6 +8,7 @@ import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
 import WeatherOverlay from '../components/WeatherOverlay'
+import GIBSOverlay from '../components/GIBSOverlay'
 import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -161,6 +162,16 @@ const MapScreen = ({ navigation }) => {
     dispatch(actions.setFilteredDisasters(tempArray));
   };
 
+  const[count, setCount] = useState(0)
+  const[isPlaying, setIsPlaying] = useState(false)
+
+  while(isPlaying){
+  setInterval(() => {
+    setCount(count+1)
+    console.log(count)
+  }, 1000)
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -178,6 +189,7 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
+          maxZoomLevel={0}
         >
 
           {filteredDisasters.map((marker: EventEntity, index) => (
@@ -200,8 +212,16 @@ const MapScreen = ({ navigation }) => {
             </Marker>
           ))}
 
-          <WeatherOverlay
-            category={weatherFilter.value} />
+
+          <GIBSOverlay
+            category={weatherFilter.value}
+            date={'2020-10-12'}
+          />
+
+          {/*<WeatherOverlay
+            category={weatherFilter.value} 
+          />*/}
+
 
         </MapView>
 

@@ -37,7 +37,7 @@ const WeatherOverlay = (props) => {
         />
 
     );
-    let pressue = (
+    let pressure = (
         <UrlTile
             key={Date.now()}
             urlTemplate={'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
@@ -66,7 +66,7 @@ const WeatherOverlay = (props) => {
     if (props.category == "temp") weather = temp;
     if (props.category == "precipitation") weather = precip;
     if (props.category == "wind") weather = wind;
-    if (props.category == "pressure") weather = pressue;
+    if (props.category == "pressure") weather = pressure;
     if (props.category == "none") weather = none;
 
 
@@ -77,5 +77,6 @@ const WeatherOverlay = (props) => {
         weather)
 
 }
+
 
 export default WeatherOverlay;
