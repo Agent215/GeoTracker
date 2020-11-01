@@ -28,15 +28,15 @@
           
           
     
-          "functionEventsApiLambdaName": {
+          "functionEventsApiHistoricalLambdaName": {
             "Type": "String",
-            "Default": "functionEventsApiLambdaName"
+            "Default": "functionEventsApiHistoricalLambdaName"
           },
         
           
-          "functionEventsApiLambdaArn": {
+          "functionEventsApiHistoricalLambdaArn": {
             "Type": "String",
-            "Default": "functionEventsApiLambdaArn"
+            "Default": "functionEventsApiHistoricalLambdaArn"
           }
         
           
@@ -65,7 +65,15 @@
         "Type": "AWS::ApiGateway::RestApi",
         "Properties": {
           "Description": "",
-          "Name": "EventsApi",
+          "Name": {
+            "Fn::Join": [
+              "-",
+              [
+                "EventsApi",
+                {"Ref": "env"}
+              ]
+            ]
+          },
           "Body": {
             "swagger": "2.0",
             "info": {
@@ -305,7 +313,7 @@
                 }
               },   
               
-              "/events/test": {
+              "/events/closed": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -391,7 +399,7 @@
                             
                             {
                                 
-                                "Ref": "functionEventsApiLambdaArn"
+                                "Ref": "functionEventsApiHistoricalLambdaArn"
                             },
                             
                             "/invocations"
@@ -404,7 +412,7 @@
                   }
                 }
               },
-              "/events/test/{proxy+}": {
+              "/events/closed/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -490,7 +498,7 @@
                           
                           {
                             
-                            "Ref": "functionEventsApiLambdaArn"
+                            "Ref": "functionEventsApiHistoricalLambdaArn"
                           },
                           
                           "/invocations"
@@ -581,12 +589,12 @@
         },
         
         
-        "functionEventsApiLambdaPermissionEventsApi": {
+        "functionEventsApiHistoricalLambdaPermissionEventsApi": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
                 "FunctionName": 
                     {
-                        "Ref":  "functionEventsApiLambdaName"
+                        "Ref":  "functionEventsApiHistoricalLambdaName"
                     },
                     
                     "Action": "lambda:InvokeFunction",
@@ -616,7 +624,7 @@
         
         
         
-      "DeploymentAPIGWEventsApi1ac509a0": {
+      "DeploymentAPIGWEventsApi3aaf682b": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",
