@@ -6,6 +6,7 @@ import { AppLoading } from 'expo';
 import { API } from 'aws-amplify'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+
 import ReduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import disasterReducer from './store/reducers/disaster';

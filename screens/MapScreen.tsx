@@ -16,6 +16,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 
+
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
 Geocoder.init(Keys.geocoderKey, { language: "en" }); // use a valid API key
@@ -96,6 +97,7 @@ const MapScreen = ({ navigation }) => {
    */
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+
   };
 
   /*
@@ -140,6 +142,7 @@ const MapScreen = ({ navigation }) => {
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
+   
   }, []);
 
   /**
