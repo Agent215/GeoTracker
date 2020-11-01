@@ -61,7 +61,8 @@
       },
       "function": {
         "EventsApiHistoricalLambda": {},
-        "EventsApiGetAll": {}
+        "EventsApiGetAll": {},
+        "EventsApiLambdaV2": {}
       }
     }
   }

@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import Amplify from 'aws-amplify'
 import config from './aws-exports'
@@ -33,26 +33,27 @@ Amplify.configure({
 
 let currentEventList: EventEntity[] = [];
 let historicalEventList: EventEntity[] = [];
+let combinedEvents: EventEntity[] = [];
 
 const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
   console.disableYellowBox = true
   const [fetchedData, setDataFetched] = useState(false)
-  
+
   if (!fetchedData) {
     return (
       <AppLoading
         startAsync={loadAllData}
         onFinish={() => setDataFetched(true)}
-        />
+      />
     );
   } else {
     return (
       <Provider store={store} >
-      
+
         <SafeAreaProvider>
-  
+
           <Navigation colorScheme={colorScheme} />
           <StatusBar />
 
@@ -65,30 +66,37 @@ const App = () => {
 
 async function loadAllData() {
   await getCurrentData();
-  getHistoricalData();
+  await getHistoricalData();
+  concatArrays();
+
 }
 
-async function getCurrentData() { 
+function concatArrays() {
+  combinedEvents = [].concat(historicalEventList,currentEventList)
+
+}
+
+async function getCurrentData() {
   const apiName = 'EventsApi';
   const path = '/events/all';
   const myInit = { // OPTIONAL
-      headers: {}, // OPTIONAL
+    headers: {}, // OPTIONAL
   };
 
   currentEventList = await API.get(apiName, path, myInit);
 
 }
 
-async function getHistoricalData() { 
+async function getHistoricalData() {
   const apiName = 'EventsApi';
   const path = '/events/closed';
   const myInit = { // OPTIONAL
-      headers: {}, // OPTIONAL
+    headers: {}, // OPTIONAL
   };
 
   historicalEventList = await API.get(apiName, path, myInit);
 
 }
 
-export { currentEventList, historicalEventList }
+export { currentEventList, historicalEventList, combinedEvents }
 export default App
