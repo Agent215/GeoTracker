@@ -62,12 +62,17 @@ const DisasterCard = (props) => {
 
         </Col>
         <Col>
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={() => { 
+            dispatch(actions.unSaveDisaster(props.event));
+          console.log("you are at line 71 of DisasterCard"); 
+        }}
+          >
             <IconButton
               icon="trash-can"
               color={"black"}
               size={50}
-              onPress={() => { dispatch(actions.unSaveDisaster(props.event)) }}
+              
             />
           </TouchableOpacity>
           <Text style={styles.remove}>Remove</Text>
