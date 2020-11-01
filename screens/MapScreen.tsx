@@ -172,17 +172,13 @@ const MapScreen = ({ navigation }) => {
     // go through all events and mark which ones need to be filtered.
     const disasterToFilter = allEvents.map((event) => {
 
-
+      
       let endDate;
       if (event.isClosed == null) {
          endDate = new Date().toISOString();
-         console.log("line 180 of map screen");
-         console.log(endDate);
-
       }
       else { endDate = event.isClosed }
      
-
       if
         (
         (disasterFilter.value === "all"      // filter for all
@@ -208,9 +204,7 @@ const MapScreen = ({ navigation }) => {
     })
 
 
-    tempArray.forEach(element => {
-      console.log("current date: "+element.currentDate+", is closed? "+element.isClosed);
-    });
+
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
   };
