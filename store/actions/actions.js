@@ -6,6 +6,7 @@ export const SET_FILTERED_DISASTERS = "SET_FILTERED_DISASTERS";
 export const SAVE_DISASTER = "SAVE_DISASTER";
 
 
+export const SET_DATE_FILTER = "SET_DATE_FILTER"
 
 
 export const setCurrentDisaster = (disaster) => {
@@ -19,6 +20,10 @@ export const setWeatherFilter = (weatherFilter) => {
 
 export const setDisasterFilter = (disasterFilter) => {
     return { type: SET_DISASTER_FILTER, disasterFilter: disasterFilter }
+};
+
+export const setDateFilter = (startDate, endDate) => {
+    return { type: SET_DATE_FILTER, startDate: startDate, endDate: endDate}
 };
 
 export const setFilteredDisasters = (filteredDisasters) => {
