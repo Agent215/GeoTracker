@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { useState,useRef } from "react";
+import { StyleSheet, Image, Platform } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch } from "react-redux";
 import * as actions from "../store/actions/actions";
@@ -8,17 +8,17 @@ import { Text, View } from "../components/Themed";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
+import { Button } from "react-native-paper";
 
 function FilterScreen() {
   const dispatch = useDispatch();
 
   let weather = [
-    { label: "Temperature", value: "Temperature" },
-    { label: "Precipitation", value: "Precipitation" },
-    { label: "Cloud Cover", value: "Cloud Cover" },
-    { label: "Wind Speed", value: "Wind Speed" },
-    { label: "Barometric Pressure", value: "Barometric Pressure" },
+    { label: "Temperature", value: "temp" },
+    { label: "Precipitation", value: "precipitation" },
+    { label: "Cloud Cover", value: "clouds" },
+    { label: "Wind Speed", value: "wind" },
+    { label: "Barometric Pressure", value: "pressure" },
     { label: "None", value: "none" },
   ];
 
@@ -48,18 +48,28 @@ function FilterScreen() {
   const [eventItems, setEventItems] = useState(event);
   let eventController;
 
-
   const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(
     false
   );
 
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
-  const initialStartDate = new Date();
-  const initialEndDate = new Date();
-  const [startDate, setStartDate] = useState(initialStartDate);
+  const startDateOnPicker = useRef(new Date(2019, 0, 1));
+  const endDateOnPicker = useRef(new Date());
+  const [startDate, setStartDate] = useState(new Date(2019, 0, 1));
 
-  const [endDate, setEndDate] = useState(initialEndDate);
+  const [endDate, setEndDate] = useState(new Date());
+
+  //test commit
+
+  let eventItem = null;
+  let weatherItem = null;
+  const setEventItem = (eventItemPicked) => {
+    eventItem = eventItemPicked;
+  };
+  const setWeatherItem = (weatherItemPicked) => {
+    weatherItem = weatherItemPicked;
+  };
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -71,10 +81,23 @@ function FilterScreen() {
 
   const handleStartDateConfirm = (date) => {
     console.log("Start Date Picked: ", date);
-    setStartDate(date);
-    hideStartDatePicker();
-  };
+    
+    
+    //VALID start date chosen
+    if (checkValidDateRange(date, endDate)) {
+      // console.log("valid start date!!!!");
+      setStartDate(date);
+      hideStartDatePicker();
+    }
+    //invalid start date chosen
+    else {
+      // console.log("invalid starting date");
 
+      setStartDate(date);
+
+      hideStartDatePicker();
+    }
+  };
 
   const showEndDatePicker = () => {
     setEndDatePickerVisibility(true);
@@ -86,44 +109,118 @@ function FilterScreen() {
 
   const handleEndDateConfirm = (date) => {
     console.log("End Date Picked: ", date);
-    setEndDate(date);
-    hideEndDatePicker();
+
+    //valid end date chosen
+    if (checkValidDateRange(startDate, date)) {
+      // console.log("valid end date!!");
+      setEndDate(date);
+      hideEndDatePicker();
+    }
+    //invalid end date chosen
+    else {
+      // console.log("invalid end date");
+      setEndDate(date);
+      hideEndDatePicker();
+    }
+  };
+
+  //idea:
+  // have a function to set the date range first,
+  // then dispatch somthing to the redux store.
+  const checkValidDateRange = (startDate, endDate) => {
+    // console.log("check validation start: " + startDate);
+    // console.log("check validation end: " + endDate);
+    return endDate >= startDate;
   };
 
   return (
     <View style={styles.grandContainer}>
+      <View style={styles.buttonContainer}>
+        <Button
+          icon="play-circle-outline"
+          mode="contained"
+          contentStyle={{ backgroundColor: "green" }}
+          labelStyle={{ fontSize: 20 }}
+          onPress={() => {
+            //eventItem is empty by default,
+            // only triger event filter if event dropdown is changed
+            if (eventItem == null) {
+              //donothing for default event filter option, hence reduce render burden
+            } else {
+              console.log("event filter triggered!");
+              dispatch(actions.setDisasterFilter(eventItem));
+            }
+
+            //weatehrItem is empty by default,
+            //only triger weatehr filter if weaterh dropdown is changed.
+            if (weatherItem == null) {
+              //do nothing for default weather filter option, hence reduce render burden
+            } else {
+              console.log("weather filter triggered!");
+              dispatch(actions.setWeatherFilter(weatherItem));
+            }
+
+            //only triger date filter if the date range is valid
+            if (checkValidDateRange(startDate, endDate)) {
+              console.log("date filter triggered");
+              dispatch(actions.setDateFilter(startDate, endDate));
+            }
+          }}
+        >
+          Start Filter
+        </Button>
+      </View>
+
       <View style={styles.datePickerContianer}>
-        <View style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}>
+        <View
+          style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}
+        >
           <Text
             style={{ flex: 3, fontSize: 16, color: "black" }}
           >{`Start date: ${startDate.toDateString()}`}</Text>
 
-          <TouchableOpacity style={{ flex: 1, backgroundColor: "white" }} onPress={showStartDatePicker} >
-            <Fontisto name="date" size={35} color="black" />
+          <TouchableOpacity
+            style={{ flex: 1, backgroundColor: "white" }}
+            onPress={showStartDatePicker}
+          >
+            <Fontisto name="date" size={35} color="green" />
             <DateTimePickerModal
+              date={startDateOnPicker.current}
+              // isDarkModeEnabled={true}
               isVisible={isStartDatePickerVisible}
               mode="date"
               display="spinner"
-              onConfirm={handleStartDateConfirm}
+              onConfirm={(date) => {
+                handleStartDateConfirm(date);
+                startDateOnPicker.current=date;
+              } }
               onCancel={hideStartDatePicker}
-
             />
           </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}>
+        <View
+          style={{ flexDirection: "row", flex: 1, backgroundColor: "white" }}
+        >
           <Text
             style={{ flex: 3, fontSize: 16, color: "black" }}
           >{`End date:  ${endDate.toDateString()}`}</Text>
 
           <TouchableOpacity style={{ flex: 1 }} onPress={showEndDatePicker}>
-            <Fontisto name="date" size={35} color="black" />
+            <Fontisto name="date" size={35} color="green" />
 
             <DateTimePickerModal
               isVisible={isEndDatePickerVisible}
+              date={endDateOnPicker.current}
+              // isDarkModeEnabled={true}
               mode="date"
               display="spinner"
-              onConfirm={handleEndDateConfirm}
+              onConfirm={(date) => {
+                handleEndDateConfirm(date);
+                endDateOnPicker.current=date;
+              }
+                
+              }
               onCancel={hideEndDatePicker}
             />
           </TouchableOpacity>
@@ -137,31 +234,35 @@ function FilterScreen() {
           onChangeList={(items, callback) => {
             new Promise((resolve, reject) => resolve(setWeatherItems(items)))
               .then(() => callback())
-              .catch(() => { });
+              .catch(() => {});
           }}
           defaultValue={weatherValue}
-          dropDownMaxHeight={400}
+          dropDownMaxHeight={300}
           placeholder="Select Weather"
           containerStyle={{ flex: 3, height: 50 }}
+          selectedLabelStyle={{ color: "blue" }}
           onChangeItem={(item) => {
-            dispatch(actions.setWeatherFilter(item));
+            setWeatherItem(item);
           }}
         />
 
         <DropDownPicker
           items={eventItems}
           controller={(instance) => (eventController = instance)}
-          dropDownMaxHeight={400}
+          dropDownMaxHeight={300}
           onChangeList={(items, callback) => {
             new Promise((resolve, reject) => resolve(setEventItems(items)))
               .then(() => callback())
-              .catch(() => { });
+              .catch(() => {});
           }}
           defaultValue={eventValue}
           placeholder="Select Event"
           containerStyle={{ flex: 3, height: 50 }}
+          selectedLabelStyle={{ color: "blue" }}
           onChangeItem={(item) => {
-            dispatch(actions.setDisasterFilter(item));
+            // console.log("item filter is:");
+            // console.log(item);
+            setEventItem(item);
           }}
         />
       </View>
@@ -174,13 +275,26 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "stretch",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
 
   filterContainer: {
-    flex: 4,
+    flex: 3.5,
     flexDirection: "row",
     // backgroundColor: "purple",
+    // ...Platform.select({
+    //   ios: {
+
+    //   },
+    //   android: {
+
+    //   }
+    // })
+
+    // The solution: Apply zIndex to any device except Android
+    ...(Platform.OS !== "android" && {
+      zIndex: 10,
+    }),
   },
 
   datePickerContianer: {
@@ -188,11 +302,17 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "white"
+    // backgroundColor: "white",
   },
-  bottomContainer: {
-    flex: 1,
-    backgroundColor: "green",
+  buttonContainer: {
+    // alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "20%",
+    //  width:"30%",
+    //  zIndex:-1, //this will freeze up the dropdown button, bug of the component
+
+    // backgroundColor: "green",
   },
 });
 
