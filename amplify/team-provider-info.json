@@ -16,8 +16,8 @@
         "geotracker57620557": {}
       },
       "function": {
-        "EventsApiLambda": {},
-        "EventsApiGetAll": {}
+        "EventsApiGetAll": {},
+        "EventsApiHistoricalLambda": {}
       }
     }
   },
@@ -61,8 +61,7 @@
       },
       "function": {
         "EventsApiHistoricalLambda": {},
-        "EventsApiGetAll": {},
-        "EventsApiLambdaV2": {}
+        "EventsApiGetAll": {}
       }
     }
   }
