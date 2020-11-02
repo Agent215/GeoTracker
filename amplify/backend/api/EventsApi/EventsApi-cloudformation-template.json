@@ -65,15 +65,7 @@
         "Type": "AWS::ApiGateway::RestApi",
         "Properties": {
           "Description": "",
-          "Name": {
-            "Fn::Join": [
-              "-",
-              [
-                "EventsApi",
-                {"Ref": "env"}
-              ]
-            ]
-          },
+          "Name": "EventsApi",
           "Body": {
             "swagger": "2.0",
             "info": {
