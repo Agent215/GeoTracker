@@ -21,20 +21,6 @@
           ]
         }
       ]
-    },
-    "EventsApiV2": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "EventsApiLambdaV2",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
     }
   },
   "auth": {
@@ -46,12 +32,6 @@
     }
   },
   "function": {
-    "EventsApiLambdaV2": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
-    },
     "EventsApiGetAll": {
       "build": true,
       "providerPlugin": "awscloudformation",
