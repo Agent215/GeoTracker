@@ -73,10 +73,11 @@ export default (state = initialState, action) => {
                 };
             }
         case UNSAVE_DISASTER:
+            
             const unSavedIndex = state.savedDisasters.findIndex(disaster => disaster.id === action.unsaveDisaster.id)
             if (unSavedIndex >= 0) { // splice out event to unsave
                 const updatedSavedDisaster = [...state.savedDisasters];
-                updatedSavedDisaster.splice(savedIndex, 1);
+                updatedSavedDisaster.splice(unSavedIndex, 1);
                 return { ...state, savedDisasters: updatedSavedDisaster };
             }
 
