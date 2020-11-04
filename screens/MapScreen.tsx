@@ -7,6 +7,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
+
 import WeatherOverlay from '../components/WeatherOverlay'
 import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
@@ -15,6 +16,7 @@ import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
+import { CustomAlert } from '../components/CustomAlert';
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -206,6 +208,7 @@ const MapScreen = ({ navigation }) => {
       if (element.isShow) tempArray.push(element)
     })
 
+    if (tempArray.length < 1) {CustomAlert("NO EVENTS FOUND", "No events found please try changing your search criteria")}
 
 
     // send only the filtered events to the redux store
