@@ -60,6 +60,11 @@ const MapScreen = ({ navigation }) => {
     cameraLongitude: 0,
   });
 
+  let [cameraRegionNE, setcameraRegionNE] =useState({
+    cameraNELatitude: 0,
+    cameraNELongitude: 0,
+  });
+
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
   let allEvents = combinedEvents.map((event) => {
@@ -226,12 +231,19 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
-          onRegionChangeComplete={(NewRegion) => {
+          onRegionChangeComplete={ async(NewRegion) => {
             console.log(NewRegion.latitude + "," + NewRegion.longitude);
             setCameraRegion({
               cameraLatitude: NewRegion.latitude,
               cameraLongitude: NewRegion.longitude,
             });
+            let mapBoundry = await mapRef.current.getMapBoundaries();
+            console.log("boundry");
+            console.log(mapBoundry);
+            setcameraRegionNE({
+              cameraNELatitude: mapBoundry.northEast.latitude,
+              cameraNELongitude: mapBoundry.northEast.longitude,
+            })
           }}
         >
           {filteredDisasters.map((marker: EventEntity, index) => (
@@ -313,6 +325,7 @@ const MapScreen = ({ navigation }) => {
           size={50}
           onPress={() => {
             console.log("you press twitter");
+            // mapRef.current.
           }}
         />
 
@@ -322,12 +335,16 @@ const MapScreen = ({ navigation }) => {
             top:60,
             left:0,
             backgroundColor: "green",
-            fontSize: 20,
+            fontSize: 18,
           }}
         >
           camera lat: {cameraRegion.cameraLatitude}{"\n"}
-          camera long:{cameraRegion.cameraLongitude}
+          camera long:{cameraRegion.cameraLongitude}{"\n"}
+          NE boundry lat: {cameraRegionNE.cameraNELatitude}{"\n"}
+          NE boundry long: {cameraRegionNE.cameraNELongitude}
         </Text>
+
+
         <Switch
           value={toggleMap}
           onValueChange={() => {
