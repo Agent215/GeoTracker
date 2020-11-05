@@ -229,6 +229,7 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
+          // test commit, will modify the MapView very soom
         >
 
           {filteredDisasters.map((marker: EventEntity, index) => (
