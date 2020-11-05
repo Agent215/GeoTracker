@@ -178,9 +178,10 @@ const MapScreen = ({ navigation }) => {
     const disasterToFilter = allEvents.map((event) => {
 
       
-      let endDate;
+      let endDate;  
       if (event.isClosed == null) {
-         endDate = new Date().toISOString();
+         endDate = new Date().toISOString();  // if isclosed is null then that means event is still open
+                                              // so then set end date to today, to make sure we show it.
       }
       else { endDate = event.isClosed }
      
