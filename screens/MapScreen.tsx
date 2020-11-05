@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Text } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
-import { currentEventList, combinedEvents, historicalEventList } from '../App'
+import { currentEventList, combinedEvents, historicalEventList } from "../App";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
-import WeatherOverlay from '../components/WeatherOverlay'
+import WeatherOverlay from "../components/WeatherOverlay";
 import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -15,7 +15,6 @@ import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
-
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
@@ -27,20 +26,24 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-let INITIALREGION = {  // this is philly for now, we can change this to whatever
+let INITIALREGION = {
+  // this is philly for now, we can change this to whatever
   latitude: 39.9526,
   longitude: -75.16522,
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
 
-
 const MapScreen = ({ navigation }) => {
   //get state from redux store
   const dispatch = useDispatch();
-  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker
-  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
-  const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
+  const currentDisaster = useSelector(
+    (state) => state.disaster.currentDisaster
+  ); // set when user presses a marker
+  const disasterFilter = useSelector((state) => state.disaster.disasterFilter); // curent filter for disasters
+  const filteredDisasters = useSelector(
+    (state) => state.disaster.filteredDisasters
+  ); // only the filtered disasters
   const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
 
   const startDate = useSelector((state) => state.disaster.startDate); // start date of the time range from date picker
@@ -50,8 +53,12 @@ const MapScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  let tempArray = [];           // temp array to store filtered events
+  let tempArray = []; // temp array to store filtered events
 
+  let [cameraRegion, setCameraRegion] = useState({
+    cameraLatitude: 0,
+    cameraLongitude: 0,
+  });
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
@@ -59,18 +66,18 @@ const MapScreen = ({ navigation }) => {
     return { ...event, isShow: true };
   });
 
-
   /**
    * When the disaster filter is changed lets filter the disasters
    */
   useEffect(() => {
-    filterDisasters()
+    filterDisasters();
   }, [disasterFilter, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
-
-    if (currentDisaster != "") { animateToDisaster(); }
+    if (currentDisaster != "") {
+      animateToDisaster();
+    }
   }, [currentDisaster.title, dispatch]);
 
   /* run once on component mount */
@@ -79,7 +86,7 @@ const MapScreen = ({ navigation }) => {
   }, []);
 
   /**
-   * standard shows streets 
+   * standard shows streets
    * hybrid shows town and city names over satilite view
    */
   const toggleMapMode = () => {
@@ -97,7 +104,6 @@ const MapScreen = ({ navigation }) => {
    */
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
-
   };
 
   /*
@@ -120,7 +126,7 @@ const MapScreen = ({ navigation }) => {
       (error) =>
         console.log(
           "MapScreen.tsx/animateToUser() - Got error from navigator.geolocation.getCurrentPosition: " +
-          error
+            error
         )
     );
   };
@@ -142,25 +148,24 @@ const MapScreen = ({ navigation }) => {
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
-   
   }, []);
 
   /**
    * When the disaster filter is changed lets filter the disasters
    */
   useEffect(() => {
-    filterDisasters()
+    filterDisasters();
   }, [disasterFilter, startDate, endDate, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
-
-    if (currentDisaster != "") { animateToDisaster(); }
+    if (currentDisaster != "") {
+      animateToDisaster();
+    }
   }, [currentDisaster.title, dispatch]);
 
-
   /**
-   * 
+   *
    * filter the disaster markers
    * create a new temporary array composed of only filtered disasters
    * then dispatch that to the redux store. Make sure we reset this array
@@ -170,43 +175,35 @@ const MapScreen = ({ navigation }) => {
     let startDate_ISO = startDate.toISOString();
     let endDate_ISO = endDate.toISOString();
 
-
-    tempArray = [];   // reset temp array
+    tempArray = []; // reset temp array
     // go through all events and mark which ones need to be filtered.
     const disasterToFilter = allEvents.map((event) => {
-
-      
       let endDate;
       if (event.isClosed == null) {
-         endDate = new Date().toISOString();
+        endDate = new Date().toISOString();
+      } else {
+        endDate = event.isClosed;
       }
-      else { endDate = event.isClosed }
-     
-      if
-        (
-        (disasterFilter.value === "all"      // filter for all
-          || disasterFilter.value === ""        // first time we render
-          || disasterFilter.value == undefined  //just in case
-          || event.category === disasterFilter.value
-        )
-        &&
-        (
-          startDate_ISO <= event.currentDate && endDate <= endDate_ISO
-        )
-      ) { event.isShow = true }
-      else {
+
+      if (
+        (disasterFilter.value === "all" || // filter for all
+          disasterFilter.value === "" || // first time we render
+          disasterFilter.value == undefined || //just in case
+          event.category === disasterFilter.value) &&
+        startDate_ISO <= event.currentDate &&
+        endDate <= endDate_ISO
+      ) {
+        event.isShow = true;
+      } else {
         event.isShow = false;
       }
-      return event
+      return event;
     });
 
-
     // create a new array from the array with correctly marked isShow prop
-    disasterToFilter.forEach(element => {
-      if (element.isShow) tempArray.push(element)
-    })
-
-
+    disasterToFilter.forEach((element) => {
+      if (element.isShow) tempArray.push(element);
+    });
 
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
@@ -229,32 +226,34 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
-          // test commit, will modify the MapView very soom
+          onRegionChangeComplete={(NewRegion) => {
+            console.log(NewRegion.latitude + "," + NewRegion.longitude);
+            setCameraRegion({
+              cameraLatitude: NewRegion.latitude,
+              cameraLongitude: NewRegion.longitude,
+            });
+          }}
         >
-
           {filteredDisasters.map((marker: EventEntity, index) => (
-
             <Marker
               key={index}
               coordinate={{
                 latitude: parseFloat(marker.currentLat),
-                longitude: parseFloat(marker.currentLong)
+                longitude: parseFloat(marker.currentLong),
               }}
               title={marker.title}
               description={marker.category}
               tracksViewChanges={false}
-              onPress={() => { toggleModal(); dispatch(actions.setCurrentDisaster(marker)) }}
+              onPress={() => {
+                toggleModal();
+                dispatch(actions.setCurrentDisaster(marker));
+              }}
             >
-              <DisasterPin
-                size={50}
-                category={marker.category}
-              />
+              <DisasterPin size={50} category={marker.category} />
             </Marker>
           ))}
 
-          <WeatherOverlay
-            category={weatherFilter.value} />
-
+          <WeatherOverlay category={weatherFilter.value} />
         </MapView>
 
         <CustomModal
@@ -295,19 +294,45 @@ const MapScreen = ({ navigation }) => {
           textInputProps={{ clearButtonMode: "always" }}
         />
 
-        {/*current location button that shows on bottom right of the map */}
+        {/*current location icon button that shows on bottom right of the map */}
         <IconButton
           icon="crosshairs-gps"
-          style={locationIcon.container}
+          style={iconOnMap.location}
           color={Colors.blue600}
           size={50}
           onPress={() => {
             animateToUser();
           }}
         />
+
+        {/* twitter icon button that shows on bottom left of the map */}
+        <IconButton
+          icon="twitter"
+          style={iconOnMap.twitter}
+          color={Colors.blue600}
+          size={50}
+          onPress={() => {
+            console.log("you press twitter");
+          }}
+        />
+
+        <Text
+          style={{
+            position:"absolute",
+            top:60,
+            left:0,
+            backgroundColor: "green",
+            fontSize: 20,
+          }}
+        >
+          camera lat: {cameraRegion.cameraLatitude}{"\n"}
+          camera long:{cameraRegion.cameraLongitude}
+        </Text>
         <Switch
           value={toggleMap}
-          onValueChange={() => { toggleMapMode(); }}
+          onValueChange={() => {
+            toggleMapMode();
+          }}
         />
       </View>
     </>
@@ -392,10 +417,15 @@ const searchStyles = StyleSheet.create({
 });
 
 //style for the current location button
-const locationIcon = StyleSheet.create({
-  container: {
+const iconOnMap = StyleSheet.create({
+  location: {
     position: "absolute",
     right: 0,
+    bottom: 0,
+  },
+  twitter: {
+    position: "absolute",
+    left: 0,
     bottom: 0,
   },
 });
