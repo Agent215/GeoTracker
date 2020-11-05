@@ -62,12 +62,6 @@ const MapScreen = ({ navigation }) => {
   });
 
 
-  /**
-   * When the disaster filter is changed lets filter the disasters
-   */
-  useEffect(() => {
-    filterDisasters()
-  }, [disasterFilter, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
@@ -183,9 +177,9 @@ const MapScreen = ({ navigation }) => {
          endDate = new Date().toISOString();  // if isclosed is null then that means event is still open
                                               // so then set end date to today, to make sure we show it.
       }
-      else { endDate = event.isClosed }
+      else { endDate = event.isClosed }       // else set endDate to date supplied by API
      
-      if
+      if    
         (
         (disasterFilter.value === "all"      // filter for all
           || disasterFilter.value === ""        // first time we render
