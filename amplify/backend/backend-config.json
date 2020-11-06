@@ -21,6 +21,20 @@
           ]
         }
       ]
+    },
+    "twi": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "twitter",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
     }
   },
   "auth": {
@@ -39,6 +53,12 @@
       "dependsOn": []
     },
     "EventsApiHistoricalLambda": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "twitter": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
