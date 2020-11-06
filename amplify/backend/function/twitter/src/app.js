@@ -24,41 +24,6 @@ app.use(function(req, res, next) {
 });
 
 
-/**********************
- * Example get method *
- **********************/
-app.get('/twitter', async(req, res) =>{
-  const url = 'https://api.twitter.com/1.1/search/tweets.json';
-  const headers = {
-    'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
-  }
-  let event = req.param('event');//.replace(',',' ');
-  let geocode = `${req.param('lat')},${req.param('long')},15mi` ;
-  let query_string = `${url}?q=${event}&result_type=recent&geocode=${geocode}`;
-
-  try{
-    const fetch = require("node-fetch");
-    let twitter_call = await fetch(query_string,{headers :headers})
-        .then((res)=>{
-          return   res.json()
-        })
-        .then((json) => {
-          res.send(json);
-        });
-    /*
-    twitter_call = await twitter_call.json();
-    const aux = require('./auxillary.js')();
-    let tweet_response = clean_response(await twitter_call);
-    console.log(await tweet_response);
-    //res.json( JSON.stringify(await tweet_response));
-     */
-  }
-  catch(err){
-    console.log('err',err);
-  }
-  //res.json({success: 'get call succeed!', url: req.url});
-});
-
 app.get('/twitter/woeid', async(req,res) => {
   const headers = {
     'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
@@ -79,10 +44,11 @@ app.get('/twitter/woeid', async(req,res) => {
         });
   }
   catch(err){
-    console.log('error:', err);
+    console.log('error while searching for WOEID:', err);
   }
 });
 
+//returns an array of top ten trends
 app.get('/twitter/trends', async(req,res) =>{
   //need to find woeid to add to fetch request
   const headers = {
@@ -97,11 +63,18 @@ app.get('/twitter/trends', async(req,res) =>{
           return   res.json()
         })
         .then((json) => {
-          res.send(json);
+          let tweet_arr = [];
+          for (let i = 0 ; i < 10; i++){
+            tweet_arr.push(json[0].trends[i].name);
+          }
+          let api_response = {
+            "trends" : tweet_arr
+          }
+          res.send(api_response);
         });
   }
   catch(err){
-    console.log('error:', err);
+    console.log('error while searching for trends:', err);
   }
 });
 
