@@ -16,6 +16,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 
+import TwitterComponent from "../components/TwitterComponent";
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
 Geocoder.init(Keys.geocoderKey, { language: "en" }); // use a valid API key
@@ -50,7 +51,7 @@ const MapScreen = ({ navigation }) => {
   const endDate = useSelector((state) => state.disaster.endDate); //end date of time range from date picker
 
   let mapRef = useRef(MapView.prototype);
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false); //useState of disaster modal
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
   let tempArray = []; // temp array to store filtered events
@@ -58,12 +59,11 @@ const MapScreen = ({ navigation }) => {
   let [cameraRegion, setCameraRegion] = useState({
     cameraLatitude: 0,
     cameraLongitude: 0,
-  });
-
-  let [cameraRegionNE, setcameraRegionNE] =useState({
     cameraNELatitude: 0,
     cameraNELongitude: 0,
   });
+
+
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
@@ -105,7 +105,7 @@ const MapScreen = ({ navigation }) => {
   };
 
   /**
-   * Toggle disaster modal
+   * Toggle disaster modal or twitter
    */
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -231,19 +231,20 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
-          onRegionChangeComplete={ async(NewRegion) => {
+          onRegionChangeComplete={async (NewRegion) => {
             console.log(NewRegion.latitude + "," + NewRegion.longitude);
-            setCameraRegion({
-              cameraLatitude: NewRegion.latitude,
-              cameraLongitude: NewRegion.longitude,
-            });
+            
             let mapBoundry = await mapRef.current.getMapBoundaries();
             console.log("boundry");
             console.log(mapBoundry);
-            setcameraRegionNE({
+           
+
+            setCameraRegion({
+              cameraLatitude: NewRegion.latitude,
+              cameraLongitude: NewRegion.longitude,
               cameraNELatitude: mapBoundry.northEast.latitude,
-              cameraNELongitude: mapBoundry.northEast.longitude,
-            })
+              cameraNELongitude:mapBoundry.northEast.longitude,
+            });
           }}
         >
           {filteredDisasters.map((marker: EventEntity, index) => (
@@ -310,40 +311,36 @@ const MapScreen = ({ navigation }) => {
         <IconButton
           icon="crosshairs-gps"
           style={iconOnMap.location}
-          color={Colors.blue600}
-          size={50}
+          color={Colors.blue900}
+          size={40}
           onPress={() => {
             animateToUser();
           }}
         />
 
         {/* twitter icon button that shows on bottom left of the map */}
-        <IconButton
-          icon="twitter"
-          style={iconOnMap.twitter}
-          color={Colors.blue600}
-          size={50}
-          onPress={() => {
-            console.log("you press twitter");
-            // mapRef.current.
-          }}
-        />
+        {/* a twitter modal will pop up on when clicked */}
+        <View style={iconOnMap.twitter}>
+          <TwitterComponent cameraRegion={cameraRegion}/>
+        </View>
 
         <Text
           style={{
-            position:"absolute",
-            top:60,
-            left:0,
+            position: "absolute",
+            top: 60,
+            left: 0,
             backgroundColor: "green",
             fontSize: 18,
           }}
         >
-          camera lat: {cameraRegion.cameraLatitude}{"\n"}
-          camera long:{cameraRegion.cameraLongitude}{"\n"}
-          NE boundry lat: {cameraRegionNE.cameraNELatitude}{"\n"}
-          NE boundry long: {cameraRegionNE.cameraNELongitude}
+          camera lat: {cameraRegion.cameraLatitude}
+          {"\n"}
+          camera long:{cameraRegion.cameraLongitude}
+          {"\n"}
+          NE boundary lat: {cameraRegion.cameraNELatitude}
+          {"\n"}
+          NE boundary long: {cameraRegion.cameraNELongitude}
         </Text>
-
 
         <Switch
           value={toggleMap}
@@ -440,10 +437,17 @@ const iconOnMap = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+
   twitter: {
+
     position: "absolute",
-    left: 0,
-    bottom: 0,
+    left: 5,
+    bottom: 5,
+    
+    backgroundColor:"transparent",
+
+    alignItems:"center",
+    // justifyContent:"center",
   },
 });
 
