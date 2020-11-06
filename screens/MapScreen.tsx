@@ -306,6 +306,15 @@ const MapScreen = ({ navigation }) => {
           value={toggleMap}
           onValueChange={() => { toggleMapMode(); }}
         />
+        <IconButton
+          icon="play-circle"
+          style={styles.icon}
+          color={Colors.blue600}
+          size={50}
+          onPress={() => {
+            console.log("Button is working")
+          }}
+        />
       </View>
     </>
   );
@@ -347,6 +356,9 @@ const styles = StyleSheet.create({
     top: 0,
     backgroundColor: "#fafafa",
   },
+  icon: {
+    position: "relative",
+  }
 });
 
 /*
