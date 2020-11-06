@@ -63,11 +63,19 @@ app.get('/twitter/woeid', async(req,res) => {
   const headers = {
     'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
   };
-  const url_WOEID = `https://api.twitter.com/1.1/trends/closest.json?${req.param('lat')}&${reg.param('long')}`;
+  const url_WOEID = `https://api.twitter.com/1.1/trends/closest.json?lat=${req.param('lat')}&long=${req.param('long')}`;
   try{
-    res.send('hello');
+    const fetch = require("node-fetch");
+    fetch(url_WOEID,{headers:headers})
+        .then((res)=>{
+          return  res.json()
+        })
+        .then((json) => {
+          res.send(json);
+        });
   }
   catch(err){
+  //  res.sendStatus(500);
     console.log('error:', err);
   }
 });
