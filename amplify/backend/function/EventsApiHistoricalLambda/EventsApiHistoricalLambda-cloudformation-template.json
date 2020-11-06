@@ -33,12 +33,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "EventsApiLambda",
+            "EventsApiHistoricalLambda",
             {
               "Fn::Join": [
                 "",
                 [
-                  "EventsApiLambda",
+                  "EventsApiHistoricalLambda",
                   "-",
                   {
                     "Ref": "env"
@@ -69,7 +69,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-geotracker-dev-132225-deployment",
-          "S3Key": "amplify-builds/EventsApiLambda-586e6e54354f49567350-build.zip"
+          "S3Key": "amplify-builds/EventsApiHistoricalLambda-75683839512f5942474d-build.zip"
         }
       }
     },
@@ -79,12 +79,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "geotrackerLambdaRole1046e243",
+            "geotrackerLambdaRole62576352",
             {
               "Fn::Join": [
                 "",
                 [
-                  "geotrackerLambdaRole1046e243",
+                  "geotrackerLambdaRole62576352",
                   "-",
                   {
                     "Ref": "env"
