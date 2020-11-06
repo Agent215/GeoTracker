@@ -71,11 +71,14 @@ app.get('/twitter/woeid', async(req,res) => {
           return  res.json()
         })
         .then((json) => {
-          res.send(json);
+          let x = json[0].woeid;
+          let rest_response= {
+            "WOEID" : json[0].woeid
+          };
+          res.send(rest_response);
         });
   }
   catch(err){
-  //  res.sendStatus(500);
     console.log('error:', err);
   }
 });
@@ -86,7 +89,7 @@ app.get('/twitter/trends', async(req,res) =>{
     'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
   };
 
-  const url = "https://api.twitter.com/1.1/trends/place.json?id=1";
+  const url = `https://api.twitter.com/1.1/trends/place.json?id=${req.param('WOEID')}`;
   try{
     const fetch = require("node-fetch");
     fetch(url,{headers:headers})

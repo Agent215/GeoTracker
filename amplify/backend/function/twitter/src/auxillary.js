@@ -20,7 +20,5 @@ module.exports = function(){
     this.clean_trends = function(server_response){
         return;
     }
-    this.filter_woeid = function(server_response){
-        
-    }
+
 }
