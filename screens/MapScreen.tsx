@@ -215,9 +215,12 @@ const MapScreen = ({ navigation }) => {
 
   const[count, setCount] = useState(0)
   const[isPlaying, setIsPlaying] = useState(false)
+  const[startDateGIBS, setStartDateGIBS] = useState(Date.now)
+  const[endDateGIBS, setEndDateGIBS] = useState(Date.now)
+
 
   while(isPlaying){
-  setInterval(() => {
+  setTimeout(() => {
     setCount(count+1)
     console.log(count)
   }, 1000)
@@ -266,7 +269,7 @@ const MapScreen = ({ navigation }) => {
 
           <GIBSOverlay
             category={weatherFilter.value}
-            date={'2020-10-12'}
+            date={'2020-10-11'}
           />
 
           {/*<WeatherOverlay

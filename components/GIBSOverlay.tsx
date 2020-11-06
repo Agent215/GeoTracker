@@ -22,7 +22,7 @@ const GIBSOverlay = (props) => {
     let gibsTile = (<UrlTile 
     urlTemplate={tempUrl}
     maximumZ={19}
-    flipY={false}    
+    flipY={false}
     />)
 
     return (gibsTile);
