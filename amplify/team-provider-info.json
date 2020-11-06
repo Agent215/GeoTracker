@@ -1,4 +1,80 @@
 {
+  "dbtest": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-dbtest-224256-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-dbtest-224256-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-dbtest-224256-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-dbtest-224256-deployment",
+      "UnauthRoleName": "amplify-geotracker-dbtest-224256-unauthRole",
+      "StackName": "amplify-geotracker-dbtest-224256",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-dbtest-224256/9eacd330-1a59-11eb-8822-0ebece173f89",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      },
+      "function": {
+        "EventsApiLambda": {},
+        "EventsApiGetAll": {}
+      }
+    }
+  },
+  "dbenv": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-dbenv-221117-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-dbenv-221117-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-dbenv-221117-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-dbenv-221117-deployment",
+      "UnauthRoleName": "amplify-geotracker-dbenv-221117-unauthRole",
+      "StackName": "amplify-geotracker-dbenv-221117",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-dbenv-221117/5cbc1150-1b1e-11eb-bd33-0e8805686543",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      }
+    }
+  },
+  "social": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-social-94806-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-social-94806-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-social-94806-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-social-94806-deployment",
+      "UnauthRoleName": "amplify-geotracker-social-94806-unauthRole",
+      "StackName": "amplify-geotracker-social-94806",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-social-94806/096a8b00-185b-11eb-9e05-0e580a5372a7",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      }
+    }
+  },
+  "weather": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-weather-195619-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-weather-195619-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-weather-195619-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-weather-195619-deployment",
+      "UnauthRoleName": "amplify-geotracker-weather-195619-unauthRole",
+      "StackName": "amplify-geotracker-weather-195619",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-weather-195619/dcbd9b10-0e78-11eb-a111-0a773b285c67",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-geotracker-dev-132225-authRole",
