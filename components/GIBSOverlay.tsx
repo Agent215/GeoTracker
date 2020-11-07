@@ -72,7 +72,7 @@ function urlBuilder(category, date){
         tempUrl = tempUrl + '/GoogleMapsCompatible_Level6/';
         //add tail of url template
         tempUrl = tempUrl + '{z}/{y}/{x}.png';
-        console.log("Url is: " + tempUrl)
+       // console.log("Url is: " + tempUrl)
         //add temp url to end of url array
         //urlArray.push(tempUrl)
         //console.log("Length of urlArry: " + urlArray.length);

@@ -17,7 +17,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 
-import {format, addDays, isEqual} from "date-fns"
+import { format, addDays, isEqual, compareAsc } from "date-fns"
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -52,8 +52,25 @@ const MapScreen = ({ navigation }) => {
   let mapRef = useRef(MapView.prototype);
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
+  //const [interval, setInterval] = useState(null);
   const [toggleMap, setToggleMap] = useState(false);
   let tempArray = [];           // temp array to store filtered events
+  const [gibsDate, setGibsDate] = useState(startDate)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [animateButton, setAnimateButton] = useState("play-circle")
+  let interval
+
+
+  const toggleIsPlaying = () => {
+
+    if (isPlaying) { setIsPlaying(false); setAnimateButton("play-circle") }
+    else {
+      setIsPlaying(true);
+      setAnimateButton("pause-circle")
+    }
+    console.log(isPlaying);
+
+  }
 
 
   /*adding property isShow to all events, which determine if they shold show on the map
@@ -81,6 +98,49 @@ const MapScreen = ({ navigation }) => {
     animateToUser();
   }, []);
 
+
+  /* run once on component mount */
+  useEffect(() => {
+    animateToUser();
+
+  }, []);
+
+  useEffect(() => {
+    setGibsDate(startDate)
+
+  }, [startDate])
+
+  /**
+   * When the disaster filter is changed lets filter the disasters
+   */
+  useEffect(() => {
+    filterDisasters()
+  }, [disasterFilter, startDate, endDate, dispatch]);
+
+  /* check if current disaster has changed, if so then force rerender */
+  useEffect(() => {
+
+    if (currentDisaster != "") { animateToDisaster(); }
+  }, [currentDisaster.title, dispatch]);
+
+  useEffect(() => {
+    if (gibsDate.toDateString() == endDate.toDateString()) { setIsPlaying(false) }
+  }, [gibsDate])
+
+  useEffect(() => {
+    interval = null;
+    console.log("current date :" + gibsDate.toDateString() + " endDate: " + endDate.toDateString())
+    console.log("use effect " + isPlaying)
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setGibsDate(prevDate => addDays(prevDate, 1))
+      }, 1000);
+    } else if (!isPlaying) {
+      clearInterval(interval);
+      console.log("use effect clear " + isPlaying)
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, gibsDate]);
   /**
    * standard shows streets 
    * hybrid shows town and city names over satilite view
@@ -102,7 +162,6 @@ const MapScreen = ({ navigation }) => {
     setModalVisible(!isModalVisible);
 
   };
-
   /*
   animateToUser 
   */
@@ -142,25 +201,6 @@ const MapScreen = ({ navigation }) => {
     mapRef.current.animateToRegion(coords, 0);
   };
 
-  /* run once on component mount */
-  useEffect(() => {
-    animateToUser();
-   
-  }, []);
-
-  /**
-   * When the disaster filter is changed lets filter the disasters
-   */
-  useEffect(() => {
-    filterDisasters()
-  }, [disasterFilter, startDate, endDate, dispatch]);
-
-  /* check if current disaster has changed, if so then force rerender */
-  useEffect(() => {
-
-    if (currentDisaster != "") { animateToDisaster(); }
-  }, [currentDisaster.title, dispatch]);
-
 
   /**
    * 
@@ -178,13 +218,13 @@ const MapScreen = ({ navigation }) => {
     // go through all events and mark which ones need to be filtered.
     const disasterToFilter = allEvents.map((event) => {
 
-      
+
       let endDate;
       if (event.isClosed == null) {
-         endDate = new Date().toISOString();
+        endDate = new Date().toISOString();
       }
       else { endDate = event.isClosed }
-     
+
       if
         (
         (disasterFilter.value === "all"      // filter for all
@@ -215,10 +255,7 @@ const MapScreen = ({ navigation }) => {
     dispatch(actions.setFilteredDisasters(tempArray));
   };
 
-  const[gibsDate, setGibsDate] = useState(startDate)
-  const[isPlaying, setIsPlaying] = useState(false)
-  const[count, setCount] = useState(0)
-  let interval
+
 
   return (
     <>
@@ -327,16 +364,13 @@ const MapScreen = ({ navigation }) => {
           onValueChange={() => { toggleMapMode(); }}
         />
         <IconButton
-          icon="play-circle"
+          icon={animateButton}
           style={styles.icon}
           color={Colors.blue600}
           size={50}
           onPress={() => {
             console.log("Button is working")
-            interval = setInterval(() => {
-              setGibsDate(prevDate => addDays(prevDate, 1))
-              console.log("The new date is: " + gibsDate)
-            }, 1500)
+            toggleIsPlaying();
           }}
         />
       </View>
