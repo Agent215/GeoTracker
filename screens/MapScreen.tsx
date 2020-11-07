@@ -17,6 +17,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 import { CustomAlert } from '../components/CustomAlert';
+import isWithinInterval from '../components/AnimateEvents';
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -312,7 +313,7 @@ const MapScreen = ({ navigation }) => {
           color={Colors.blue600}
           size={50}
           onPress={() => {
-            console.log("Button is working")
+            console.log(isWithinInterval)
           }}
         />
       </View>
