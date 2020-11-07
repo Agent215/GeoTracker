@@ -23,7 +23,7 @@ import { addDays } from "date-fns/esm";
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
-Geocoder.init(Keys.geocoderKey, { language: "en" }); // use a valid API key
+Geocoder.init(Keys.geocoderKey, { language: "en" });                                  // use a valid API key.
 
 const LATITUDE_DELTA = 0.0922;
 const { width, height } = Dimensions.get("window");
@@ -31,7 +31,7 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-let INITIALREGION = {  // this is philly for now, we can change this to whatever
+let INITIALREGION = {                                                                 // this is philly for now, we can change this to whatever.
   latitude: 39.9526,
   longitude: -75.16522,
   latitudeDelta: 0.0922,
@@ -42,13 +42,13 @@ let INITIALREGION = {  // this is philly for now, we can change this to whatever
 const MapScreen = ({ navigation }) => {
   //get state from redux store
   const dispatch = useDispatch();
-  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker
-  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
-  const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
+  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker.
+  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters.
+  const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters.
   const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
 
-  const startDate = useSelector((state) => state.disaster.startDate); // start date of the time range from date picker
-  const endDate = useSelector((state) => state.disaster.endDate); //end date of time range from date picker
+  const startDate = useSelector((state) => state.disaster.startDate);                 // start date of the time range from date picker.
+  const endDate = useSelector((state) => state.disaster.endDate);                     // end date of time range from date picker.
 
   let mapRef = useRef(MapView.prototype);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -57,16 +57,16 @@ const MapScreen = ({ navigation }) => {
   let tempArray = []; // temp array to store filtered events
 
   // States for animation
-  const [animationDate, setAnimationDate] = useState(startDate)
-  const [isActive, setIsActive] = useState(false)
+  const [currentDate, setCurrentDate] = useState(startDate)                           // Hook that keeps track of the current day that is animating.
+  const [isPlaying, setIsPlaying] = useState(false)                                   // Hook that keep track of if the animation is playing.
   const [animateButton, setAnimationButton] = useState("play-circle")
 
   //This function starts or pauses the animation.
   const toggleAnimation = () => {
-    if (isActive) { setIsActive(false); setAnimationButton("play-circle") }
+    if (isPlaying) { setIsPlaying(false); setAnimationButton("play-circle") }         // If the animation is not playing, have the button a play-circle.
     else {
-      setIsActive(true)
-      setAnimationButton("pause-circle")
+      setIsPlaying(true)                                                              // If the animation is running.
+      setAnimationButton("pause-circle")                                              // Make the play button into a pause-circle.
     }
   }
 
@@ -78,33 +78,37 @@ const MapScreen = ({ navigation }) => {
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
-
     if (currentDisaster != "") { animateToDisaster(); }
   }, [currentDisaster.title, dispatch]);
 
+  //Start of animation useEffects
+  // If the current date hits the end date, end the animation and reset the button.
   useEffect(() => {
-      if (animationDate.toDateString() == endDate.toDateString()){
-        setIsActive(false)
-        setAnimationButton("play-circle")
-      }
-
-  },[animationDate])
+    if (currentDate.toDateString() == endDate.toDateString()) {
+      setIsPlaying(false)
+      setAnimationButton("play-circle")
+    }
+  }, [currentDate])
 
   useEffect(() => {
     let interval = null
-    console.log("current date: " + animationDate.getDate() + "end date: " + endDate.getDate())
-    console.log("use effect " + isActive)
-    if (isActive) {
+    console.log("current date: " + currentDate.toDateString() + " | " + "end date: " + endDate.toDateString())
+    console.log("use effect " + isPlaying)
+    if (isPlaying) {                                                                    // If the button is playing.
       interval = setInterval(() => {
-        setAnimationDate(prevDate => addDays(prevDate, 1))
+        setCurrentDate(prevDate => addDays(prevDate, 1))                                // Starts with currentDate and iterates through given dates.
       }, 1500)
-    } else if ((!isActive)) {
+    } else if ((!isPlaying)) {                                                          // Once the start date == end date, clear the interval and end animation.
       clearInterval(interval)
       console.log("Clear Interval Initiated")
     }
-    return () => clearInterval(interval)
-  }, [isActive, animationDate])
+    return () => clearInterval(interval)                                                // Clean up return function.
+  }, [isPlaying, currentDate])
 
+  useEffect(() => {                                                                     // 
+    setCurrentDate(startDate)                                                           // If the start date filter changes, then set animation to start on that date.
+  }, [startDate]);
+  //End of animate function useEffects
 
   /* run once on component mount */
   useEffect(() => {
