@@ -17,7 +17,8 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 import { CustomAlert } from '../components/CustomAlert';
-import isWithinInterval from '../components/AnimateEvents';
+import { } from '../components/AnimateEvents';
+import { addDays } from "date-fns/esm";
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -53,8 +54,21 @@ const MapScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  let tempArray = [];           // temp array to store filtered events
+  let tempArray = []; // temp array to store filtered events
 
+  // States for animation
+  const [animationDate, setAnimationDate] = useState(startDate)
+  const [isActive, setIsActive] = useState(false)
+  const [animateButton, setAnimationButton] = useState("play-circle")
+
+  //This function starts or pauses the animation.
+  const toggleAnimation = () => {
+    if (isActive) { setIsActive(false); setAnimationButton("play-circle") }
+    else {
+      setIsActive(true)
+      setAnimationButton("pause-circle")
+    }
+  }
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
@@ -62,13 +76,35 @@ const MapScreen = ({ navigation }) => {
     return { ...event, isShow: true };
   });
 
-
-
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
 
     if (currentDisaster != "") { animateToDisaster(); }
   }, [currentDisaster.title, dispatch]);
+
+  useEffect(() => {
+      if (animationDate.toDateString() == endDate.toDateString()){
+        setIsActive(false)
+        setAnimationButton("play-circle")
+      }
+
+  },[animationDate])
+
+  useEffect(() => {
+    let interval = null
+    console.log("current date: " + animationDate.getDate() + "end date: " + endDate.getDate())
+    console.log("use effect " + isActive)
+    if (isActive) {
+      interval = setInterval(() => {
+        setAnimationDate(prevDate => addDays(prevDate, 1))
+      }, 1500)
+    } else if ((!isActive)) {
+      clearInterval(interval)
+      console.log("Clear Interval Initiated")
+    }
+    return () => clearInterval(interval)
+  }, [isActive, animationDate])
+
 
   /* run once on component mount */
   useEffect(() => {
@@ -139,7 +175,7 @@ const MapScreen = ({ navigation }) => {
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
-   
+
   }, []);
 
   /**
@@ -155,7 +191,6 @@ const MapScreen = ({ navigation }) => {
     if (currentDisaster != "") { animateToDisaster(); }
   }, [currentDisaster.title, dispatch]);
 
-
   /**
    * 
    * filter the disaster markers
@@ -163,6 +198,7 @@ const MapScreen = ({ navigation }) => {
    * then dispatch that to the redux store. Make sure we reset this array
    * each time arround.
    */
+
   const filterDisasters = () => {
     let startDate_ISO = startDate.toISOString();
     let endDate_ISO = endDate.toISOString();
@@ -172,15 +208,15 @@ const MapScreen = ({ navigation }) => {
     // go through all events and mark which ones need to be filtered.
     const disasterToFilter = allEvents.map((event) => {
 
-      
-      let endDate;  
+
+      let endDate;
       if (event.isClosed == null) {
-         endDate = new Date().toISOString();  // if isclosed is null then that means event is still open
-                                              // so then set end date to today, to make sure we show it.
+        endDate = new Date().toISOString();  // if isclosed is null then that means event is still open
+        // so then set end date to today, to make sure we show it.
       }
       else { endDate = event.isClosed }       // else set endDate to date supplied by API
-     
-      if    
+
+      if
         (
         (disasterFilter.value === "all"      // filter for all
           || disasterFilter.value === ""        // first time we render
@@ -204,7 +240,7 @@ const MapScreen = ({ navigation }) => {
       if (element.isShow) tempArray.push(element)
     })
 
-    if (tempArray.length < 1) {CustomAlert("NO EVENTS FOUND", "No events found please try changing your search criteria")}
+    if (tempArray.length < 1) { CustomAlert("NO EVENTS FOUND", "No events found please try changing your search criteria") }
 
 
     // send only the filtered events to the redux store
@@ -308,12 +344,13 @@ const MapScreen = ({ navigation }) => {
           onValueChange={() => { toggleMapMode(); }}
         />
         <IconButton
-          icon="play-circle"
+          icon={animateButton}
           style={styles.icon}
           color={Colors.blue600}
           size={50}
           onPress={() => {
-            console.log(isWithinInterval)
+            toggleAnimation()
+            console.log("animation toggled")
           }}
         />
       </View>

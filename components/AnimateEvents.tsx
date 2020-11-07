@@ -1,51 +1,37 @@
-import React from "react";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import React, { useEffect } from "react";
 import { useState, useRef } from "react";
-import { StyleSheet, Image, Platform } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch, useSelector } from "react-redux";
-import { Fontisto } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Button } from "react-native-paper";
 
-import * as actions from "../store/actions/actions";
-import { Text, View } from "../components/Themed";
-import { isWithinInterval } from "date-fns/esm";
+//const startDate = useSelector((state) => state.disaster.startDate); // start date of the time range from date picker
+//const endDate = useSelector((state) => state.disaster.endDate); //end date of time range from date picker
 
+//const [animationDate, setAnimationDate] = useState(startDate)
+//const [isActive, setIsActive] = useState(false)
 
+//let startDate_ISO = startDate.toISOString();
+//let endDate_ISO = endDate.toISOString();
 
+//This function starts or pauses the animation.
+ //const toggleAnimation = () => { 
+    //setIsActive(!isActive)
+//}
+
+//This function resets back to the start date.
+//const resetAnimation = () => {
+   // setAnimationDate(startDate),
+    //setIsActive(false)
+//}
 /*
-on Play press
-DisastersInRange = FiltereDisasters  // save The filteredDisaters for playback
+useEffect(() => {
+    let interval = null
+    if (isActive){
+        interval = setInterval(() => {
+            setAnimationDate(startAnimationDate => startAnimationDate + 1)
+        }, 1500)
+    }else if ((!isActive) || animationDate.getDate() == endDate.getDate()){
+        clearInterval(interval)
+    }
+    return () => clearInterval(interval)
+}, [isActive, animationDate])
 
-const ShowMarkerOnDay = () => {
-
-    tempArray = [];   // reset temp array
-    // go through all events and mark which ones need to be filtered.
-    const disastersOnDay = DisastersInRange.map((event) => {
-
-        let startDate_ISO = event.currentDate.toISOString();
-
-        let endDate;
-        if (event.isClosed == null) {        // id isClosed is null then event is open so set endate to today
-            let endDate = new Date().toISOString();
-        }
-        else { endDate = event.isClosed }   // else isClosed = endDate
-
-        if (isWithinInterval(currentDate, { start: startDate_ISO, endDate })) { event.isShow = true }
-        else {
-            event.isShow = false;
-        }
-        return event
-    });
-
-
-    // create a new array from the array with correctly marked isShow prop
-    disasterToFilter.forEach(element => {
-        if (element.isShow) tempArray.push(element)
-    })
-    // send only the filtered events to the redux store
-    dispatch(actions.setFilteredDisasters(tempArray));
-};
 */
