@@ -23,12 +23,58 @@ app.use(function(req, res, next) {
   next()
 });
 
+// This is the main endpoint that will return the twitter trends  it is comprised of the the two endpoints below it in a concatenated form.
+app.get('/twitter', async(req,res) => {
+  const headers = {
+    'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
+  };
+  const url_WOEID = `https://api.twitter.com/1.1/trends/closest.json?lat=${req.param('lat')}&long=${req.param('long')}`;
+
+  try{
+    const fetch = require("node-fetch");
+    const w = await fetch(url_WOEID,{headers:headers})
+        .then(response => response.json())
+        .then((json) => {
+            let x = json[0].woeid;
+            let rest_response= {
+              "WOEID" : json[0].woeid
+            };
+            return x;
+          });
+    const url = `https://api.twitter.com/1.1/trends/place.json?id=${w}`;
+
+    const trends = await fetch(url, {headers:headers})
+       // .then(response => response.json())
+        .then((res) => {
+          return res.json()
+        })
+        .then((json) => {
+          let tweet_arr = [];
+          for (let i = 0 ; i < 10; i++){
+            tweet_arr.push(json[0].trends[i].name);
+          }
+          let api_body = {
+            "trends" : tweet_arr
+          }
+          let api_response = {
+            statusCode : 200,
+            body : api_body,
+            headers : {'Content-Type': 'application/json'}
+          }
+          res.send(api_response);
+        });
+  }
+  catch(err){
+    console.log('error:', err);
+  }
+});
 
 app.get('/twitter/woeid', async(req,res) => {
   const headers = {
     'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
   };
   const url_WOEID = `https://api.twitter.com/1.1/trends/closest.json?lat=${req.param('lat')}&long=${req.param('long')}`;
+
   try{
     const fetch = require("node-fetch");
     fetch(url_WOEID,{headers:headers})
@@ -49,8 +95,10 @@ app.get('/twitter/woeid', async(req,res) => {
 });
 
 //returns an array of top ten trends
+
 app.get('/twitter/trends', async(req,res) =>{
   //need to find woeid to add to fetch request
+
   const headers = {
     'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
   };
@@ -67,8 +115,13 @@ app.get('/twitter/trends', async(req,res) =>{
           for (let i = 0 ; i < 10; i++){
             tweet_arr.push(json[0].trends[i].name);
           }
-          let api_response = {
+          let api_body = {
             "trends" : tweet_arr
+          }
+          let api_response = {
+            statusCode : 200,
+            body : api_body,
+            headers : {'Content-Type': 'application/json'}
           }
           res.send(api_response);
         });

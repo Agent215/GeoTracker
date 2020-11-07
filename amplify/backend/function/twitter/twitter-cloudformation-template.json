@@ -69,7 +69,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-geotracker-dev-132225-deployment",
-          "S3Key": "amplify-builds/twitter-433774354f556678486e-build.zip"
+          "S3Key": "amplify-builds/twitter-6144565245675930366d-build.zip"
         }
       }
     },
