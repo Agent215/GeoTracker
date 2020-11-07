@@ -17,12 +17,18 @@ const GIBSOverlay = (props) => {
     //let isPlaying = props.isPlaying;
 
     //let gibsUrlTemplate = urlBuilder(setCategory(props.category), date, endDate);
+    const [count, setCount] = useState(0)
     let tempUrl = urlBuilder(props.category, props.date)
-
+    while(props.playing){
+        setTimeout(() => {
+            setCount(count+1)
+        }, 500)
+    }
     let gibsTile = (<UrlTile 
     urlTemplate={tempUrl}
     maximumZ={19}
     flipY={false}
+    //key={Date.now()}
     />)
 
     return (gibsTile);

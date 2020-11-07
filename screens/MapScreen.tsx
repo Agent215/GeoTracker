@@ -17,6 +17,8 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 
+import {format, addDays} from "date-fns"
+
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
@@ -213,19 +215,17 @@ const MapScreen = ({ navigation }) => {
     dispatch(actions.setFilteredDisasters(tempArray));
   };
 
-  const[count, setCount] = useState(0)
+  const[gibsDate, setGibsDate] = useState(startDate)
   const[isPlaying, setIsPlaying] = useState(false)
-  const[startDateGIBS, setStartDateGIBS] = useState(Date.now)
-  const[endDateGIBS, setEndDateGIBS] = useState(Date.now)
+  const[count, setCount] = useState(0)
 
-
-  while(isPlaying){
-  setTimeout(() => {
+  /*while(false){
+    setTimeout(() => {
+    setGibsDate(addDays(gibsDate, 1))
     setCount(count+1)
-    console.log(count)
-  }, 1000)
-  }
-
+    console.log('Count is: ' + count)
+  }, 500)
+  }*/
   return (
     <>
       <View style={styles.container}>
@@ -269,7 +269,8 @@ const MapScreen = ({ navigation }) => {
 
           <GIBSOverlay
             category={weatherFilter.value}
-            date={'2020-10-11'}
+            date={format(gibsDate, "yyyy-MM-dd")}
+            playing={isPlaying}
           />
 
           {/*<WeatherOverlay
@@ -331,6 +332,17 @@ const MapScreen = ({ navigation }) => {
           value={toggleMap}
           onValueChange={() => { toggleMapMode(); }}
         />
+        <IconButton
+          icon="play-circle"
+          style={styles.icon}
+          color={Colors.blue600}
+          size={50}
+          onPress={() => {
+            setGibsDate(addDays(gibsDate, 1))
+            console.log("GIBS Date is: " + gibsDate)
+            console.log("Button is working")
+          }}
+        />
       </View>
     </>
   );
@@ -371,6 +383,11 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     backgroundColor: "#fafafa",
+  },
+  icon: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
   },
 });
 
