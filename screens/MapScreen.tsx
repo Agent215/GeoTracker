@@ -17,7 +17,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 
-import {format, addDays} from "date-fns"
+import {format, addDays, isEqual} from "date-fns"
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -218,14 +218,8 @@ const MapScreen = ({ navigation }) => {
   const[gibsDate, setGibsDate] = useState(startDate)
   const[isPlaying, setIsPlaying] = useState(false)
   const[count, setCount] = useState(0)
+  let interval
 
-  /*while(false){
-    setTimeout(() => {
-    setGibsDate(addDays(gibsDate, 1))
-    setCount(count+1)
-    console.log('Count is: ' + count)
-  }, 500)
-  }*/
   return (
     <>
       <View style={styles.container}>
@@ -268,7 +262,7 @@ const MapScreen = ({ navigation }) => {
 
 
           <GIBSOverlay
-            category={weatherFilter.value}
+            category={'precipitation'}
             date={format(gibsDate, "yyyy-MM-dd")}
             playing={isPlaying}
           />
@@ -338,9 +332,11 @@ const MapScreen = ({ navigation }) => {
           color={Colors.blue600}
           size={50}
           onPress={() => {
-            setGibsDate(addDays(gibsDate, 1))
-            console.log("GIBS Date is: " + gibsDate)
             console.log("Button is working")
+            interval = setInterval(() => {
+              setGibsDate(prevDate => addDays(prevDate, 1))
+              console.log("The new date is: " + gibsDate)
+            }, 1500)
           }}
         />
       </View>
