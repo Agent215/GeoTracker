@@ -34,6 +34,7 @@ Amplify.configure({
 
 let currentEventList: EventEntity[] = [];
 let historicalEventList: EventEntity[] = [];
+let earthquakeEventList: EventEntity[] = [];
 let combinedEvents: EventEntity[] = [];
 
 const App = () => {
@@ -68,13 +69,27 @@ const App = () => {
 async function loadAllData() {
   await getCurrentData();
   await getHistoricalData();
+  await getEarthquakeData();
   concatArrays();
 
 }
 
 function concatArrays() {
-  combinedEvents = [].concat(historicalEventList,currentEventList)
+  let tempArray = [].concat(historicalEventList,currentEventList);
+  combinedEvents = [].concat(tempArray, earthquakeEventList);
+}
 
+async function getEarthquakeData() {
+  const apiName = 'EarthquakesAPI';
+  const path = '/earthquakes';
+  const myInit = {
+    queryStringParameters: {
+      starttime: "2020-01-01",
+      endtime: ""
+    }
+  };
+
+  earthquakeEventList = await API.get(apiName, path, myInit);
 }
 
 async function getCurrentData() {
@@ -99,5 +114,5 @@ async function getHistoricalData() {
 
 }
 
-export { currentEventList, historicalEventList, combinedEvents }
+export { currentEventList, historicalEventList, combinedEvents, earthquakeEventList }
 export default App
