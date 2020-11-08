@@ -15,9 +15,7 @@ import * as Keys from "../constants/APIkeys";
 import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
-import { State } from "ionicons/dist/types/stencil-public-runtime";
 import { CustomAlert } from '../components/CustomAlert';
-import { } from '../components/AnimateEvents';
 import { addDays } from "date-fns/esm";
 
 
