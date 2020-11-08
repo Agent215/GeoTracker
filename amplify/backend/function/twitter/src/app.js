@@ -68,11 +68,12 @@ app.get('/twitter', async(req,res) => {
     console.log('error:', err);
   }
 });
+//There is an API issue with the result type where it only returns calls if the result_type parameter is mixed using popular or recent will return a null list of statuses
 app.get('/twitter/tweets', async(req,res)=>{
   const headers = {
     'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
   };
-  const url = `https://api.twitter.com/1.1/search/tweets.json?q=${req.param('query_string')}&result_type=popular&geocode=${req.param('lat')},${req.param('long')},${req.param('rad')}mi`;
+  const url = `https://api.twitter.com/1.1/search/tweets.json?q=${req.param('query_string')}&result_type=recent&geocode=${req.param('lat')},${req.param('long')},${req.param('rad')}mi`;
 
   try{
     const fetch = require("node-fetch");
@@ -81,7 +82,21 @@ app.get('/twitter/tweets', async(req,res)=>{
           return res.json();
         })
         .then((json) => {
-          res.send(json);
+          let size_response = json.statuses.length;
+          let tweets = [];
+          for (var i =0 ; i < size_response ;i++){
+            let entry = {
+              'text' : json.statuses[i].text,
+              'user' : json.statuses[i].user.screen_name ,
+              'id' : json.statuses[i].id
+            }
+            tweets.push(entry);
+          }
+          let response = {
+            'tweets' : tweets,
+            'response_size' : size_response
+          };
+          res.send(response);
         })
   }
   catch(err){
