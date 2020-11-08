@@ -16,7 +16,7 @@ import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { CustomAlert } from '../components/CustomAlert';
-import { addDays } from "date-fns/esm";
+import { addDays, isWithinInterval, parseISO } from "date-fns/esm";
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -53,11 +53,13 @@ const MapScreen = ({ navigation }) => {
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
   let tempArray = []; // temp array to store filtered events
+  //let disastersInRange = [];
 
   // States for animation
-  const [currentDate, setCurrentDate] = useState(startDate)                           // Hook that keeps track of the current day that is animating.
-  const [isPlaying, setIsPlaying] = useState(false)                                   // Hook that keep track of if the animation is playing.
-  const [animateButton, setAnimationButton] = useState("play-circle")
+  const [currentDate, setCurrentDate] = useState(startDate);                           // Hook that keeps track of the current day that is animating.
+  const [isPlaying, setIsPlaying] = useState(false);                                   // Hook that keep track of if the animation is playing.
+  const [animateButton, setAnimationButton] = useState("play-circle");
+  const [disastersInRange, setDisastersInRange] = useState([]);
 
   //This function starts or pauses the animation.
   const toggleAnimation = () => {
@@ -88,13 +90,15 @@ const MapScreen = ({ navigation }) => {
     }
   }, [currentDate])
 
+
   useEffect(() => {
     let interval = null
     console.log("current date: " + currentDate.toDateString() + " | " + "end date: " + endDate.toDateString())
     console.log("use effect " + isPlaying)
     if (isPlaying) {                                                                    // If the button is playing.
       interval = setInterval(() => {
-        setCurrentDate(prevDate => addDays(prevDate, 1))                                // Starts with currentDate and iterates through given dates.
+        setCurrentDate(prevDate => addDays(prevDate, 1));                              // Starts with currentDate and iterates through given dates.
+        ShowMarkerOnDay();
       }, 1500)
     } else if ((!isPlaying)) {                                                          // Once the start date == end date, clear the interval and end animation.
       clearInterval(interval)
@@ -111,8 +115,34 @@ const MapScreen = ({ navigation }) => {
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
+
   }, []);
 
+  /* run once on component mount */
+  useEffect(() => {
+    animateToUser();
+
+  }, []);
+
+  /**
+   * When the disaster filter is changed lets filter the disasters
+   */
+  useEffect(() => {
+    filterDisasters()
+  }, [disasterFilter, startDate, endDate, dispatch]);
+
+  useEffect(() => {                 // we want to shallow copy the disaters for use in animation
+    setDisastersInRange(filteredDisasters);
+    console.log(disastersInRange);
+    console.log("disastersInRange");
+  }, [disasterFilter]);
+
+
+  /* check if current disaster has changed, if so then force rerender */
+  useEffect(() => {
+
+    if (currentDisaster != "") { animateToDisaster(); }
+  }, [currentDisaster.title, dispatch]);
   /**
    * standard shows streets 
    * hybrid shows town and city names over satilite view
@@ -174,24 +204,6 @@ const MapScreen = ({ navigation }) => {
     mapRef.current.animateToRegion(coords, 0);
   };
 
-  /* run once on component mount */
-  useEffect(() => {
-    animateToUser();
-
-  }, []);
-
-  /**
-   * When the disaster filter is changed lets filter the disasters
-   */
-  useEffect(() => {
-    filterDisasters()
-  }, [disasterFilter, startDate, endDate, dispatch]);
-
-  /* check if current disaster has changed, if so then force rerender */
-  useEffect(() => {
-
-    if (currentDisaster != "") { animateToDisaster(); }
-  }, [currentDisaster.title, dispatch]);
 
   /**
    * 
@@ -248,6 +260,46 @@ const MapScreen = ({ navigation }) => {
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
   };
+
+
+  /*
+   *function to be called at each interval of animation of markers 
+    fitler by specific day of event not a range. 
+   */
+  const ShowMarkerOnDay = () => {
+
+      tempArray = [];   // reset temp array
+      // go through all events and mark which ones need to be filtered.
+      const disastersOnDay = disastersInRange.map((event) => {
+      let startDate = event.currentDate;
+      let endingDate;
+      if (event.isClosed == null) {        // id isClosed is null then event is open so set endate to today
+        endingDate = new Date().toISOString();
+      }
+      else { endingDate = event.isClosed }   // else isClosed = endDate
+      console.log(currentDate)
+      if (isWithinInterval(currentDate, {
+        start: parseISO(startDate),
+        end: parseISO(endingDate)
+      })) {
+        event.isShow = true
+      }
+      else {
+        event.isShow = false;
+      }
+      return event
+    });
+
+    // create a new array from the array with correctly marked isShow prop
+    disastersOnDay.forEach(element => {
+      if (element.isShow) tempArray.push(element)
+    })
+    console.log(tempArray)
+    console.log("todays disasters include")
+    // send only the filtered events to the redux store
+    dispatch(actions.setFilteredDisasters(tempArray));
+  };
+
 
   return (
     <>
@@ -351,8 +403,8 @@ const MapScreen = ({ navigation }) => {
           color={Colors.blue600}
           size={50}
           onPress={() => {
-            toggleAnimation()
-            console.log("animation toggled")
+            toggleAnimation();
+            console.log("animation toggled");
           }}
         />
       </View>
