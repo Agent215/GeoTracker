@@ -61,11 +61,31 @@ app.get('/twitter', async(req,res) => {
             body : api_body,
             headers : {'Content-Type': 'application/json'}
           }
-          res.send(api_response);
+          res.send(api_body);
         });
   }
   catch(err){
     console.log('error:', err);
+  }
+});
+app.get('/twitter/tweets', async(req,res)=>{
+  const headers = {
+    'Authorization' : 'Bearer AAAAAAAAAAAAAAAAAAAAAHTgIQEAAAAAanWdtHE31s4QRThNOuZE8eMd%2BjQ%3D8KZ38KBOKACDTqFM1F2YGV7bUdcpUJsuyq905xWhckhe2qssYI'
+  };
+  const url = `https://api.twitter.com/1.1/search/tweets.json?q=${req.param('query_string')}&result_type=popular&geocode=${req.param('lat')},${req.param('long')},${req.param('rad')}mi`;
+
+  try{
+    const fetch = require("node-fetch");
+    fetch(url, {headers:headers})
+        .then((res) => {
+          return res.json();
+        })
+        .then((json) => {
+          res.send(json);
+        })
+  }
+  catch(err){
+    console.log("error:",err);
   }
 });
 
