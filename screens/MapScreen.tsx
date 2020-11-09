@@ -216,8 +216,8 @@ const MapScreen = ({ navigation }) => {
   };
 
   const[gibsDate, setGibsDate] = useState(startDate)
-  const[isPlaying, setIsPlaying] = useState(false)
-  const[count, setCount] = useState(0)
+  //const[isPlaying, setIsPlaying] = useState(false)
+  //const[count, setCount] = useState(0)
   let interval
 
   return (
@@ -260,11 +260,10 @@ const MapScreen = ({ navigation }) => {
             </Marker>
           ))}
 
-
           <GIBSOverlay
             category={'precipitation'}
             date={format(gibsDate, "yyyy-MM-dd")}
-            playing={isPlaying}
+            //playing={isPlaying}
           />
 
           {/*<WeatherOverlay
@@ -328,15 +327,24 @@ const MapScreen = ({ navigation }) => {
         />
         <IconButton
           icon="play-circle"
-          style={styles.icon}
+          style={styles.playIcon}
           color={Colors.blue600}
           size={50}
-          onPress={() => {
+          onPress={(interval) => {
             console.log("Button is working")
-            interval = setInterval(() => {
+            setInterval(() => {
               setGibsDate(prevDate => addDays(prevDate, 1))
               console.log("The new date is: " + gibsDate)
-            }, 1500)
+              //if(gibsDate == endDate){clearInterval(interval)}
+            }, 2000)
+          }}
+        />
+        <IconButton
+          icon="stop-circle"
+          style={styles.stopIcon}
+          size={50}
+          onPress={() => {
+            clearInterval(interval)
           }}
         />
       </View>
@@ -380,9 +388,14 @@ const styles = StyleSheet.create({
     top: 0,
     backgroundColor: "#fafafa",
   },
-  icon: {
+  playIcon: {
     position: "absolute",
     left: 0,
+    bottom: 0,
+  },
+  stopIcon: {
+    position: "absolute",
+    left: 50,
     bottom: 0,
   },
 });
