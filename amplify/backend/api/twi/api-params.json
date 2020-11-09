@@ -1,0 +1,35 @@
+{
+    "paths": [
+        {
+            "name": "/twitter",
+            "lambdaFunction": "twitter",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/twitter"
+        }
+    ],
+    "resourceName": "twi",
+    "apiName": "twi",
+    "functionArns": [
+        {
+            "lambdaFunction": "twitter"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-geotracker-dev-132225-authRole",
+        "unAuthRoleName": "amplify-geotracker-dev-132225-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "twitter",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
