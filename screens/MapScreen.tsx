@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
-import { PROVIDER_GOOGLE, Marker, UrlTile } from "react-native-maps";
+import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { currentEventList, combinedEvents, historicalEventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 import WeatherOverlay from '../components/WeatherOverlay'
-import GIBSOverlay from '../components/GIBSOverlay'
 import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -235,7 +234,6 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
-          maxZoomLevel={0}
         >
 
           {filteredDisasters.map((marker: EventEntity, index) => (
@@ -267,7 +265,6 @@ const MapScreen = ({ navigation }) => {
           {/*<WeatherOverlay
             category={weatherFilter.value} 
           />*/}
-
 
         </MapView>
 
