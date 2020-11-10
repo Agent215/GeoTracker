@@ -7,6 +7,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
+
 import WeatherOverlay from '../components/WeatherOverlay'
 import GIBSOverlay from '../components/GIBSOverlay'
 import { View } from "../components/Themed";
@@ -16,6 +17,7 @@ import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
+import { CustomAlert } from '../components/CustomAlert';
 
 import {format, addDays, isEqual} from "date-fns"
 
@@ -63,12 +65,6 @@ const MapScreen = ({ navigation }) => {
   });
 
 
-  /**
-   * When the disaster filter is changed lets filter the disasters
-   */
-  useEffect(() => {
-    filterDisasters()
-  }, [disasterFilter, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
@@ -179,13 +175,14 @@ const MapScreen = ({ navigation }) => {
     const disasterToFilter = allEvents.map((event) => {
 
       
-      let endDate;
+      let endDate;  
       if (event.isClosed == null) {
-         endDate = new Date().toISOString();
+         endDate = new Date().toISOString();  // if isclosed is null then that means event is still open
+                                              // so then set end date to today, to make sure we show it.
       }
-      else { endDate = event.isClosed }
+      else { endDate = event.isClosed }       // else set endDate to date supplied by API
      
-      if
+      if    
         (
         (disasterFilter.value === "all"      // filter for all
           || disasterFilter.value === ""        // first time we render
@@ -209,6 +206,7 @@ const MapScreen = ({ navigation }) => {
       if (element.isShow) tempArray.push(element)
     })
 
+    if (tempArray.length < 1) {CustomAlert("NO EVENTS FOUND", "No events found please try changing your search criteria")}
 
 
     // send only the filtered events to the redux store
