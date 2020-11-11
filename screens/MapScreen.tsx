@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 import WeatherOverlay from '../components/WeatherOverlay'
+import GIBSOverlay from '../components/GIBSOverlay'
 import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -213,7 +214,7 @@ const MapScreen = ({ navigation }) => {
   };
 
   const[gibsDate, setGibsDate] = useState(startDate)
-  //const[isPlaying, setIsPlaying] = useState(false)
+  const[isPlaying, setIsPlaying] = useState(false)
   //const[count, setCount] = useState(0)
   let interval
 
@@ -257,7 +258,7 @@ const MapScreen = ({ navigation }) => {
           ))}
 
           <GIBSOverlay
-            category={'precipitation'}
+            category={weatherFilter.value}
             date={format(gibsDate, "yyyy-MM-dd")}
             //playing={isPlaying}
           />
