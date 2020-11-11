@@ -17,7 +17,6 @@ import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { CustomAlert } from '../components/CustomAlert';
-import GIBSOverlay from '../components/GIBSOverlay';
 import { addDays, isWithinInterval, parseISO ,format} from "date-fns/esm";
 
 
@@ -326,13 +325,6 @@ const MapScreen = ({ navigation }) => {
     dispatch(actions.setFilteredDisasters(tempArray));
   };
 
-<<<<<<< HEAD
-  const[gibsDate, setGibsDate] = useState(startDate)
-  const[isPlaying, setIsPlaying] = useState(false)
-  //const[count, setCount] = useState(0)
-  let interval
-=======
->>>>>>> a8c1b61e12bda232e29288d1004a5af468329567
 
   return (
     <>
@@ -375,13 +367,8 @@ const MapScreen = ({ navigation }) => {
 
           <GIBSOverlay
             category={weatherFilter.value}
-<<<<<<< HEAD
-            date={format(gibsDate, "yyyy-MM-dd")}
-            //playing={isPlaying}
-=======
             date={format(currentDate, "yyyy-MM-dd")}
           //playing={isPlaying}
->>>>>>> a8c1b61e12bda232e29288d1004a5af468329567
           />
 
           {/*<WeatherOverlay
