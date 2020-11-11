@@ -1,23 +1,23 @@
 import React, { useRef, useEffect, useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
-import { PROVIDER_GOOGLE, Marker, UrlTile } from "react-native-maps";
+import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { currentEventList, combinedEvents, historicalEventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
+
 import WeatherOverlay from '../components/WeatherOverlay'
-import GIBSOverlay from '../components/GIBSOverlay'
 import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
 import DisasterPin from "../components/CustomMarker";
 import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
-import { State } from "ionicons/dist/types/stencil-public-runtime";
-
-import { format, addDays, isEqual, compareAsc } from "date-fns"
+import { CustomAlert } from '../components/CustomAlert';
+import { format, addDays} from "date-fns"
+import GIBSOverlay from '../components/GIBSOverlay';
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -80,12 +80,6 @@ const MapScreen = ({ navigation }) => {
   });
 
 
-  /**
-   * When the disaster filter is changed lets filter the disasters
-   */
-  useEffect(() => {
-    filterDisasters()
-  }, [disasterFilter, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
@@ -221,9 +215,10 @@ const MapScreen = ({ navigation }) => {
 
       let endDate;
       if (event.isClosed == null) {
-        endDate = new Date().toISOString();
+        endDate = new Date().toISOString();  // if isclosed is null then that means event is still open
+        // so then set end date to today, to make sure we show it.
       }
-      else { endDate = event.isClosed }
+      else { endDate = event.isClosed }       // else set endDate to date supplied by API
 
       if
         (
@@ -249,12 +244,11 @@ const MapScreen = ({ navigation }) => {
       if (element.isShow) tempArray.push(element)
     })
 
-
+    if (tempArray.length < 1) { CustomAlert("NO EVENTS FOUND", "No events found please try changing your search criteria") }
 
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
   };
-
 
 
   return (
@@ -274,7 +268,6 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
-          maxZoomLevel={0}
         >
 
           {filteredDisasters.map((marker: EventEntity, index) => (
@@ -297,17 +290,15 @@ const MapScreen = ({ navigation }) => {
             </Marker>
           ))}
 
-
           <GIBSOverlay
             category={'precipitation'}
             date={format(gibsDate, "yyyy-MM-dd")}
-            playing={isPlaying}
+          //playing={isPlaying}
           />
 
           {/*<WeatherOverlay
             category={weatherFilter.value} 
           />*/}
-
 
         </MapView>
 
@@ -365,10 +356,9 @@ const MapScreen = ({ navigation }) => {
         />
         <IconButton
           icon={animateButton}
-          style={styles.icon}
           color={Colors.blue600}
           size={50}
-          onPress={() => {
+          onPress={(interval) => {
             console.log("Button is working")
             toggleIsPlaying();
           }}
@@ -414,9 +404,14 @@ const styles = StyleSheet.create({
     top: 0,
     backgroundColor: "#fafafa",
   },
-  icon: {
+  playIcon: {
     position: "absolute",
     left: 0,
+    bottom: 0,
+  },
+  stopIcon: {
+    position: "absolute",
+    left: 50,
     bottom: 0,
   },
 });
