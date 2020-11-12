@@ -37,7 +37,7 @@ const WeatherOverlay = (props) => {
         />
 
     );
-    let pressue = (
+    let pressure = (
         <UrlTile
           
             urlTemplate={'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
@@ -60,14 +60,15 @@ const WeatherOverlay = (props) => {
 
     );
 
-    if (props.category == undefined) weather = none;
-    if (props.category == "") weather = none;
+    if (props.category == undefined) weather = null;
+    if (props.category == "") weather = null;
     if (props.category == "clouds") weather = clouds;
     if (props.category == "temp") weather = temp;
     if (props.category == "precipitation") weather = precip;
     if (props.category == "wind") weather = wind;
-    if (props.category == "pressure") weather = pressue;
-    if (props.category == "none") weather = none;
+    if (props.category == "pressure") weather = pressure;
+    if (props.category == "none") weather = null;
+    if (props.gibsVisible) weather = null
 
 
 
@@ -77,5 +78,6 @@ const WeatherOverlay = (props) => {
         weather)
 
 }
+
 
 export default WeatherOverlay;

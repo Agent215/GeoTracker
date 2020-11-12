@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 import WeatherOverlay from '../components/WeatherOverlay'
+import GIBSOverlay from '../components/GIBSOverlay'
 import { View } from "../components/Themed";
 import Geocoder from "react-native-geocoding";
 import * as Keys from "../constants/APIkeys";
@@ -17,11 +18,12 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
+import { addDays, isWithinInterval, parseISO ,format} from "date-fns/esm";
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
-Geocoder.init(Keys.geocoderKey, { language: "en" }); // use a valid API key
+Geocoder.init(Keys.geocoderKey, { language: "en" });                                  // use a valid API key.
 
 const LATITUDE_DELTA = 0.0922;
 const { width, height } = Dimensions.get("window");
@@ -29,7 +31,7 @@ const SCREEN_HEIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-let INITIALREGION = {  // this is philly for now, we can change this to whatever
+let INITIALREGION = {                                                                 // this is philly for now, we can change this to whatever.
   latitude: 39.9526,
   longitude: -75.16522,
   latitudeDelta: 0.0922,
@@ -40,20 +42,39 @@ let INITIALREGION = {  // this is philly for now, we can change this to whatever
 const MapScreen = ({ navigation }) => {
   //get state from redux store
   const dispatch = useDispatch();
-  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker
-  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters
-  const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters
+  const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker.
+  const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters.
+  const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters.
   const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
 
-  const startDate = useSelector((state) => state.disaster.startDate); // start date of the time range from date picker
-  const endDate = useSelector((state) => state.disaster.endDate); //end date of time range from date picker
+  const startDate = useSelector((state) => state.disaster.startDate);                 // start date of the time range from date picker.
+  const endDate = useSelector((state) => state.disaster.endDate);                     // end date of time range from date picker.
 
   let mapRef = useRef(MapView.prototype);
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  let tempArray = [];           // temp array to store filtered events
+  let tempArray = []; // temp array to store filtered events
+  //let disastersInRange = [];
 
+  // States for animation
+  const [currentDate, setCurrentDate] = useState(startDate);                          // Hook that keeps track of the current day that is animating.
+  const [isPlaying, setIsPlaying] = useState(false);                                  // Hook that keep track of if the animation is playing.
+  const [isGibsVisible, setGibsVisible] = useState(false);                            // Hook to keep track of if the GIBS data is visible
+  const [animateButton, setAnimationButton] = useState("play-circle");
+  const [disastersInRange, setDisastersInRange] = useState([]);
+  const [maxZoom, setMaxZoom] = useState(20);
+
+  //This function starts or pauses the animation.
+  const toggleAnimation = () => {
+    if (isPlaying) { setIsPlaying(false); setAnimationButton("play-circle") }         // If the animation is not playing, have the button a play-circle.
+    else {
+      setIsPlaying(true)
+      setGibsVisible(true)   
+      setMaxZoom(6);                                                           // If the animation is running.
+      setAnimationButton("pause-circle")                                              // Make the play button into a pause-circle.
+    }
+  }
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
@@ -61,7 +82,57 @@ const MapScreen = ({ navigation }) => {
     return { ...event, isShow: true };
   });
 
+  /* check if current disaster has changed, if so then force rerender */
+  useEffect(() => {
+    if (currentDisaster != "") { animateToDisaster(); }
+  }, [currentDisaster.title, dispatch]);
 
+  //Start of animation useEffects
+  // If the current date hits the end date, end the animation and reset the button.
+  useEffect(() => {
+    if (currentDate.toDateString() == endDate.toDateString()) {
+      setIsPlaying(false)
+      setGibsVisible(false)
+      setAnimationButton("play-circle")
+      setMaxZoom(20);
+    }
+  }, [currentDate])
+
+
+  useEffect(() => {
+    let interval = null
+    console.log("current date: " + currentDate.toDateString() + " | " + "end date: " + endDate.toDateString())
+    console.log("use effect " + isPlaying)
+    if (isPlaying) {                                                                    // If the button is playing.
+      interval = setInterval(() => {
+        setCurrentDate(prevDate => addDays(prevDate, 1));                              // Starts with currentDate and iterates through given dates.
+        ShowMarkerOnDay();
+      }, 1500)
+    } else if ((!isPlaying)) {                                                          // Once the start date == end date, clear the interval and end animation.
+      clearInterval(interval)
+      console.log("Clear Interval Initiated")
+      setCurrentDate(startDate);
+    }
+    return () => clearInterval(interval)                                                // Clean up return function.
+  }, [isPlaying, currentDate])
+
+  useEffect(() => {                                                                     // 
+    setCurrentDate(startDate)                                                           // If the start date filter changes, then set animation to start on that date.
+  }, [startDate]);
+  //End of animate function useEffects
+
+  /* run once on component mount */
+  useEffect(() => {
+    animateToUser();
+
+  }, []);
+
+  /**
+   * When the disaster filter is changed lets filter the disasters
+   */
+  useEffect(() => {
+    filterDisasters()
+  }, [disasterFilter, startDate, endDate, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
@@ -69,11 +140,30 @@ const MapScreen = ({ navigation }) => {
     if (currentDisaster != "") { animateToDisaster(); }
   }, [currentDisaster.title, dispatch]);
 
-  /* run once on component mount */
   useEffect(() => {
-    animateToUser();
-  }, []);
+    if (currentDate.toDateString() == endDate.toDateString()) { setIsPlaying(false) }
+  }, [currentDate])
 
+  
+  /**
+   * When the disaster filter is changed lets filter the disasters
+   */
+  useEffect(() => {
+    filterDisasters()
+  }, [disasterFilter, startDate, endDate, dispatch]);
+
+  useEffect(() => {                 // we want to shallow copy the disaters for use in animation
+    setDisastersInRange(filteredDisasters);
+    console.log(disastersInRange);
+    console.log("disastersInRange");
+  }, [disasterFilter]);
+
+
+  /* check if current disaster has changed, if so then force rerender */
+  useEffect(() => {
+
+    if (currentDisaster != "") { animateToDisaster(); }
+  }, [currentDisaster.title, dispatch]);
   /**
    * standard shows streets 
    * hybrid shows town and city names over satilite view
@@ -95,7 +185,6 @@ const MapScreen = ({ navigation }) => {
     setModalVisible(!isModalVisible);
 
   };
-
   /*
   animateToUser 
   */
@@ -135,25 +224,6 @@ const MapScreen = ({ navigation }) => {
     mapRef.current.animateToRegion(coords, 0);
   };
 
-  /* run once on component mount */
-  useEffect(() => {
-    animateToUser();
-
-  }, []);
-
-  /**
-   * When the disaster filter is changed lets filter the disasters
-   */
-  useEffect(() => {
-    filterDisasters()
-  }, [disasterFilter, startDate, endDate, dispatch]);
-
-  /* check if current disaster has changed, if so then force rerender */
-  useEffect(() => {
-
-    if (currentDisaster != "") { animateToDisaster(); }
-  }, [currentDisaster.title, dispatch]);
-
 
   /**
    * 
@@ -162,6 +232,7 @@ const MapScreen = ({ navigation }) => {
    * then dispatch that to the redux store. Make sure we reset this array
    * each time arround.
    */
+
   const filterDisasters = () => {
     let startDate_ISO = startDate.toISOString();
     let endDate_ISO = endDate.toISOString();
@@ -210,6 +281,45 @@ const MapScreen = ({ navigation }) => {
     dispatch(actions.setFilteredDisasters(tempArray));
   };
 
+
+  /*
+   *function to be called at each interval of animation of markers 
+    fitler by specific day of event not a range. 
+   */
+  const ShowMarkerOnDay = () => {
+
+      tempArray = [];   // reset temp array
+      // go through all events and mark which ones need to be filtered.
+      const disastersOnDay = disastersInRange.map((event) => {
+      let startDate = event.currentDate;
+      let endingDate;
+      if (event.isClosed == null) {        // id isClosed is null then event is open so set endate to today
+        endingDate = new Date().toISOString();
+      }
+      else { endingDate = event.isClosed }   // else isClosed = endDate
+      console.log(currentDate)
+      if (isWithinInterval(currentDate, {
+        start: parseISO(startDate),
+        end: parseISO(endingDate)
+      })) {
+        event.isShow = true
+      }
+      else {
+        event.isShow = false;
+      }
+      return event
+    });
+
+    // create a new array from the array with correctly marked isShow prop
+    disastersOnDay.forEach(element => {
+      if (element.isShow) tempArray.push(element)
+    })
+    console.log(tempArray)
+    console.log("todays disasters include")
+    // send only the filtered events to the redux store
+    dispatch(actions.setFilteredDisasters(tempArray));
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -227,6 +337,7 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
+          maxZoomLevel={maxZoom}
         >
 
           {filteredDisasters.map((marker: EventEntity, index) => (
@@ -249,12 +360,21 @@ const MapScreen = ({ navigation }) => {
             </Marker>
           ))}
 
+          <GIBSOverlay
+            category={weatherFilter.value}
+            date={format(currentDate, "yyyy-MM-dd")}
+            gibsVisible={isGibsVisible}
+          />
+
           <WeatherOverlay
-            category={weatherFilter.value} />
+            category={weatherFilter.value}
+            gibsVisible={isGibsVisible}
+          />
 
         </MapView>
         <WeatherLegend
           category={weatherFilter.value}
+          gibsVisible={isGibsVisible}
           size={400}
         />
         <CustomModal
@@ -309,6 +429,16 @@ const MapScreen = ({ navigation }) => {
           value={toggleMap}
           onValueChange={() => { toggleMapMode(); }}
         />
+        <IconButton
+          icon={animateButton}
+          style={styles.icon}
+          color={Colors.blue600}
+          size={50}
+          onPress={() => {
+            toggleAnimation();
+            console.log("animation toggled");
+          }}
+        />
       </View>
     </>
   );
@@ -350,6 +480,9 @@ const styles = StyleSheet.create({
     top: 0,
     backgroundColor: "#fafafa",
   },
+  icon: {
+    position: "relative",
+  }
 });
 
 /*

@@ -12,12 +12,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const { width, height } = Dimensions.get('screen');
 const SCREEN_WIDTH = width;
-const MODAL_HEIGHT = height / 4;
+const MODAL_HEIGHT = height / 2;
+
 
 // modal to cover part of map screen. 
 // contains event data
 const CustomModal = (props) => {
-
+    let properDate = new Date(props.disaster.currentDate)
     const dispatch = useDispatch();
     const toastRef = useRef(CustomToast.prototype);
 
@@ -57,7 +58,7 @@ const CustomModal = (props) => {
                             />
                         </View>
 
-
+                        <Text style={styles.title}> Start Date: {properDate.toDateString()}</Text>
                     </View >
                 </ScrollView>
             </Modal>
