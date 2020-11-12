@@ -48,7 +48,7 @@ function FilterScreen() {
     false
   );
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-  const startDateOnPicker = useRef(new Date(2019, 0, 1));
+  const startDateOnPicker = useRef(new Date(2020, 10, 1));
   const endDateOnPicker = useRef(new Date());
   const [startDate, setStartDate] = useState(new Date(2020, 10, 1));    //TODO: set back to (2019, 0, 1) later changed for testing purposes
   const [endDate, setEndDate] = useState(new Date());

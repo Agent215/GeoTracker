@@ -18,7 +18,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
-import { addDays, isWithinInterval, parseISO ,format} from "date-fns/esm";
+import { addDays, isWithinInterval, parseISO, format } from "date-fns/esm";
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -54,7 +54,7 @@ const MapScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  let tempArray = []; // temp array to store filtered events
+  //let tempArray = []; // temp array to store filtered events
   //let disastersInRange = [];
 
   // States for animation
@@ -70,7 +70,9 @@ const MapScreen = ({ navigation }) => {
     if (isPlaying) { setIsPlaying(false); setAnimationButton("play-circle") }         // If the animation is not playing, have the button a play-circle.
     else {
       setIsPlaying(true)
-      setGibsVisible(true)   
+      setGibsVisible(true)
+      console.log(disastersInRange);
+      console.log("disastersInRange");
       setMaxZoom(6);                                                           // If the animation is running.
       setAnimationButton("pause-circle")                                              // Make the play button into a pause-circle.
     }
@@ -95,6 +97,8 @@ const MapScreen = ({ navigation }) => {
       setGibsVisible(false)
       setAnimationButton("play-circle")
       setMaxZoom(20);
+      filterDisasters();
+      setDisastersInRange(filteredDisasters);
     }
   }, [currentDate])
 
@@ -102,7 +106,6 @@ const MapScreen = ({ navigation }) => {
   useEffect(() => {
     let interval = null
     console.log("current date: " + currentDate.toDateString() + " | " + "end date: " + endDate.toDateString())
-    console.log("use effect " + isPlaying)
     if (isPlaying) {                                                                    // If the button is playing.
       interval = setInterval(() => {
         setCurrentDate(prevDate => addDays(prevDate, 1));                              // Starts with currentDate and iterates through given dates.
@@ -111,7 +114,6 @@ const MapScreen = ({ navigation }) => {
     } else if ((!isPlaying)) {                                                          // Once the start date == end date, clear the interval and end animation.
       clearInterval(interval)
       console.log("Clear Interval Initiated")
-      setCurrentDate(startDate);
     }
     return () => clearInterval(interval)                                                // Clean up return function.
   }, [isPlaying, currentDate])
@@ -124,7 +126,6 @@ const MapScreen = ({ navigation }) => {
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
-
   }, []);
 
   /**
@@ -136,15 +137,10 @@ const MapScreen = ({ navigation }) => {
 
   /* check if current disaster has changed, if so then force rerender */
   useEffect(() => {
-
     if (currentDisaster != "") { animateToDisaster(); }
   }, [currentDisaster.title, dispatch]);
 
-  useEffect(() => {
-    if (currentDate.toDateString() == endDate.toDateString()) { setIsPlaying(false) }
-  }, [currentDate])
 
-  
   /**
    * When the disaster filter is changed lets filter the disasters
    */
@@ -197,9 +193,6 @@ const MapScreen = ({ navigation }) => {
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         };
-        console.log(
-          "MapScreen.tsx/animateToUser - Getting User Coords : " + coords
-        );
         mapRef.current.animateToRegion(coords, 0); // why does my linter give me red squiglly lines, yet this runs...
       },
       (error) =>
@@ -236,11 +229,14 @@ const MapScreen = ({ navigation }) => {
   const filterDisasters = () => {
     let startDate_ISO = startDate.toISOString();
     let endDate_ISO = endDate.toISOString();
+    let events = [];
+    if (isGibsVisible) {
+      events = disastersInRange; // if we are animating then filter from only disasters in range
+    } else { events = allEvents }
 
-
-    tempArray = [];   // reset temp array
+    let tempArray = [];   // reset temp array
     // go through all events and mark which ones need to be filtered.
-    const disasterToFilter = allEvents.map((event) => {
+    const disasterToFilter = events.map((event) => {
 
 
       let endDate;
@@ -288,9 +284,9 @@ const MapScreen = ({ navigation }) => {
    */
   const ShowMarkerOnDay = () => {
 
-      tempArray = [];   // reset temp array
-      // go through all events and mark which ones need to be filtered.
-      const disastersOnDay = disastersInRange.map((event) => {
+    let tempArray = [];   // reset temp array
+    // go through all events and mark which ones need to be filtered.
+    const disastersOnDay = disastersInRange.map((event) => {
       let startDate = event.currentDate;
       let endingDate;
       if (event.isClosed == null) {        // id isClosed is null then event is open so set endate to today
@@ -298,10 +294,15 @@ const MapScreen = ({ navigation }) => {
       }
       else { endingDate = event.isClosed }   // else isClosed = endDate
       console.log(currentDate)
-      if (isWithinInterval(currentDate, {
+      if ((isWithinInterval(currentDate, {
         start: parseISO(startDate),
         end: parseISO(endingDate)
-      })) {
+      }))
+        && (disasterFilter.value === "all"      // filter for all
+          || disasterFilter.value === ""        // first time we render
+          || disasterFilter.value == undefined  //just in case
+          || event.category === disasterFilter.value
+        )) {
         event.isShow = true
       }
       else {
@@ -393,7 +394,6 @@ const MapScreen = ({ navigation }) => {
           }}
           onPress={(data, details = null) => {
             console.log(data);
-            console.log("test");
             Geocoder.from(data.description)
               .then((json) => {
                 var location = json.results[0].geometry.location;
@@ -436,7 +436,6 @@ const MapScreen = ({ navigation }) => {
           size={50}
           onPress={() => {
             toggleAnimation();
-            console.log("animation toggled");
           }}
         />
       </View>

@@ -52,8 +52,7 @@ function urlBuilder(category, date){
     
     //add tail of url template
     tempUrl = tempUrl + '{z}/{y}/{x}.png';
-    console.log("Url is: " + tempUrl)
-
+  
     //return completed url string
     return tempUrl;
 }
