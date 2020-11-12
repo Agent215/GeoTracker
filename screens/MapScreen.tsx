@@ -80,10 +80,15 @@ const MapScreen = ({ navigation }) => {
 
   //This function stops the animation
   const stopAnimation = () => {
-      setIsPlaying(false); 
-      setAnimationButton("play-circle"); 
-      setGibsVisible(false)
-      setCurrentDate(startDate)
+    setIsPlaying(false);                  // no longer playing
+    setAnimationButton("play-circle");    // reset UI
+    setGibsVisible(false);                // also no longer in animation mode
+    setIsPlaying(false);                  // no longer playing
+    setAnimationButton("play-circle");    // reset UI
+    setGibsVisible(false);                // also no longer in animation mode
+    setCurrentDate(startDate);            // reset start date back to begining.
+    filterDisasters();                    // filter all the disasters again to give us the intitial set we started with
+    setMaxZoom(20)                        // let user zoom again!!
   }
 
   /*adding property isShow to all events, which determine if they shold show on the map
@@ -126,7 +131,7 @@ const MapScreen = ({ navigation }) => {
     return () => clearInterval(interval)                                                // Clean up return function.
   }, [isPlaying, currentDate])
 
-  useEffect(() => {                                                                     
+  useEffect(() => {
     setCurrentDate(startDate)                                                           // If the start date filter changes, then set animation to start on that date.
   }, [startDate]);
   //End of animate function useEffects
@@ -438,27 +443,27 @@ const MapScreen = ({ navigation }) => {
           style={mapButtons.toggleLayer}
           color={Colors.blue600}
           size={50}
-          onPress={() => { toggleMapMode();}}
+          onPress={() => { toggleMapMode(); }}
         />
         <View
           style={mapButtons.animateButtons}
         >
-        <IconButton
-          icon={animateButton}
-          color={Colors.blue600}
-          size={50}
-          onPress={() => {
-            toggleAnimation();
-          }}
-        />
-        <IconButton
-          icon="stop-circle"
-          color={Colors.blue600}
-          size={50}
-          onPress={() => {
-            stopAnimation();
-          }}
-        />
+          <IconButton
+            icon={animateButton}
+            color={Colors.blue600}
+            size={50}
+            onPress={() => {
+              toggleAnimation();
+            }}
+          />
+          <IconButton
+            icon="stop-circle"
+            color={Colors.blue600}
+            size={50}
+            onPress={() => {
+              stopAnimation();
+            }}
+          />
         </View>
       </View>
     </>
