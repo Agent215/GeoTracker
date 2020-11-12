@@ -62,13 +62,15 @@ const MapScreen = ({ navigation }) => {
   const [isGibsVisible, setGibsVisible] = useState(false);                            // Hook to keep track of if the GIBS data is visible
   const [animateButton, setAnimationButton] = useState("play-circle");
   const [disastersInRange, setDisastersInRange] = useState([]);
+  const [maxZoom, setMaxZoom] = useState(20);
 
   //This function starts or pauses the animation.
   const toggleAnimation = () => {
     if (isPlaying) { setIsPlaying(false); setAnimationButton("play-circle") }         // If the animation is not playing, have the button a play-circle.
     else {
       setIsPlaying(true)
-      setGibsVisible(true)                                                              // If the animation is running.
+      setGibsVisible(true)   
+      setMaxZoom(6);                                                           // If the animation is running.
       setAnimationButton("pause-circle")                                              // Make the play button into a pause-circle.
     }
   }
@@ -99,6 +101,7 @@ const MapScreen = ({ navigation }) => {
       setIsPlaying(false)
       setGibsVisible(false)
       setAnimationButton("play-circle")
+      setMaxZoom(20);
     }
   }, [currentDate])
 
@@ -341,7 +344,7 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
-          maxZoomLevel={6}
+          maxZoomLevel={maxZoom}
         >
 
           {filteredDisasters.map((marker: EventEntity, index) => (
