@@ -57,8 +57,9 @@ const MapScreen = ({ navigation }) => {
   //let disastersInRange = [];
 
   // States for animation
-  const [currentDate, setCurrentDate] = useState(startDate);                           // Hook that keeps track of the current day that is animating.
-  const [isPlaying, setIsPlaying] = useState(false);                                   // Hook that keep track of if the animation is playing.
+  const [currentDate, setCurrentDate] = useState(startDate);                          // Hook that keeps track of the current day that is animating.
+  const [isPlaying, setIsPlaying] = useState(false);                                  // Hook that keep track of if the animation is playing.
+  const [isGibsVisible, setGibsVisible] = useState(false);                            // Hook to keep track of if the GIBS data is visible
   const [animateButton, setAnimationButton] = useState("play-circle");
   const [disastersInRange, setDisastersInRange] = useState([]);
 
@@ -66,7 +67,8 @@ const MapScreen = ({ navigation }) => {
   const toggleAnimation = () => {
     if (isPlaying) { setIsPlaying(false); setAnimationButton("play-circle") }         // If the animation is not playing, have the button a play-circle.
     else {
-      setIsPlaying(true)                                                              // If the animation is running.
+      setIsPlaying(true)
+      setGibsVisible(true)                                                              // If the animation is running.
       setAnimationButton("pause-circle")                                              // Make the play button into a pause-circle.
     }
   }
@@ -87,6 +89,7 @@ const MapScreen = ({ navigation }) => {
   useEffect(() => {
     if (currentDate.toDateString() == endDate.toDateString()) {
       setIsPlaying(false)
+      setGibsVisible(false)
       setAnimationButton("play-circle")
     }
   }, [currentDate])
@@ -104,6 +107,7 @@ const MapScreen = ({ navigation }) => {
     } else if ((!isPlaying)) {                                                          // Once the start date == end date, clear the interval and end animation.
       clearInterval(interval)
       console.log("Clear Interval Initiated")
+      setCurrentDate(startDate);
     }
     return () => clearInterval(interval)                                                // Clean up return function.
   }, [isPlaying, currentDate])
@@ -112,19 +116,6 @@ const MapScreen = ({ navigation }) => {
     setCurrentDate(startDate)                                                           // If the start date filter changes, then set animation to start on that date.
   }, [startDate]);
   //End of animate function useEffects
-
-  /* run once on component mount */
-  useEffect(() => {
-    animateToUser();
-
-  }, []);
-
-  /* run once on component mount */
-  useEffect(() => {
-    animateToUser();
-
-  }, []);
-
 
   /* run once on component mount */
   useEffect(() => {
@@ -325,7 +316,6 @@ const MapScreen = ({ navigation }) => {
     dispatch(actions.setFilteredDisasters(tempArray));
   };
 
-
   return (
     <>
       <View style={styles.container}>
@@ -343,6 +333,7 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
+          maxZoomLevel={6}
         >
 
           {filteredDisasters.map((marker: EventEntity, index) => (
@@ -368,12 +359,13 @@ const MapScreen = ({ navigation }) => {
           <GIBSOverlay
             category={weatherFilter.value}
             date={format(currentDate, "yyyy-MM-dd")}
-          //playing={isPlaying}
+            gibsVisible={isGibsVisible}
           />
 
-          {/*<WeatherOverlay
-            category={weatherFilter.value} 
-          />*/}
+          <WeatherOverlay
+            category={weatherFilter.value}
+            gibsVisible={isGibsVisible}
+          />
 
         </MapView>
 

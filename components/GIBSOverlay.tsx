@@ -11,13 +11,16 @@ import React from "react"
 
 const GIBSOverlay = (props) => {
 
-    //tempUrl is built into 
-    let gibsUrl = urlBuilder(props.category, props.date)
-    let gibsTile = (<UrlTile 
-    urlTemplate={gibsUrl}
-    maximumZ={19}
-    flipY={false}
-    />)
+    let gibsTile = null;
+    if(props.gibsVisible && (props.category != undefined || props.category != "" || props.category != "none")){    
+        //tempUrl is built into 
+        let gibsUrl = urlBuilder(props.category, props.date)
+        gibsTile = (<UrlTile 
+        urlTemplate={gibsUrl}
+        maximumZ={6}
+        flipY={false}
+        />)
+    };
 
     return (gibsTile);
 }
@@ -30,30 +33,17 @@ function urlBuilder(category, date){
     let tempUrl = urlStart;
 
     //handle layer of url using matching GIBS category string
-    if (layer == undefined) {
-        tempUrl = '';
-        console.log('Category undefined.')
-        return tempUrl;
-    }
-    if (layer == ""){
-        tempUrl = '';
-        return tempUrl;
-    }
-    if (layer == "clouds") tempUrl = tempUrl + 'VIIRS_SNPP_Cloud_Effective_Radius/default/';
-    if (layer == "temp") tempUrl = tempUrl + 'AIRS_L2_Surface_Skin_Temperature_Day/default/';
+    if (layer == "clouds") tempUrl = tempUrl + 'MODIS_Aqua_Cloud_Phase_Optical_Properties/default/';
+    if (layer == "temp") tempUrl = tempUrl + 'MODIS_Terra_Land_Surface_Temp_Day/default/';
     if (layer == "precipitation") tempUrl = tempUrl + 'IMERG_Precipitation_Rate/default/';
-    if (layer == "wind") tempUrl = tempUrl + 'CYGNSS_L3_Wind_Speed_Daily/default/';
-    if (layer == "pressure") tempUrl = tempUrl + 'AIRS_L2_RelativeHumidity_500hPa_Day/default/';
-    if (layer == "none"){
-        tempUrl = '';
-        return tempUrl;
-    }
+    if (layer == "wind") tempUrl = tempUrl + 'SSMI_DMSP_F17_Wind_Speed_Over_Oceans_Ascending/default/';
+    if (layer == "pressure") tempUrl = tempUrl + 'MODIS_Terra_Cloud_Top_Pressure_Day/default/';
 
     //handle date of url
     tempUrl = tempUrl + date;
 
     //if clouds a different suffix is needed that other weather overlays
-    if (layer == "clouds") {
+    if (layer == "clouds" || layer == "temp") {
         tempUrl = tempUrl + '/GoogleMapsCompatible_Level7/';
     }
     else {

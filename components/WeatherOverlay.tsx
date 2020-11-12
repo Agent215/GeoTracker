@@ -60,14 +60,15 @@ const WeatherOverlay = (props) => {
 
     );
 
-    if (props.category == undefined) weather = none;
-    if (props.category == "") weather = none;
+    if (props.category == undefined) weather = null;
+    if (props.category == "") weather = null;
     if (props.category == "clouds") weather = clouds;
     if (props.category == "temp") weather = temp;
     if (props.category == "precipitation") weather = precip;
     if (props.category == "wind") weather = wind;
     if (props.category == "pressure") weather = pressure;
-    if (props.category == "none") weather = none;
+    if (props.category == "none") weather = null;
+    if (props.gibsVisible) weather = null
 
 
 
