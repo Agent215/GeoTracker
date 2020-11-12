@@ -73,6 +73,14 @@ const MapScreen = ({ navigation }) => {
     }
   }
 
+  //This function stops the animation
+  const stopAnimation = () => {
+      setIsPlaying(false); 
+      setAnimationButton("play-circle"); 
+      setGibsVisible(false)
+      setCurrentDate(startDate)
+  }
+
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
   let allEvents = combinedEvents.map((event) => {
@@ -112,7 +120,7 @@ const MapScreen = ({ navigation }) => {
     return () => clearInterval(interval)                                                // Clean up return function.
   }, [isPlaying, currentDate])
 
-  useEffect(() => {                                                                     // 
+  useEffect(() => {                                                                     
     setCurrentDate(startDate)                                                           // If the start date filter changes, then set animation to start on that date.
   }, [startDate]);
   //End of animate function useEffects
@@ -410,20 +418,25 @@ const MapScreen = ({ navigation }) => {
         {/*current location button that shows on bottom right of the map */}
         <IconButton
           icon="crosshairs-gps"
-          style={locationIcon.container}
+          style={mapButtons.goToCurrent}
           color={Colors.blue600}
           size={50}
           onPress={() => {
             animateToUser();
           }}
         />
-        <Switch
-          value={toggleMap}
-          onValueChange={() => { toggleMapMode(); }}
+        <IconButton
+          icon="layers"
+          style={mapButtons.toggleLayer}
+          color={Colors.blue600}
+          size={50}
+          onPress={() => { toggleMapMode();}}
         />
+        <View
+          style={mapButtons.animateButtons}
+        >
         <IconButton
           icon={animateButton}
-          style={styles.icon}
           color={Colors.blue600}
           size={50}
           onPress={() => {
@@ -431,6 +444,15 @@ const MapScreen = ({ navigation }) => {
             console.log("animation toggled");
           }}
         />
+        <IconButton
+          icon="stop-circle"
+          color={Colors.blue600}
+          size={50}
+          onPress={() => {
+            stopAnimation();
+          }}
+        />
+        </View>
       </View>
     </>
   );
@@ -466,15 +488,6 @@ const styles = StyleSheet.create({
     width: "auto",
     backgroundColor: "#107B67",
   },
-  dropDownPicker: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-    backgroundColor: "#fafafa",
-  },
-  icon: {
-    position: "relative",
-  }
 });
 
 /*
@@ -517,11 +530,23 @@ const searchStyles = StyleSheet.create({
 });
 
 //style for the current location button
-const locationIcon = StyleSheet.create({
-  container: {
+const mapButtons = StyleSheet.create({
+  goToCurrent: {
     position: "absolute",
     right: 0,
     bottom: 0,
+  },
+  animateButtons: {
+    flex: 1,
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: "transparent"
+  },
+  toggleLayer: {
+    position: "absolute",
+    top: 40,
+    right: -8,
   },
 });
 
