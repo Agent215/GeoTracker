@@ -54,8 +54,6 @@ const MapScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  //let tempArray = []; // temp array to store filtered events
-  //let disastersInRange = [];
 
   // States for animation
   const [currentDate, setCurrentDate] = useState(startDate);                          // Hook that keeps track of the current day that is animating.
@@ -64,6 +62,13 @@ const MapScreen = ({ navigation }) => {
   const [animateButton, setAnimationButton] = useState("play-circle");
   const [disastersInRange, setDisastersInRange] = useState([]);
   const [maxZoom, setMaxZoom] = useState(20);
+
+
+  /*adding property isShow to all events, which determine if they shold show on the map
+  they all should when the Map first rendered*/
+  let allEvents = combinedEvents.map((event) => {
+    return { ...event, isShow: true };
+  });
 
   //This function starts or pauses the animation.
   const toggleAnimation = () => {
@@ -83,24 +88,18 @@ const MapScreen = ({ navigation }) => {
     setIsPlaying(false);                  // no longer playing
     setAnimationButton("play-circle");    // reset UI
     setGibsVisible(false);                // also no longer in animation mode
-    setIsPlaying(false);                  // no longer playing
-    setAnimationButton("play-circle");    // reset UI
-    setGibsVisible(false);                // also no longer in animation mode
     setCurrentDate(startDate);            // reset start date back to begining.
     filterDisasters();                    // filter all the disasters again to give us the intitial set we started with
     setMaxZoom(20)                        // let user zoom again!!
   }
 
-  /*adding property isShow to all events, which determine if they shold show on the map
-  they all should when the Map first rendered*/
-  let allEvents = combinedEvents.map((event) => {
-    return { ...event, isShow: true };
-  });
 
-  /* check if current disaster has changed, if so then force rerender */
-  useEffect(() => {
-    if (currentDisaster != "") { animateToDisaster(); }
-  }, [currentDisaster.title, dispatch]);
+  // useEffect(() => {
+
+  //   if (!isGibsVisible) {
+  //     filterDisasters();
+  //   }
+  // }, [isGibsVisible])
 
   //Start of animation useEffects
   // If the current date hits the end date, end the animation and reset the button.
@@ -112,6 +111,7 @@ const MapScreen = ({ navigation }) => {
       setMaxZoom(20);
       filterDisasters();
       setDisastersInRange(filteredDisasters);
+      setCurrentDate(startDate);            // reset start date back to begining.
     }
   }, [currentDate])
 
@@ -122,14 +122,14 @@ const MapScreen = ({ navigation }) => {
     if (isPlaying) {                                                                    // If the button is playing.
       interval = setInterval(() => {
         setCurrentDate(prevDate => addDays(prevDate, 1));                              // Starts with currentDate and iterates through given dates.
-        ShowMarkerOnDay();
+        ShowMarkerOnDay(currentDate);
       }, 1500)
     } else if ((!isPlaying)) {                                                          // Once the start date == end date, clear the interval and end animation.
       clearInterval(interval)
       console.log("Clear Interval Initiated")
     }
     return () => clearInterval(interval)                                                // Clean up return function.
-  }, [isPlaying, currentDate])
+  }, [isPlaying,currentDate])
 
   useEffect(() => {
     setCurrentDate(startDate)                                                           // If the start date filter changes, then set animation to start on that date.
@@ -154,25 +154,12 @@ const MapScreen = ({ navigation }) => {
   }, [currentDisaster.title, dispatch]);
 
 
-  /**
-   * When the disaster filter is changed lets filter the disasters
-   */
-  useEffect(() => {
-    filterDisasters()
-  }, [disasterFilter, startDate, endDate, dispatch]);
+  // useEffect(() => {                 // we want to shallow copy the disaters for use in animation
+  //   setDisastersInRange(filteredDisasters);
+  //   // console.log(disastersInRange);
+  //   // console.log("disastersInRange");
+  // }, [disasterFilter]);
 
-  useEffect(() => {                 // we want to shallow copy the disaters for use in animation
-    setDisastersInRange(filteredDisasters);
-    console.log(disastersInRange);
-    console.log("disastersInRange");
-  }, [disasterFilter]);
-
-
-  /* check if current disaster has changed, if so then force rerender */
-  useEffect(() => {
-
-    if (currentDisaster != "") { animateToDisaster(); }
-  }, [currentDisaster.title, dispatch]);
   /**
    * standard shows streets 
    * hybrid shows town and city names over satilite view
@@ -242,14 +229,9 @@ const MapScreen = ({ navigation }) => {
   const filterDisasters = () => {
     let startDate_ISO = startDate.toISOString();
     let endDate_ISO = endDate.toISOString();
-    let events = [];
-    if (isGibsVisible) {
-      events = disastersInRange; // if we are animating then filter from only disasters in range
-    } else { events = allEvents }
-
     let tempArray = [];   // reset temp array
     // go through all events and mark which ones need to be filtered.
-    const disasterToFilter = events.map((event) => {
+    const disasterToFilter = allEvents.map((event) => {
 
 
       let endDate;
@@ -285,9 +267,10 @@ const MapScreen = ({ navigation }) => {
 
     if (tempArray.length < 1) { CustomAlert("NO EVENTS FOUND", "No events found please try changing your search criteria") }
 
-
+    console.log(isGibsVisible + " isgibsVisable")
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
+    setDisastersInRange(tempArray);
   };
 
 
@@ -295,7 +278,7 @@ const MapScreen = ({ navigation }) => {
    *function to be called at each interval of animation of markers 
     fitler by specific day of event not a range. 
    */
-  const ShowMarkerOnDay = () => {
+  const ShowMarkerOnDay = (currentdate) => {
 
     let tempArray = [];   // reset temp array
     // go through all events and mark which ones need to be filtered.
@@ -306,8 +289,8 @@ const MapScreen = ({ navigation }) => {
         endingDate = new Date().toISOString();
       }
       else { endingDate = event.isClosed }   // else isClosed = endDate
-      console.log(currentDate)
-      if ((isWithinInterval(currentDate, {
+      console.log(currentdate)
+      if ((isWithinInterval(currentdate, {
         start: parseISO(startDate),
         end: parseISO(endingDate)
       }))

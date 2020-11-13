@@ -16,7 +16,7 @@ const initialState = {
     filteredDisasters: [],
     savedDisasters: [],
 
-    startDate:new Date(2019,0,1),  //if triggered, default value 2019/1/1
+    startDate:new Date(2020,8,1),  //if triggered, default value 2020/10/1
     endDate:new Date(),    //if griggered, default value is current date
 
 

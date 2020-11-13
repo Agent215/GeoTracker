@@ -62,13 +62,13 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const EventFeedStack = createStackNavigator<EventScreenParamList>();
 
- function EventFeedNavigator() {
+function EventFeedNavigator() {
   return (
     <EventFeedStack.Navigator>
       <EventFeedStack.Screen
         name="EventFeedScreen"
         component={EventFeedScreen}
-        options={{ headerTitle: 'Event Screen Title' }}
+        options={{ headerTitle: 'Disaster Feed' }}
       />
     </EventFeedStack.Navigator>
   );
@@ -82,7 +82,7 @@ function MapScreenNavigator() {
       <MapScreenStack.Screen
         name="MapScreen"
         component={MapScreen}
-        options={{ headerTitle: 'Map Screen Title' }}
+        options={{ headerTitle: 'Map Screen' }}
       />
     </MapScreenStack.Navigator>
   );
@@ -90,13 +90,13 @@ function MapScreenNavigator() {
 
 const SettingsStack = createStackNavigator<SettingsScreenParamList>();
 
- function SettingsScreenNavigator() {
+function SettingsScreenNavigator() {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
-        options={{ headerTitle: 'Settings Screen Title' }}
+        options={{ headerTitle: 'Settings Screen' }}
       />
     </SettingsStack.Navigator>
   );
@@ -110,7 +110,7 @@ function FilterScreenNavigator() {
       <FilterStack.Screen
         name="FilterScreen"
         component={FilterScreen}
-        options={{ headerTitle: 'Filter Screen Title' }}
+        options={{ headerTitle: 'Filter Screen' }}
       />
     </FilterStack.Navigator>
   );
