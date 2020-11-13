@@ -100,6 +100,7 @@ const MapScreen = ({ navigation }) => {
     if (currentDate.toDateString() == endDate.toDateString()) {
       setIsPlaying(false)
       setGibsVisible(false)
+      setCurrentDate(startDate)
       setAnimationButton("play-circle")
       setMaxZoom(20);
     }
@@ -118,7 +119,6 @@ const MapScreen = ({ navigation }) => {
     } else if ((!isPlaying)) {                                                          // Once the start date == end date, clear the interval and end animation.
       clearInterval(interval)
       console.log("Clear Interval Initiated")
-      setCurrentDate(startDate);
     }
     return () => clearInterval(interval)                                                // Clean up return function.
   }, [isPlaying, currentDate])
