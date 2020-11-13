@@ -16,7 +16,11 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 
+
 import TwitterComponent from "../components/TwitterComponent";
+
+
+
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
 // Initialize the module (needs to be done only once)
 Geocoder.init(Keys.geocoderKey, { language: "en" }); // use a valid API key
@@ -62,6 +66,7 @@ const MapScreen = ({ navigation }) => {
     cameraNELatitude: 0,
     cameraNELongitude: 0,
   });
+
 
 
 
@@ -324,7 +329,7 @@ const MapScreen = ({ navigation }) => {
           <TwitterComponent cameraRegion={cameraRegion}/>
         </View>
 
-        <Text
+        {/* <Text
           style={{
             position: "absolute",
             top: 60,
@@ -340,7 +345,7 @@ const MapScreen = ({ navigation }) => {
           NE boundary lat: {cameraRegion.cameraNELatitude}
           {"\n"}
           NE boundary long: {cameraRegion.cameraNELongitude}
-        </Text>
+        </Text> */}
 
         <Switch
           value={toggleMap}

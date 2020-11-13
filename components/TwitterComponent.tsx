@@ -6,9 +6,14 @@ import { Button } from "react-native-paper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import { red100 } from "react-native-paper/lib/typescript/src/styles/colors";
+import useResults from "../hooks/useResult";
+
 
 function TwitterComponent(props) {
+
   const [isModalVisible, setModalVisible] = useState(false);
+  const [trendsApi, results, errorMessage] = useResults();
+
 
   let [trending, setTrending] = useState([
     { rank: 1, name: "a trending name1" },
@@ -51,7 +56,19 @@ function TwitterComponent(props) {
     <View style={{ flex: 1 }}>
       <TouchableOpacity
         style={{ flex: 1, alignSelf: "center", padding: 10 }}
-        onPress={toggleModal}
+        onPress={
+          () => {
+          toggleModal();
+          console.log("tw component line 62");
+          // console.log(props);
+          console.log(results);
+          console.log(errorMessage);
+          
+          
+          
+          }
+          
+        }
       >
         <View style={styles.buttonContainer}>
           <AntDesign name="twitter" size={40} color="#95e4f8" />
