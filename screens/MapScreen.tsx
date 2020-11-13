@@ -58,12 +58,13 @@ const MapScreen = ({ navigation }) => {
   // States for animation
   const [currentDate, setCurrentDate] = useState(startDate);                          // Hook that keeps track of the current day that is animating.
   const [isPlaying, setIsPlaying] = useState(false);                                  // Hook that keep track of if the animation is playing.
-  const [isGibsVisible, setGibsVisible] = useState(false);                            // Hook to keep track of if the GIBS data is visible
   const [animateButton, setAnimationButton] = useState("play-circle");
   const [disastersInRange, setDisastersInRange] = useState([]);
   const [maxZoom, setMaxZoom] = useState(20);
+  const [canPlay, setCanPlay] = useState(false);
+  const isGibsVisible = useSelector((state) => state.disaster.isGibsVisible);         // keep track of if the GIBS data is visible
 
-
+  
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
   let allEvents = combinedEvents.map((event) => {
@@ -75,7 +76,7 @@ const MapScreen = ({ navigation }) => {
     if (isPlaying) { setIsPlaying(false); setAnimationButton("play-circle") }         // If the animation is not playing, have the button a play-circle.
     else {
       setIsPlaying(true)
-      setGibsVisible(true)
+      dispatch(actions.setIsGibsVisible(true))
       console.log(disastersInRange);
       console.log("disastersInRange");
       setMaxZoom(6);                                                           // If the animation is running.
@@ -87,26 +88,20 @@ const MapScreen = ({ navigation }) => {
   const stopAnimation = () => {
     setIsPlaying(false);                  // no longer playing
     setAnimationButton("play-circle");    // reset UI
-    setGibsVisible(false);                // also no longer in animation mode
+    dispatch(actions.setIsGibsVisible(false))               // also no longer in animation mode
     setCurrentDate(startDate);            // reset start date back to begining.
     filterDisasters();                    // filter all the disasters again to give us the intitial set we started with
     setMaxZoom(20)                        // let user zoom again!!
   }
 
 
-  // useEffect(() => {
-
-  //   if (!isGibsVisible) {
-  //     filterDisasters();
-  //   }
-  // }, [isGibsVisible])
 
   //Start of animation useEffects
   // If the current date hits the end date, end the animation and reset the button.
   useEffect(() => {
     if (currentDate.toDateString() == endDate.toDateString()) {
       setIsPlaying(false)
-      setGibsVisible(false)
+      dispatch(actions.setIsGibsVisible(false))
       setAnimationButton("play-circle")
       setMaxZoom(20);
       filterDisasters();
@@ -129,7 +124,7 @@ const MapScreen = ({ navigation }) => {
       console.log("Clear Interval Initiated")
     }
     return () => clearInterval(interval)                                                // Clean up return function.
-  }, [isPlaying,currentDate])
+  }, [isPlaying, currentDate])
 
   useEffect(() => {
     setCurrentDate(startDate)                                                           // If the start date filter changes, then set animation to start on that date.
@@ -146,6 +141,15 @@ const MapScreen = ({ navigation }) => {
    */
   useEffect(() => {
     filterDisasters()
+    if (startDate.toDateString() == endDate.toDateString()) {
+      // if start and end are the same
+      // then set disabled to true on play button because we are viewing a single day.
+      console.log(startDate + "  " + endDate)
+      setCanPlay(true)
+    } else {
+      setCanPlay(false)
+    }
+
   }, [disasterFilter, startDate, endDate, dispatch]);
 
   /* check if current disaster has changed, if so then force rerender */
@@ -153,12 +157,6 @@ const MapScreen = ({ navigation }) => {
     if (currentDisaster != "") { animateToDisaster(); }
   }, [currentDisaster.title, dispatch]);
 
-
-  // useEffect(() => {                 // we want to shallow copy the disaters for use in animation
-  //   setDisastersInRange(filteredDisasters);
-  //   // console.log(disastersInRange);
-  //   // console.log("disastersInRange");
-  // }, [disasterFilter]);
 
   /**
    * standard shows streets 
@@ -265,9 +263,12 @@ const MapScreen = ({ navigation }) => {
       if (element.isShow) tempArray.push(element)
     })
 
-    if (tempArray.length < 1) { CustomAlert("NO EVENTS FOUND", "No events found please try changing your search criteria") }
+    if (disasterFilter.value != "none") { 
+      if (tempArray.length < 1) { CustomAlert("No Disasters in this day, or range of dates", "NO EVENTS FOUND") }
+    }
 
-    console.log(isGibsVisible + " isgibsVisable")
+
+   
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
     setDisastersInRange(tempArray);
@@ -435,6 +436,7 @@ const MapScreen = ({ navigation }) => {
             icon={animateButton}
             color={Colors.blue600}
             size={50}
+            disabled={canPlay}
             onPress={() => {
               toggleAnimation();
             }}
@@ -442,6 +444,7 @@ const MapScreen = ({ navigation }) => {
           <IconButton
             icon="stop-circle"
             color={Colors.blue600}
+            disabled={canPlay}
             size={50}
             onPress={() => {
               stopAnimation();
@@ -540,7 +543,7 @@ const mapButtons = StyleSheet.create({
   },
   toggleLayer: {
     position: "absolute",
-    top: 40,
+    top: 60,
     right: -8,
   },
 });
