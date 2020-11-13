@@ -380,6 +380,7 @@ const MapScreen = ({ navigation }) => {
           sourceLink={currentDisaster.sourceLink}
           visable={isModalVisible}
           disaster={currentDisaster}
+          startDate = {currentDisaster.currentDate}
           toggleModal={toggleModal}
         />
 
