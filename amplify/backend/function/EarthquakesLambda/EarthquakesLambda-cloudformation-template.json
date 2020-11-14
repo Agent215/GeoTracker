@@ -68,8 +68,8 @@
         "Layers": [],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-geotracker-dev-132225-deployment",
-          "S3Key": "amplify-builds/EarthquakesLambda-4e57752b374e6a436b62-build.zip"
+          "S3Bucket": "amplify-geotracker-saveevents-141830-deployment",
+          "S3Key": "amplify-builds/EarthquakesLambda-583573647234376c4142-build.zip"
         }
       }
     },

@@ -140,5 +140,29 @@
         "EventsApiGetAll": {}
       }
     }
+  },
+  "saveevents": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geotracker-saveevents-141830-authRole",
+      "UnauthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-saveevents-141830-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::124229768008:role/amplify-geotracker-saveevents-141830-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-geotracker-saveevents-141830-deployment",
+      "UnauthRoleName": "amplify-geotracker-saveevents-141830-unauthRole",
+      "StackName": "amplify-geotracker-saveevents-141830",
+      "StackId": "arn:aws:cloudformation:us-east-1:124229768008:stack/amplify-geotracker-saveevents-141830/90c512f0-26b6-11eb-a4fd-0a57eb901035",
+      "AmplifyAppId": "d3emtfa795r2dk"
+    },
+    "categories": {
+      "auth": {
+        "geotracker57620557": {}
+      },
+      "function": {
+        "EventsApiGetAll": {},
+        "EventsApiHistoricalLambda": {},
+        "twitter": {},
+        "EarthquakesLambda": {}
+      }
+    }
   }
 }
