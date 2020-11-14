@@ -96,7 +96,7 @@ function TwitterComponent(props) {
               <Text style={{ fontSize: 25, fontWeight: "bold" }}>Trending</Text>
 
               <FlatList
-                
+                persistentScrollbar={true}
                 style={{ height: 200,  borderWidth:1}}
                 keyExtractor={(item) => item.id.toString()}
                 data={trending}
@@ -134,6 +134,7 @@ function TwitterComponent(props) {
 
               <Text style={{ fontSize: 25, fontWeight: "bold" }}>Tweet of trending:{"\n"}{trendTitle} </Text>
               <FlatList
+              persistentScrollbar={true}
                 style={{ height: 300, borderWidth:1 }}
                 keyExtractor={(item) => item.id.toString()}
                 data={tweets}
