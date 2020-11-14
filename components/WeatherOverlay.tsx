@@ -16,6 +16,7 @@ const WeatherOverlay = (props) => {
             urlTemplate={'https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
             maximumZ={19}
             flipY={false}
+            key={Date.now()}
         />
 
     );
@@ -25,6 +26,7 @@ const WeatherOverlay = (props) => {
             urlTemplate={'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
             maximumZ={19}
             flipY={false}
+            key={Date.now()}
         />
 
     );
@@ -34,6 +36,7 @@ const WeatherOverlay = (props) => {
             urlTemplate={'https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
             maximumZ={19}
             flipY={false}
+            key={Date.now()}
         />
 
     );
@@ -43,6 +46,7 @@ const WeatherOverlay = (props) => {
             urlTemplate={'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
             maximumZ={19}
             flipY={false}
+            key={Date.now()}
         />
 
     );
@@ -52,6 +56,7 @@ const WeatherOverlay = (props) => {
             urlTemplate={'https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
             maximumZ={19}
             flipY={false}
+            key={Date.now()}
         />
 
     );
