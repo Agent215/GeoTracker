@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import Amplify from 'aws-amplify'
+import { DataStore } from '@aws-amplify/datastore';
 import config from './aws-exports'
 import { AppLoading } from 'expo';
-import { API } from 'aws-amplify'
+import { API, Auth, Hub } from 'aws-amplify'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
@@ -67,6 +68,14 @@ const App = () => {
 }
 
 async function loadAllData() {
+  let currentUserInfo = await Auth.currentUserInfo();
+  if (currentUserInfo != null) {
+    console.log("current logged in user: " + currentUserInfo.username);
+    await DataStore.start();
+  } else {
+    console.log("user not signed in");
+  }
+  
   await getCurrentData();
   await getHistoricalData();
   await getEarthquakeData();
@@ -113,6 +122,21 @@ async function getHistoricalData() {
   historicalEventList = await API.get(apiName, path, myInit);
 
 }
+
+const listener = async (data) => {
+
+  switch (data.payload.event) {
+
+    case 'signIn':
+      console.log('user signed in');
+      await DataStore.clear();
+      await DataStore.start();
+      break;
+  }
+}
+
+Hub.listen('auth', listener);
+
 
 export { currentEventList, historicalEventList, combinedEvents, earthquakeEventList }
 export default App
