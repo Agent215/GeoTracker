@@ -18,7 +18,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
-import { addDays, isWithinInterval, parseISO, format } from "date-fns/esm";
+import { addDays, isWithinInterval, parseISO, format, isEqual } from "date-fns/esm";
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -64,7 +64,7 @@ const MapScreen = ({ navigation }) => {
   const [canPlay, setCanPlay] = useState(false);
   const isGibsVisible = useSelector((state) => state.disaster.isGibsVisible);         // keep track of if the GIBS data is visible
 
-  
+
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
   let allEvents = combinedEvents.map((event) => {
@@ -77,8 +77,6 @@ const MapScreen = ({ navigation }) => {
     else {
       setIsPlaying(true)
       dispatch(actions.setIsGibsVisible(true))
-      console.log(disastersInRange);
-      console.log("disastersInRange");
       setMaxZoom(6);                                                           // If the animation is running.
       setAnimationButton("pause-circle")                                              // Make the play button into a pause-circle.
     }
@@ -144,7 +142,7 @@ const MapScreen = ({ navigation }) => {
     if (startDate.toDateString() == endDate.toDateString()) {
       // if start and end are the same
       // then set disabled to true on play button because we are viewing a single day.
-      console.log(startDate + "  " + endDate)
+   
       setCanPlay(true)
     } else {
       setCanPlay(false)
@@ -218,6 +216,71 @@ const MapScreen = ({ navigation }) => {
 
   /**
    * 
+   * function to preprocess events that have been filtered
+   * check if event occurs in multiple locations
+   * if so then make new events duplicated from the orignial one
+   * return all the events
+   */
+  const splitAndDupEvents = (events) => {
+    let returnEvents = [];
+
+    // for each event
+    events.forEach(event => {
+      let dupEvents = [];
+      if (event.locationList != undefined) {
+
+        if (event.locationList.length > 1) {
+
+          let temp = [...event.locationList];
+          // for each location
+          temp.forEach(location => {
+
+            //if dupEvents!contains event with location.date
+            let compareDate = new Date(location.date);
+            if (dupEvents.includes(compareDate.toDateString())) {
+              // do nothing 
+
+            } else {
+
+
+              let dup: EventEntity = {
+                title: "",
+                category: "",
+                sourceLink: "",
+                isClosed: "",
+                currentLat: "",
+                currentLong: "",
+                currentDate: "",
+                id: "",
+                locationList: ""
+              };
+              //make a new event with one of the locations
+              dup.title = event.title;
+              dup.category = event.category;
+              dup.sourceLink = event.sourceLink;
+              dup.isClosed = location.date;
+              dup.currentLat = location.coordinates[1];
+              dup.currentLong = location.coordinates[0];
+              dup.currentDate = location.date;
+              dup.id = event.id;
+              returnEvents.push(dup);
+              let date = new Date(location.date);
+              dupEvents.push(date.toDateString());
+            }
+          });
+        } else {
+          // if event only has one location just return it
+          returnEvents.push(event);
+        }
+      }
+
+    });
+    return returnEvents;
+  }
+
+
+  /**
+   * 
    * filter the disaster markers
    * create a new temporary array composed of only filtered disasters
    * then dispatch that to the redux store. Make sure we reset this array
@@ -263,15 +326,16 @@ const MapScreen = ({ navigation }) => {
       if (element.isShow) tempArray.push(element)
     })
 
-    if (disasterFilter.value != "none") { 
+    if (disasterFilter.value != "none") {
       if (tempArray.length < 1) { CustomAlert("No Disasters in this day, or range of dates", "NO EVENTS FOUND") }
     }
 
 
-   
+
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
-    setDisastersInRange(tempArray);
+    setDisastersInRange(splitAndDupEvents(tempArray));
+    // setDisastersInRange(tempArray);
   };
 
 
@@ -280,6 +344,7 @@ const MapScreen = ({ navigation }) => {
     fitler by specific day of event not a range. 
    */
   const ShowMarkerOnDay = (currentdate) => {
+
 
     let tempArray = [];   // reset temp array
     // go through all events and mark which ones need to be filtered.
@@ -290,11 +355,10 @@ const MapScreen = ({ navigation }) => {
         endingDate = new Date().toISOString();
       }
       else { endingDate = event.isClosed }   // else isClosed = endDate
-      console.log(currentdate)
       if ((isWithinInterval(currentdate, {
         start: parseISO(startDate),
         end: parseISO(endingDate)
-      }))
+      }) || (new Date(startDate).toDateString() == new Date(currentDate).toDateString()))
         && (disasterFilter.value === "all"      // filter for all
           || disasterFilter.value === ""        // first time we render
           || disasterFilter.value == undefined  //just in case
@@ -312,8 +376,7 @@ const MapScreen = ({ navigation }) => {
     disastersOnDay.forEach(element => {
       if (element.isShow) tempArray.push(element)
     })
-    console.log(tempArray)
-    console.log("todays disasters include")
+
     // send only the filtered events to the redux store
     dispatch(actions.setFilteredDisasters(tempArray));
   };
@@ -380,7 +443,7 @@ const MapScreen = ({ navigation }) => {
           sourceLink={currentDisaster.sourceLink}
           visable={isModalVisible}
           disaster={currentDisaster}
-          startDate = {currentDisaster.currentDate}
+          startDate={currentDisaster.currentDate}
           toggleModal={toggleModal}
         />
 
