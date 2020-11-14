@@ -5,10 +5,14 @@ export const SET_WEATHER_FILTER = "SET_WEATHER_FILTER";
 export const SET_FILTERED_DISASTERS = "SET_FILTERED_DISASTERS";
 export const SAVE_DISASTER = "SAVE_DISASTER";
 export const UNSAVE_DISASTER = "UNSAVE_DISASTER";
+export const SET_HEADER_DATE = "SET_HEADER_DATE"
 export const SET_ISGIBSVISIBLE = "SET_ISGIBSVISIBLE"
 
 export const SET_DATE_FILTER = "SET_DATE_FILTER"
 
+export const setHeaderDate = (headerDate) => {
+    return { type: SET_HEADER_DATE, headerDate: headerDate }
+}
 
 export const setCurrentDisaster = (disaster) => {
     return { type: SET_CURRENT_DISASTER, disaster: disaster }

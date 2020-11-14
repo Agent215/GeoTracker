@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { Header } from "react-native-elements";
 import { StyleSheet, Dimensions } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
@@ -6,6 +7,8 @@ import { currentEventList, combinedEvents, historicalEventList } from '../App'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
 import WeatherOverlay from '../components/WeatherOverlay'
@@ -37,7 +40,6 @@ let INITIALREGION = {                                                           
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
-
 
 const MapScreen = ({ navigation }) => {
   //get state from redux store
@@ -92,7 +94,14 @@ const MapScreen = ({ navigation }) => {
     setMaxZoom(19)                        // let user zoom again!!
   }
 
-
+  useEffect(() => {
+    if (!isGibsVisible) {
+      let headerString = "From " + format(startDate, "MM/dd/yyyy") + " To " + format(endDate, "MM/dd/yyyy")
+      dispatch(actions.setHeaderDate(headerString))
+    } else {
+      dispatch(actions.setHeaderDate(format(currentDate, "MM/dd/yyyy")))
+    }
+  }, [isGibsVisible, currentDate])
 
   //Start of animation useEffects
   // If the current date hits the end date, end the animation and reset the button.
@@ -131,7 +140,11 @@ const MapScreen = ({ navigation }) => {
 
   /* run once on component mount */
   useEffect(() => {
+    // show set of dates
     animateToUser();
+    let headerString = "From " + format(startDate, "MM/dd/yyyy") + " To " + format(endDate, "MM/dd/yyyy")
+    console.log("This is headerString" + headerString)
+    dispatch(actions.setHeaderDate(headerString))
   }, []);
 
   /**
@@ -549,7 +562,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "auto",
     backgroundColor: "#107B67",
-  },
+  }
 });
 
 /*
