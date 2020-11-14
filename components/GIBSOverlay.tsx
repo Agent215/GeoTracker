@@ -12,6 +12,7 @@ import React from "react"
 const GIBSOverlay = (props) => {
 
     let gibsTile = null;
+    
     if(props.gibsVisible && (props.category != undefined || props.category != "" || props.category != "none")){    
         //tempUrl is built into 
         let gibsUrl = urlBuilder(props.category, props.date)
@@ -34,7 +35,7 @@ function urlBuilder(category, date){
     let tempUrl = urlStart;
 
     //handle layer of url using matching GIBS category string
-    if (layer == "clouds") tempUrl = tempUrl + 'MODIS_Aqua_Cloud_Phase_Optical_Properties/default/';
+    if (layer == "clouds") tempUrl = tempUrl + 'MODIS_Terra_Cloud_Phase_Optical_Properties/default/';
     if (layer == "temp") tempUrl = tempUrl + 'MODIS_Terra_Land_Surface_Temp_Day/default/';
     if (layer == "precipitation") tempUrl = tempUrl + 'IMERG_Precipitation_Rate/default/';
     if (layer == "wind") tempUrl = tempUrl + 'SSMI_DMSP_F17_Wind_Speed_Over_Oceans_Ascending/default/';
@@ -53,8 +54,7 @@ function urlBuilder(category, date){
     
     //add tail of url template
     tempUrl = tempUrl + '{z}/{y}/{x}.png';
-    console.log("Url is: " + tempUrl)
-
+  
     //return completed url string
     return tempUrl;
 }

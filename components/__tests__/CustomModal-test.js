@@ -11,10 +11,11 @@ enzyme.configure({ adapter: new Adapter() });
 const mockedToggle = jest.fn();
 // mock of a prop to pass CustomModal
 const mockProp = {
+    startDate : "10/20/2020",
     title: "title",
     sourceLink : "www.google.com",
     visable: true,
-    disaster: { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, sourceLink: "www.google.com" },
+    disaster: { title: 'Thirsty Thursday', id: 1, description: 'Draught', LatL: 11, LongL: 12, sourceLink: "www.google.com" , currentDate: "10/20/2020"},
     toggleModal: mockedToggle
 };
 
@@ -28,7 +29,7 @@ describe('Testing Custom Modal  Component', () => {
     /*
     Check CustomModal against snapshot. run jest -u to update snapshot
     */
-    it(`DisasterCard renders correctly`, () => {
+    it(`Custom Modal renders correctly`, () => {
         store = mockStore(initialState)
         const comp = <Provider store={store}><CustomModal event={mockProp} /></Provider>
         const tree = renderer.create().toJSON(comp);
@@ -38,7 +39,7 @@ describe('Testing Custom Modal  Component', () => {
     /**
      * CustomModal should not be null
      */
-    it(`DisasterCard should not be null`, () => {
+    it(`Custom Modal should not be null`, () => {
         store = mockStore(initialState)
         const comp = <Provider store={store}><CustomModal event={mockProp} /></Provider>
         const tree = renderer.create(comp).toJSON();
