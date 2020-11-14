@@ -68,7 +68,7 @@
         "Layers": [],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-geotracker-dev-132225-deployment",
+          "S3Bucket": "amplify-geotracker-saveevents-141830-deployment",
           "S3Key": "amplify-builds/twitter-7753704651467354616c-build.zip"
         }
       }
