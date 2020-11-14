@@ -140,8 +140,12 @@ function TwitterComponent(props) {
                 data={tweets}
                 renderItem={({ item }) => (
                 
-              
-                    <Text style={styles.tweetText}>{item.user}: {item.text}</Text>
+                  <View style={{marginVertical:8}}>
+                    <Text style={styles.tweetUserText}>{item.user}:</Text>                 
+                  
+                   <Text style={styles.tweetText} >{item.text}</Text>
+
+                  </View>
          
                 )}
               ></FlatList>
@@ -191,11 +195,16 @@ const styles = StyleSheet.create({
   trendingText: {
     fontSize: 20,
     marginVertical: 5,
+    color:"blue",
   },
 
+  tweetUserText:{
+    fontSize: 16,
+    fontWeight:"bold",
+  },
   tweetText:{
     fontSize: 16,
-    marginVertical: 8,
+   
   }
 });
 
