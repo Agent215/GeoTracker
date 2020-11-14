@@ -83,7 +83,7 @@ function MapScreenNavigator() {
       <MapScreenStack.Screen
         name="MapScreen"
         component={MapScreen}
-        options={{ headerTitle: headerDate }}
+        options={{ headerTitle: headerDate, headerTitleAlign: "center" }}
       />
     </MapScreenStack.Navigator>
   );
