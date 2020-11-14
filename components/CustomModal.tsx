@@ -18,7 +18,7 @@ const MODAL_HEIGHT = height / 2;
 // modal to cover part of map screen. 
 // contains event data
 const CustomModal = (props) => {
-    let properDate = new Date(props.disaster.currentDate)
+    let properDate =new Date(props.startDate)
     const dispatch = useDispatch();
     const toastRef = useRef(CustomToast.prototype);
 

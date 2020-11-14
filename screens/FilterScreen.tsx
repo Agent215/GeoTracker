@@ -9,6 +9,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
+import { useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 function FilterScreen() {
   const dispatch = useDispatch();
@@ -52,6 +54,12 @@ function FilterScreen() {
   const endDateOnPicker = useRef(new Date());
   const [startDate, setStartDate] = useState(new Date(2020, 8, 1));    //TODO: set back to (2019, 0, 1) later changed for testing purposes
   const [endDate, setEndDate] = useState(new Date());
+  const navigation = useNavigation();
+
+
+  useEffect(() => {
+    setDates(startDate, endDate)
+  }, []);
 
 
   const showStartDatePicker = () => {
@@ -84,6 +92,13 @@ function FilterScreen() {
     }
   };
 
+  const setDates = (start, end) => {
+
+    if (checkValidDateRange(start, end)) {
+      console.log("date filter triggered");
+      dispatch(actions.setDateFilter(start, end));
+    }
+  }
   const showEndDatePicker = () => {
     setEndDatePickerVisibility(true);
   };
@@ -91,6 +106,38 @@ function FilterScreen() {
   const hideEndDatePicker = () => {
     setEndDatePickerVisibility(false);
   };
+
+  const onFilterPress = (start, end) => {
+    //eventItem is empty by default,
+    // only triger event filter if event dropdown is changed
+    if (eventValue == null) {
+      //donothing for default event filter option, hence reduce render burden
+      console.log("event Item " + eventValue)
+    } else {
+      console.log("event filter triggered!");
+      dispatch(actions.setDisasterFilter(eventValue));
+    }
+
+    //weatehrItem is empty by default,
+    //only triger weatehr filter if weaterh dropdown is changed.
+    if (weatherValue == null) {
+      //do nothing for default weather filter option, hence reduce render burden
+      console.log("weather Item " + weatherValue)
+    } else {
+      console.log("weather filter triggered!");
+      dispatch(actions.setWeatherFilter(weatherValue));
+    }
+
+    //only triger date filter if the date range is valid
+    if (checkValidDateRange(start, end)) {
+      console.log("date filter triggered");
+      setStartDate(start);
+      setEndDate(end);
+      dispatch(actions.setDateFilter(start, end));
+    }
+    navigation.navigate("Map");
+
+  }
 
   const handleEndDateConfirm = (date) => {
     console.log("End Date Picked: ", date);
@@ -122,40 +169,29 @@ function FilterScreen() {
     <View style={styles.grandContainer}>
       <View style={styles.buttonContainer}>
         <Button
-          icon="play-circle-outline"
           mode="contained"
           contentStyle={{ backgroundColor: "green" }}
           labelStyle={{ fontSize: 20 }}
           onPress={() => {
-            //eventItem is empty by default,
-            // only triger event filter if event dropdown is changed
-            if (eventValue == null) {
-              //donothing for default event filter option, hence reduce render burden
-              console.log("event Item " + eventValue)
-            } else {
-              console.log("event filter triggered!");
-              dispatch(actions.setDisasterFilter(eventValue));
-            }
-
-            //weatehrItem is empty by default,
-            //only triger weatehr filter if weaterh dropdown is changed.
-            if (weatherValue == null) {
-              //do nothing for default weather filter option, hence reduce render burden
-              console.log("weather Item " + weatherValue)
-            } else {
-              console.log("weather filter triggered!");
-              dispatch(actions.setWeatherFilter(weatherValue));
-            }
-
-            //only triger date filter if the date range is valid
-            if (checkValidDateRange(startDate, endDate)) {
-              console.log("date filter triggered");
-              dispatch(actions.setDateFilter(startDate, endDate));
-            }
+            onFilterPress(new Date(), new Date());  // set start and end to today. because we only show current day
           }}
         >
-          Start Filter
+          Go To Today
         </Button>
+        <Button
+          mode="contained"
+          contentStyle={{ backgroundColor: "green" }}
+          labelStyle={{ fontSize: 20 }}
+          onPress={() => {
+            onFilterPress(startDate, endDate);
+            dispatch(actions.setIsGibsVisible(true))
+          }}
+        >
+          Filter Range
+          </Button>
+
+
+
       </View>
 
       <View style={styles.datePickerContianer}>

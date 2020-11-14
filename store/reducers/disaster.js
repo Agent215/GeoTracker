@@ -5,19 +5,26 @@ import { SET_WEATHER_FILTER } from '../actions/actions';
 import { SAVE_DISASTER } from '../actions/actions'
 import { UNSAVE_DISASTER } from '../actions/actions'
 import { SET_DATE_FILTER } from '../actions/actions';
+<<<<<<< HEAD
 import { SET_HEADER_DATE } from '../actions/actions';
+=======
+import { SET_ISGIBSVISIBLE } from '../actions/actions'
+>>>>>>> staging
 
 
 const initialState = {
 
+    isGibsVisible: false,
     currentDisaster: "",
-    reRender: false,
     disasterFilter: "",
     weatherFilter: "",
     filteredDisasters: [],
     savedDisasters: [],
+<<<<<<< HEAD
     headerDate: "no date set",
 
+=======
+>>>>>>> staging
     startDate: new Date(2020, 8, 1),  //if triggered, default value 2020/10/1
     endDate: new Date(),    //if griggered, default value is current date
 };
@@ -43,6 +50,10 @@ export default (state = initialState, action) => {
                 ...state,
                 disasterFilter: action.disasterFilter
             };
+<<<<<<< HEAD
+=======
+
+>>>>>>> staging
 
         case SET_WEATHER_FILTER:
 
@@ -57,7 +68,10 @@ export default (state = initialState, action) => {
                 startDate: action.startDate,
                 endDate: action.endDate
             };
+<<<<<<< HEAD
 
+=======
+>>>>>>> staging
         case SET_FILTERED_DISASTERS:
 
             return {
@@ -89,6 +103,12 @@ export default (state = initialState, action) => {
                 return { ...state, savedDisasters: updatedSavedDisaster };
             }
 
+        case SET_ISGIBSVISIBLE:
+
+            return {
+                ...state,
+                isGibsVisible: action.isGibsVisible
+            };
 
         default:
             return state;

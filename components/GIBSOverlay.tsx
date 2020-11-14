@@ -12,6 +12,7 @@ import React from "react"
 const GIBSOverlay = (props) => {
 
     let gibsTile = null;
+    
     if(props.gibsVisible && (props.category != undefined || props.category != "" || props.category != "none")){    
         //tempUrl is built into 
         let gibsUrl = urlBuilder(props.category, props.date)
