@@ -60,7 +60,7 @@ const MapScreen = ({ navigation }) => {
   const [isPlaying, setIsPlaying] = useState(false);                                  // Hook that keep track of if the animation is playing.
   const [animateButton, setAnimationButton] = useState("play-circle");
   const [disastersInRange, setDisastersInRange] = useState([]);
-  const [maxZoom, setMaxZoom] = useState(20);
+  const [maxZoom, setMaxZoom] = useState(19);
   const [canPlay, setCanPlay] = useState(false);
   const isGibsVisible = useSelector((state) => state.disaster.isGibsVisible);         // keep track of if the GIBS data is visible
 
@@ -91,7 +91,7 @@ const MapScreen = ({ navigation }) => {
     dispatch(actions.setIsGibsVisible(false))               // also no longer in animation mode
     setCurrentDate(startDate);            // reset start date back to begining.
     filterDisasters();                    // filter all the disasters again to give us the intitial set we started with
-    setMaxZoom(20)                        // let user zoom again!!
+    setMaxZoom(19)                        // let user zoom again!!
   }
 
 
@@ -103,7 +103,7 @@ const MapScreen = ({ navigation }) => {
       setIsPlaying(false)
       dispatch(actions.setIsGibsVisible(false))
       setAnimationButton("play-circle")
-      setMaxZoom(20);
+      setMaxZoom(19);
       filterDisasters();
       setDisastersInRange(filteredDisasters);
       setCurrentDate(startDate);            // reset start date back to begining.
