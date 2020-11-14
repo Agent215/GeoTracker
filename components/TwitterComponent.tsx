@@ -1,74 +1,66 @@
-import React, { useState } from "react";
-import { Text, View, StyleSheet, ScrollView, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import Modal from "react-native-modal";
-import Icon from "react-native-vector-icons/FontAwesome";
 import { Button } from "react-native-paper";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
-import { red100 } from "react-native-paper/lib/typescript/src/styles/colors";
-import useResults from "../hooks/useResult";
+import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
 
+import { AntDesign } from "@expo/vector-icons";
 
 function TwitterComponent(props) {
 
+  // console.log(props.tweetResult.tweets);
+  
+  let [trending, setTrending] = useState([]);
+  let [tweets, setTweets]=useState(props.tweetResult.tweets);
+
+  let [trendTitle, setTrendTitle] = useState("");
+
+  const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
+
   const [isModalVisible, setModalVisible] = useState(false);
-  const [trendsApi, results, errorMessage] = useResults();
 
 
-  let [trending, setTrending] = useState([
-    { rank: 1, name: "a trending name1" },
-    { rank: 2, name: "a trending name2" },
-    { rank: 3, name: "a trending name3" },
-    { rank: 4, name: "a trending name4" },
-    { rank: 5, name: "a trending name5" },
-    { rank: 6, name: "a trending name6" },
-    { rank: 7, name: "a trending name7" },
-    { rank: 8, name: "a trending name8" },
-    { rank: 9, name: "a trending name9" },
-    { rank: 10, name: "a trending name10" },
-    { rank: 11, name: "a trending name11" },
-    { rank: 12, name: "a trending name12" },
-    { rank: 13, name: "a trending name13" },
-    { rank: 14, name: "a trending name14" },
-    { rank: 15, name: "a trending name15" },
-    { rank: 16, name: "a trending name16" },
-    { rank: 17, name: "a trending name17" },
-    { rank: 18, name: "a trending name18" },
-    { rank: 19, name: "a trending name19" },
-    { rank: 20, name: "a trending name20" },
-    { rank: 21, name: "a trending name21" },
-    { rank: 22, name: "a trending name22" },
-    { rank: 23, name: "a trending name23" },
-    { rank: 24, name: "a trending name24" },
-    { rank: 25, name: "a trending name25" },
-    { rank: 26, name: "a trending name26" },
-    { rank: 27, name: "a trending name27" },
-    { rank: 28, name: "a trending name28" },
-    { rank: 29, name: "a trending name29" },
-    { rank: 30, name: "a trending name30" },
-  ]);
+  
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
+
+
+  //One degree of latitude equals approximately 364,000 feet (69 miles),
+  //One-degree of longitude equals 288,200 feet (54.6 miles)
+  const getRadius =(lat1, lat2, long1,long2) => {
+    
+    return Math.abs(lat1-lat2)>=Math.abs(long1-long2)?Math.abs(lat1-lat2)*69:Math.abs(long1-long2)*54.6
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity
         style={{ flex: 1, alignSelf: "center", padding: 10 }}
-        onPress={
-          () => {
+        onPress={() => {
           toggleModal();
           console.log("tw component line 62");
-          // console.log(props);
-          console.log(results);
-          console.log(errorMessage);
           
+          let trendsData = props.trendsResult.trends.map((trend,index) => {
+            return { name: trend, id:index };
+          });
+    
+          console.log(trendsData);
+          setTrending(trendsData);
           
-          
-          }
-          
-        }
+           //tweetApi(trendsData[0].name ,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,20);
+         
+    
+        }}
       >
         <View style={styles.buttonContainer}>
           <AntDesign name="twitter" size={40} color="#95e4f8" />
@@ -83,8 +75,8 @@ function TwitterComponent(props) {
       >
         <View style={{ flex: 1 }}>
           <View style={styles.container}>
-            <ScrollView
-              persistentScrollbar={true}
+            <View
+              // persistentScrollbar={true}
               style={{
                 flex: 1,
                 backgroundColor: "#5794a7",
@@ -96,23 +88,63 @@ function TwitterComponent(props) {
                 paddingLeft: 10,
               }}
             >
-            
-              <Text style={{fontSize:20}}>Map Camera latitude: {props.cameraRegion.cameraLatitude} </Text>
+              {/* <Text style={{fontSize:20}}>Map Camera latitude: {props.cameraRegion.cameraLatitude} </Text>
               <Text style={{fontSize:20}}>Map Camera longtitude: {props.cameraRegion.cameraLongitude} </Text>
               <Text style={{fontSize:20}}>Map Camera Northeast latitude: {props.cameraRegion.cameraNELatitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text>
+              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text> */}
 
               <Text style={{ fontSize: 25, fontWeight: "bold" }}>Trending</Text>
 
               <FlatList
-              style={{height:200}}
-                keyExtractor={(item) => item.name}
+                
+                style={{ height: 200,  borderWidth:1}}
+                keyExtractor={(item) => item.id.toString()}
                 data={trending}
                 renderItem={({ item }) => (
-                  <Text style={styles.trendingText}>{item.name}</Text>
+                  <TouchableOpacity
+                    onPress={   () => {
+
+                      setTrendTitle(item.name);
+
+                      // console.log("\n\n\n\n\n");
+                      // console.log(item.name);
+
+                      
+                      let radius = getRadius(
+                        props.cameraRegion.cameraLatitude,
+                        props.cameraRegion.cameraNELatitude,
+                        props.cameraRegion.cameraLongitude,props.cameraRegion.cameraNELongitude
+                        )
+                        console.log(radius);
+                       tweetApi(item.name,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,radius);
+
+                      let tweetsData = tweetResults.tweets;
+                     
+                      console.log(tweetsData);
+                      setTweets(tweetResults.tweets);
+                      // console.log(tweets);
+                    }}
+                  >
+                    <Text style={styles.trendingText}>{item.name}</Text>
+                  </TouchableOpacity>
                 )}
               ></FlatList>
-            </ScrollView>
+
+
+              <Text style={{ fontSize: 25, fontWeight: "bold" }}>Tweet of trending:{"\n"}{trendTitle} </Text>
+              <FlatList
+                style={{ height: 300, borderWidth:1 }}
+                keyExtractor={(item) => item.id.toString()}
+                data={tweets}
+                renderItem={({ item }) => (
+                
+              
+                    <Text style={styles.tweetText}>{item.user}: {item.text}</Text>
+         
+                )}
+              ></FlatList>
+
+            </View>
           </View>
 
           <Button
@@ -158,6 +190,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 5,
   },
+
+  tweetText:{
+    fontSize: 16,
+    marginVertical: 8,
+  }
 });
 
 export default TwitterComponent;

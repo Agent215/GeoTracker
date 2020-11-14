@@ -16,9 +16,9 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import { State } from "ionicons/dist/types/stencil-public-runtime";
 
-
+import useTwitterTrendsResults from "../hooks/useTwitterTrendsResult";
 import TwitterComponent from "../components/TwitterComponent";
-
+import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -40,6 +40,11 @@ let INITIALREGION = {
 };
 
 const MapScreen = ({ navigation }) => {
+
+  const [trendsApi, results, errorMessage] = useTwitterTrendsResults();
+  const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
+
+
   //get state from redux store
   const dispatch = useDispatch();
   const currentDisaster = useSelector(
@@ -69,7 +74,6 @@ const MapScreen = ({ navigation }) => {
 
 
 
-
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
   let allEvents = combinedEvents.map((event) => {
@@ -93,6 +97,7 @@ const MapScreen = ({ navigation }) => {
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
+    
   }, []);
 
   /**
@@ -122,6 +127,7 @@ const MapScreen = ({ navigation }) => {
   const animateToUser = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+
         let coords = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -155,6 +161,8 @@ const MapScreen = ({ navigation }) => {
     mapRef.current.animateToRegion(coords, 0);
   };
 
+
+
   /* run once on component mount */
   useEffect(() => {
     animateToUser();
@@ -173,6 +181,7 @@ const MapScreen = ({ navigation }) => {
       animateToDisaster();
     }
   }, [currentDisaster.title, dispatch]);
+
 
   /**
    *
@@ -236,20 +245,40 @@ const MapScreen = ({ navigation }) => {
           zoomEnabled={true}
           zoomControlEnabled={true}
           loadingEnabled={true}
-          onRegionChangeComplete={async (NewRegion) => {
-            console.log(NewRegion.latitude + "," + NewRegion.longitude);
-            
-            let mapBoundry = await mapRef.current.getMapBoundaries();
-            console.log("boundry");
-            console.log(mapBoundry);
-           
 
+          onMapReady={
+            async()=>{
+              console.log("Map is ready");
+              let camera = await mapRef.current.getCamera();
+              console.log("camera center lat and long:" );
+
+              console.log(camera.center.latitude, camera.center.longitude );
+
+               trendsApi(camera.center.latitude,camera.center.longitude );
+            
+            
+              tweetApi(results[0],camera.center.latitude,camera.center.longitude ,20);
+
+            }
+          }
+
+          onRegionChangeComplete={async (NewRegion) => {
+                       
+            let mapBoundry = await mapRef.current.getMapBoundaries();
+           
             setCameraRegion({
               cameraLatitude: NewRegion.latitude,
               cameraLongitude: NewRegion.longitude,
               cameraNELatitude: mapBoundry.northEast.latitude,
               cameraNELongitude:mapBoundry.northEast.longitude,
-            });
+            
+            }
+            );
+
+            trendsApi(NewRegion.latitude,NewRegion.longitude);
+            tweetApi(results[0],NewRegion.latitude,NewRegion.longitude ,20);
+
+            
           }}
         >
           {filteredDisasters.map((marker: EventEntity, index) => (
@@ -326,26 +355,12 @@ const MapScreen = ({ navigation }) => {
         {/* twitter icon button that shows on bottom left of the map */}
         {/* a twitter modal will pop up on when clicked */}
         <View style={iconOnMap.twitter}>
-          <TwitterComponent cameraRegion={cameraRegion}/>
+          <TwitterComponent
+             cameraRegion={cameraRegion} trendsResult={results} 
+            tweetResult={tweetResults}
+            />
         </View>
 
-        {/* <Text
-          style={{
-            position: "absolute",
-            top: 60,
-            left: 0,
-            backgroundColor: "green",
-            fontSize: 18,
-          }}
-        >
-          camera lat: {cameraRegion.cameraLatitude}
-          {"\n"}
-          camera long:{cameraRegion.cameraLongitude}
-          {"\n"}
-          NE boundary lat: {cameraRegion.cameraNELatitude}
-          {"\n"}
-          NE boundary long: {cameraRegion.cameraNELongitude}
-        </Text> */}
 
         <Switch
           value={toggleMap}
