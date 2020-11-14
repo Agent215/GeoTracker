@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -62,27 +63,27 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const EventFeedStack = createStackNavigator<EventScreenParamList>();
 
-function EventFeedNavigator() {
+ function EventFeedNavigator() {
   return (
     <EventFeedStack.Navigator>
       <EventFeedStack.Screen
         name="EventFeedScreen"
         component={EventFeedScreen}
-        options={{ headerTitle: 'Disaster Feed' }}
+        options={{ headerTitle: 'Event Screen Title' }}
       />
     </EventFeedStack.Navigator>
   );
 }
 
-const MapScreenStack = createStackNavigator<MapScreenParamList>();
-
+const MapScreenStack = createStackNavigator<MapScreenParamList>()
 function MapScreenNavigator() {
+  const headerDate = useSelector((state) => state.disaster.headerDate);
   return (
     <MapScreenStack.Navigator>
       <MapScreenStack.Screen
         name="MapScreen"
         component={MapScreen}
-        options={{ headerTitle: 'Map Screen' }}
+        options={{ headerTitle: headerDate }}
       />
     </MapScreenStack.Navigator>
   );
@@ -90,13 +91,13 @@ function MapScreenNavigator() {
 
 const SettingsStack = createStackNavigator<SettingsScreenParamList>();
 
-function SettingsScreenNavigator() {
+ function SettingsScreenNavigator() {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
-        options={{ headerTitle: 'Settings Screen' }}
+        options={{ headerTitle: 'Settings Screen Title' }}
       />
     </SettingsStack.Navigator>
   );
@@ -110,7 +111,7 @@ function FilterScreenNavigator() {
       <FilterStack.Screen
         name="FilterScreen"
         component={FilterScreen}
-        options={{ headerTitle: 'Filter Screen' }}
+        options={{ headerTitle: 'Filter Screen Title' }}
       />
     </FilterStack.Navigator>
   );
