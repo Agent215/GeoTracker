@@ -39,7 +39,7 @@ function TwitterComponent(props) {
   //One-degree of longitude equals 288,200 feet (54.6 miles)
   const getRadius =(lat1, lat2, long1,long2) => {
     
-    return Math.abs(lat1-lat2)>=Math.abs(long1-long2)?Math.abs(lat1-lat2)*69:Math.abs(long1-long2)*54.6
+    return Math.abs(lat1-lat2)>=Math.abs(long1-long2)?Math.abs(lat1-lat2)*69:Math.abs(long1-long2)*54.6;
   }
 
   return (
@@ -48,7 +48,7 @@ function TwitterComponent(props) {
         style={{ flex: 1, alignSelf: "center", padding: 10 }}
         onPress={() => {
           toggleModal();
-          console.log("tw component line 62");
+          // console.log("tw component line 62");
           
           let trendsData = props.trendsResult.trends.map((trend,index) => {
             return { name: trend, id:index };
@@ -106,14 +106,15 @@ function TwitterComponent(props) {
 
                       setTrendTitle(item.name);
 
-                      // console.log("\n\n\n\n\n");
+                      console.log("\n\n\n\n\n");
                       // console.log(item.name);
 
                       
                       let radius = getRadius(
                         props.cameraRegion.cameraLatitude,
                         props.cameraRegion.cameraNELatitude,
-                        props.cameraRegion.cameraLongitude,props.cameraRegion.cameraNELongitude
+                        props.cameraRegion.cameraLongitude,
+                        props.cameraRegion.cameraNELongitude
                         )
                         console.log(radius);
                        tweetApi(item.name,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,radius);
