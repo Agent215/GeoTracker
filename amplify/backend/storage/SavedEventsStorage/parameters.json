@@ -1,0 +1,5 @@
+{
+    "tableName": "SavedEventsTable",
+    "partitionKeyName": "id",
+    "partitionKeyType": "S"
+}

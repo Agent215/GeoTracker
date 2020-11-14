@@ -84,5 +84,11 @@
       "service": "Lambda",
       "dependsOn": []
     }
+  },
+  "storage": {
+    "SavedEventsStorage": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }
