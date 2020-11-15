@@ -58,6 +58,12 @@ const App = () => {
         store.dispatch(actions.setSavedDisasters(savedEvents));
       }
     }
+    if (event === "outboxStatus") {
+      // do something here once the data is synced from the cloud
+      if (!data.isEmpty) {
+        await DataStore.start();
+      }
+    }
   })
 
   const authListener = async (data) => {
