@@ -81,6 +81,7 @@ const App = () => {
     let currentUserInfo = await Auth.currentUserInfo();
     if (currentUserInfo != null) {
       console.log("current logged in user: " + currentUserInfo.username);
+      await DataStore.clear();
       await DataStore.start();
       savedEvents = await DataStore.query(EventEntity);
       store.dispatch(actions.setSavedDisasters(savedEvents));
