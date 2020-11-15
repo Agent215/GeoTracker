@@ -3,3 +3,16 @@ type Todo @model @auth(rules: [{ allow: owner }]) {
   name: String!
   description: String
 }
+
+type EventEntity @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  title: String!
+  category: String!
+  sourceLink: String!
+  locationList: String!
+  isClosed: String!
+  currentLat: String!
+  currentLong: String!
+  eventId: String!
+  currentDate: String!
+}

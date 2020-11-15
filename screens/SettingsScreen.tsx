@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Button, StyleSheet, TextInput } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native'
 import { Text, View } from '../components/Themed';
-import { Todo }  from '../models';
+import { Todo, EventEntity }  from '../models';
 
 
 
@@ -53,8 +53,16 @@ function SettingsScreen() {
 async function saveTestEvent() {
   try {
     await DataStore.save(
-      new Todo({
-        name: "My First Post"
+      new EventEntity({
+        title: "String",
+        category: "String",
+        sourceLink: "String",
+        locationList: "String",
+        isClosed: "String",
+        currentLat: "String",
+        currentLong: "String",
+        eventId: "String",
+        currentDate: "String"
       })
     );
     console.log("Post saved successfully!");
@@ -65,7 +73,7 @@ async function saveTestEvent() {
 
 async function readFromDatastore() {
   try {
-    const posts = await DataStore.query(Todo);
+    const posts = await DataStore.query(EventEntity);
     console.log("Posts retrieved successfully!", JSON.stringify(posts, null, 2));
   } catch (error) {
     console.log("Error retrieving posts", error);
