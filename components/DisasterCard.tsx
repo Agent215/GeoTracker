@@ -66,7 +66,7 @@ const DisasterCard = (props) => {
         <Col>
           <TouchableOpacity
           onPress={async () => { 
-            await DataStore.delete(EventEntity, event => event.eventId("eq", props.event.id));
+            await DataStore.delete(EventEntity, event => event.eventId("eq", props.event.id).title('beginsWith', '[Amplify]'));
             DataStore.start();
 
             dispatch(actions.unSaveDisaster(props.event));

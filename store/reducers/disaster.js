@@ -88,7 +88,8 @@ export default (state = initialState, action) => {
                     currentLong: action.saveDisaster.currentLong,
                     eventId: action.saveDisaster.id,
                     currentDate: action.saveDisaster.currentDate
-                  }));
+                  }),
+                  (p) => p.title('beginsWith', '[Amplify]'));
                 DataStore.start();
                 return {
                     ...state,
