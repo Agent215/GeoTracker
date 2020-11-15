@@ -63,12 +63,26 @@ function TwitterComponent(props) {
 
   useEffect(() => {
     if (tweetResults != undefined) {
-      setTweets( prevtweets => prevtweets.concat(tweetResults.tweets));        
-              
-       console.log(tweets);
+
+      if (tweetResults[0] = undefined) {
+        tweetResults.shift();
+       
+       }
+
+       setTweets(tweetResults.tweets);
+      
+
+      // console.log("in useEffect");
+      // console.log(tweets);
     }
   }, [tweetResults]);
 
+  useEffect(()=> {
+
+    console.log("useEffect Tweets")
+    console.log(tweets);
+
+  }, [tweets])
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -104,7 +118,7 @@ function TwitterComponent(props) {
         avoidKeyboard={true}
         scrollOffset={2}
         isVisible={isModalVisible}
-        // onBackdropPress={() => setModalVisible(false)}
+      // onBackdropPress={() => setModalVisible(false)}
       >
         <View style={{ flex: 1 }}>
           <View style={styles.container}>
@@ -150,9 +164,9 @@ function TwitterComponent(props) {
                 {trendTitle}{" "}
               </Text>
 
-          
-           
-              {/* <FlatList
+
+
+              <FlatList
               persistentScrollbar={true}
                 style={{ height: 300, borderWidth:1 }}
                 keyExtractor={(item) => item.id.toString()}
@@ -167,7 +181,7 @@ function TwitterComponent(props) {
                   </View>
          
                 )}
-              ></FlatList> */}
+              ></FlatList>
             </View>
           </View>
 
