@@ -41,7 +41,6 @@ function TwitterComponent(props) {
   useEffect(() => {
     console.log("Twitter component first render...");
     console.log(props.trendsResult);
-
     let temArray = [];
     temArray = props.trendsResult.trends;
 
@@ -60,28 +59,23 @@ function TwitterComponent(props) {
       });
     }
 
-    // tweetApi(props.trendsResult[0],
-    //   props.cameraRegion.cameraLatitude,
-    //   props.cameraRegion.cameraLongitude,
-    //   radius);
-    // setTweets(tweetResults.tweets);
   }, [trending]);
 
   useEffect(() => {
     if (tweetResults != undefined) {
-      setTweets((prevtweets) => {
-          prevtweets.concat(tweetResults.tweets);
-        console.log("concanated tweet results:::");
-          console.log(prevtweets);
-        }
-      );
-      // console.log(tweetResults);
+      setTweets( prevtweets => prevtweets.concat(tweetResults.tweets));        
+              
+       console.log(tweets);
     }
   }, [tweetResults]);
+
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -156,18 +150,8 @@ function TwitterComponent(props) {
                 {trendTitle}{" "}
               </Text>
 
-              {/* {
-                        tweets.map((tweet) => {
-
-                          return (
-                            <Text>
-                              {tweet.text}
-                            </Text>
-                          )
-                  
-                        })}
-                    } */}
-
+          
+           
               {/* <FlatList
               persistentScrollbar={true}
                 style={{ height: 300, borderWidth:1 }}
