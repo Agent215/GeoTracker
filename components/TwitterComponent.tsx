@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Text,
   View,
@@ -15,24 +15,14 @@ import { AntDesign } from "@expo/vector-icons";
 
 function TwitterComponent(props) {
 
-  // console.log(props.tweetResult.tweets);
+  const [isModalVisible, setModalVisible] = useState(false);
   
-  let [trending, setTrending] = useState([]);
-  let [tweets, setTweets]=useState(props.tweetResult.tweets);
 
+  let [trending, setTrending] = useState([]);
+  let [tweets, setTweets]=useState([]);
   let [trendTitle, setTrendTitle] = useState("");
 
   const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
-
-  const [isModalVisible, setModalVisible] = useState(false);
-
-
-  
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-
 
 
   //One degree of latitude equals approximately 364,000 feet (69 miles),
@@ -42,21 +32,63 @@ function TwitterComponent(props) {
     return Math.abs(lat1-lat2)>=Math.abs(long1-long2)?Math.abs(lat1-lat2)*69:Math.abs(long1-long2)*54.6;
   }
 
+  let radius = getRadius(
+    props.cameraRegion.cameraLatitude,
+    props.cameraRegion.cameraNELatitude,
+    props.cameraRegion.cameraLongitude,
+    props.cameraRegion.cameraNELongitude
+    );
+    // console.log("radius is "+radius);
+
+    const tweetArray= useRef([]);
+
+    useEffect(() => {
+
+      console.log("Twitter component first render...");
+      console.log(props.trendsResult);
+
+      // tweetArray.current= props.trendsResult.map((trend,index) => {
+      //   tweetApi(trend,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,radius);
+      //   console.log("mapping "+trend+","+index);
+      //    console.log(tweetResults);
+
+      //   return tweetResults;
+      // });
+      tweetApi(props.trendsResult[0],props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,radius);
+      setTweets(tweetResults.tweets);                      
+
+    },[]);
+
+
+    useEffect(() => {
+      
+    },[tweets]);
+    
+
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+
+
+  
+
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity
         style={{ flex: 1, alignSelf: "center", padding: 10 }}
         onPress={() => {
           toggleModal();
-          // console.log("tw component line 62");
           
           let trendsData = props.trendsResult.trends.map((trend,index) => {
             return { name: trend, id:index };
           });
-    
-          console.log(trendsData);
-          setTrending(trendsData);
           
+          setTrending(trendsData);
+      
+          // console.log(props.tweetResults);
+
            //tweetApi(trendsData[0].name ,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,20);
          
     
@@ -103,27 +135,9 @@ function TwitterComponent(props) {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     onPress={   () => {
-
                       setTrendTitle(item.name);
-
-                      console.log("\n\n\n\n\n");
-                      // console.log(item.name);
-
+                     setTweets(tweetResults.tweets);                      
                       
-                      let radius = getRadius(
-                        props.cameraRegion.cameraLatitude,
-                        props.cameraRegion.cameraNELatitude,
-                        props.cameraRegion.cameraLongitude,
-                        props.cameraRegion.cameraNELongitude
-                        )
-                        console.log(radius);
-                       tweetApi(item.name,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,radius);
-
-                      let tweetsData = tweetResults.tweets;
-                     
-                      console.log(tweetsData);
-                      setTweets(tweetResults.tweets);
-                      // console.log(tweets);
                     }}
                   >
                     <Text style={styles.trendingText}>{item.name}</Text>

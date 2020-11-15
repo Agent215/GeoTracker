@@ -41,7 +41,7 @@ let INITIALREGION = {
 
 const MapScreen = ({ navigation }) => {
 
-  const [trendsApi, results, errorMessage] = useTwitterTrendsResults();
+  const [trendsApi, trendsResults, errorMessage] = useTwitterTrendsResults();
   const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
 
 
@@ -246,24 +246,24 @@ const MapScreen = ({ navigation }) => {
           zoomControlEnabled={true}
           loadingEnabled={true}
 
-          onMapReady={
-            async()=>{
-              console.log("Map is ready");
-              let camera = await mapRef.current.getCamera();
-              console.log("camera center lat and long:" );
+        //   onMapReady={
+        //     async()=>{
+        //       console.log("Map is ready");
+        //       let camera = await mapRef.current.getCamera();
+        //       console.log("camera center lat and long:" );
 
-              console.log(camera.center.latitude, camera.center.longitude );
+        //       console.log(camera.center.latitude, camera.center.longitude );
 
-               trendsApi(camera.center.latitude,camera.center.longitude );
+        //  //     trendsApi(camera.center.latitude,camera.center.longitude );
+
+
+              
             
-            
-              tweetApi(results[0],camera.center.latitude,camera.center.longitude ,20);
-
-            }
-          }
+        //     }
+        //   }
 
           onRegionChangeComplete={async (NewRegion) => {
-                       
+                  
             let mapBoundry = await mapRef.current.getMapBoundaries();
            
             setCameraRegion({
@@ -276,7 +276,9 @@ const MapScreen = ({ navigation }) => {
             );
 
             trendsApi(NewRegion.latitude,NewRegion.longitude);
-            tweetApi(results[0],NewRegion.latitude,NewRegion.longitude ,20);
+        
+            // tweetApi(trendsResults[0],NewRegion.latitude,NewRegion.longitude ,20);
+            console.log("map region change complete");
 
             
           }}
@@ -356,8 +358,9 @@ const MapScreen = ({ navigation }) => {
         {/* a twitter modal will pop up on when clicked */}
         <View style={iconOnMap.twitter}>
           <TwitterComponent
-             cameraRegion={cameraRegion} trendsResult={results} 
-            tweetResult={tweetResults}
+             cameraRegion={cameraRegion} 
+             trendsResult={trendsResults} 
+            // tweetResult={tweetResults}
             />
         </View>
 
