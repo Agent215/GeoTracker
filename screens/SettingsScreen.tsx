@@ -63,8 +63,8 @@ async function saveTestEvent() {
         sourceLink: "String",
         locationList: "String",
         isClosed: "String",
-        currentLat: "String",
-        currentLong: "String",
+        currentLat: 4.20,
+        currentLong: 6.90,
         eventId: "String",
         currentDate: "String"
       })

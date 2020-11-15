@@ -8,6 +8,8 @@ import { SET_DATE_FILTER } from '../actions/actions';
 import { SET_HEADER_DATE } from '../actions/actions';
 import { SET_ISGIBSVISIBLE } from '../actions/actions'
 import { SET_SAVED_DISASTERS } from '../actions/actions';
+import { DataStore } from '@aws-amplify/datastore';
+import { EventEntity }  from '../../models';
 
 
 const initialState = {
@@ -76,6 +78,18 @@ export default (state = initialState, action) => {
                     savedDisasters: state.savedDisasters
                 }
             } else {
+                DataStore.save(new EventEntity({
+                    title: action.saveDisaster.title,
+                    category: action.saveDisaster.category,
+                    sourceLink: action.saveDisaster.sourceLink,
+                    locationList: "",
+                    isClosed: action.saveDisaster.isClosed,
+                    currentLat: action.saveDisaster.currentLat,
+                    currentLong: action.saveDisaster.currentLong,
+                    eventId: action.saveDisaster.id,
+                    currentDate: action.saveDisaster.currentDate
+                  }));
+                DataStore.start();
                 return {
                     ...state,
                     savedDisasters: state.savedDisasters.concat(action.saveDisaster)
