@@ -5,7 +5,7 @@ import { API } from 'aws-amplify';
 
 
   export default () => {
-    const [tweetResults, setResults] = useState([]);
+    const [tweetResults, setResults] = useState({});
     const [tweetErrorMessage, setErrorMessage] = useState("");
 
     const tweetApi = async function getTwitterTweets(query, lat, long, rad) {
@@ -23,8 +23,8 @@ import { API } from 'aws-amplify';
       try{
         let temp = await API.get(apiName, path, myInit);
         // console.log(temp);
-        console.log("line 26, tweet result");
-        setResults(temp);
+        // console.log("line 26, tweet result");
+        setResults({...temp,query:query});
       }catch{
         setErrorMessage("Something went wrong when getting tweets");
     }
