@@ -5,6 +5,7 @@ export const SET_WEATHER_FILTER = "SET_WEATHER_FILTER";
 export const SET_FILTERED_DISASTERS = "SET_FILTERED_DISASTERS";
 export const SAVE_DISASTER = "SAVE_DISASTER";
 export const UNSAVE_DISASTER = "UNSAVE_DISASTER";
+export const SET_SAVED_DISASTERS = "SET_SAVED_DISASTERSc"
 
 
 export const SET_DATE_FILTER = "SET_DATE_FILTER"
@@ -39,6 +40,10 @@ export const unSaveDisaster = (unsaveDisaster) => {
 
     return {type :UNSAVE_DISASTER, unsaveDisaster: unsaveDisaster}
 }
+
+export const setSavedDisasters = (savedDisasters) => {
+    return { type: SET_SAVED_DISASTERS, savedDisasters: savedDisasters }
+};
 
 
 

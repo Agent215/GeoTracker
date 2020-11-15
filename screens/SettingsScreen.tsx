@@ -5,37 +5,41 @@ import { Button, StyleSheet, TextInput } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native'
 import { Text, View } from '../components/Themed';
 import { Todo, EventEntity }  from '../models';
-
-
-
-export async function signOut() {
-  try {
-    await Auth.signOut();
-    await DataStore.clear();
-  } catch (error) {
-    console.log('error signing out: ', error)
-  }
-}
-
-//function to delete user
-async function onDeleteUser() {
-  const userName ='';
-
-  //collect current authenticated user
-  const user = await Auth.currentAuthenticatedUser();
-  //Auth function to delete authenticated user
-  user.deleteUser((error, data) => {
-    //send error to console if exists
-    if(error)
-      console.log('Error deleting user', error);
-    else
-      signOut();
-  });
-  
-}
+import { useDispatch } from 'react-redux';
+import * as actions from '../store/actions/actions';
 
 
 function SettingsScreen() {
+  const dispatch = useDispatch();
+
+  const signOut = async () => {
+    try {
+      await Auth.signOut();
+      await DataStore.clear();
+      dispatch(actions.setSavedDisasters([]));
+    } catch (error) {
+      console.log('error signing out: ', error)
+    }
+  }
+
+  //function to delete user
+  async function onDeleteUser() {
+    const userName ='';
+
+    //collect current authenticated user
+    const user = await Auth.currentAuthenticatedUser();
+    //Auth function to delete authenticated user
+    user.deleteUser((error, data) => {
+      //send error to console if exists
+      if(error)
+        console.log('Error deleting user', error);
+      else
+        signOut();
+    });
+    
+  }
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Click below to sign out</Text>
@@ -45,7 +49,6 @@ function SettingsScreen() {
       {<Button title='Log response from API for event/all query' onPress={testAPI} />}
       {<Button title='Save test event to datastore' onPress={saveTestEvent} />}
       {<Button title='Read events from datastore' onPress={readFromDatastore} />}
-
     </View>
   );
 }
