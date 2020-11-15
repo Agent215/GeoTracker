@@ -11,8 +11,8 @@ type EventEntity @model @auth(rules: [{ allow: owner }]) {
   sourceLink: String!
   locationList: String!
   isClosed: String!
-  currentLat: String!
-  currentLong: String!
+  currentLat: Float!
+  currentLong: Float!
   eventId: String!
   currentDate: String!
 }
