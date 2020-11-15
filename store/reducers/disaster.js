@@ -7,6 +7,7 @@ import { UNSAVE_DISASTER } from '../actions/actions'
 import { SET_DATE_FILTER } from '../actions/actions';
 import { SET_HEADER_DATE } from '../actions/actions';
 import { SET_ISGIBSVISIBLE } from '../actions/actions'
+import { SET_SAVED_DISASTERS } from '../actions/actions';
 
 
 const initialState = {
@@ -95,6 +96,11 @@ export default (state = initialState, action) => {
                 ...state,
                 isGibsVisible: action.isGibsVisible
             };
+        case SET_SAVED_DISASTERS:
+            return {
+                ...state,
+                savedDisasters: action.savedDisasters
+            }
 
         default:
             return state;
