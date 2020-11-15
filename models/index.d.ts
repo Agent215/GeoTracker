@@ -19,8 +19,8 @@ export declare class EventEntity {
   readonly sourceLink: string;
   readonly locationList: string;
   readonly isClosed: string;
-  readonly currentLat: string;
-  readonly currentLong: string;
+  readonly currentLat: number;
+  readonly currentLong: number;
   readonly eventId: string;
   readonly currentDate: string;
   constructor(init: ModelInit<EventEntity>);

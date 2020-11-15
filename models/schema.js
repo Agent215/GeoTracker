@@ -101,14 +101,14 @@ export const schema = {
                 "currentLat": {
                     "name": "currentLat",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Float",
                     "isRequired": true,
                     "attributes": []
                 },
                 "currentLong": {
                     "name": "currentLong",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Float",
                     "isRequired": true,
                     "attributes": []
                 },
@@ -158,5 +158,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "19f3648346b3bf28bba19e6d88ac55cf"
+    "version": "6abb9237ce242176b5547fa3b7dba68b"
 };
