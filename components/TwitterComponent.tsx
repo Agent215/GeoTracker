@@ -14,65 +14,74 @@ import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
 import { AntDesign } from "@expo/vector-icons";
 
 function TwitterComponent(props) {
-
   const [isModalVisible, setModalVisible] = useState(false);
-  
 
   let [trending, setTrending] = useState([]);
-  let [tweets, setTweets]=useState([]);
+  let [tweets, setTweets] = useState([]);
   let [trendTitle, setTrendTitle] = useState("");
 
   const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
 
-
   //One degree of latitude equals approximately 364,000 feet (69 miles),
   //One-degree of longitude equals 288,200 feet (54.6 miles)
-  const getRadius =(lat1, lat2, long1,long2) => {
-    
-    return Math.abs(lat1-lat2)>=Math.abs(long1-long2)?Math.abs(lat1-lat2)*69:Math.abs(long1-long2)*54.6;
-  }
+  const getRadius = (lat1, lat2, long1, long2) => {
+    return Math.abs(lat1 - lat2) >= Math.abs(long1 - long2)
+      ? Math.abs(lat1 - lat2) * 69
+      : Math.abs(long1 - long2) * 54.6;
+  };
 
   let radius = getRadius(
     props.cameraRegion.cameraLatitude,
     props.cameraRegion.cameraNELatitude,
     props.cameraRegion.cameraLongitude,
     props.cameraRegion.cameraNELongitude
-    );
-    // console.log("radius is "+radius);
+  );
+  // console.log("radius is "+radius);
 
-    const tweetArray= useRef([]);
+  useEffect(() => {
+    console.log("Twitter component first render...");
+    console.log(props.trendsResult);
 
-    useEffect(() => {
+    let temArray = [];
+    temArray = props.trendsResult.trends;
 
-      console.log("Twitter component first render...");
-      console.log(props.trendsResult);
+    console.log("temp Array is");
+    console.log(temArray);
 
-      // tweetArray.current= props.trendsResult.map((trend,index) => {
-      //   tweetApi(trend,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,radius);
-      //   console.log("mapping "+trend+","+index);
-      //    console.log(tweetResults);
+    if (temArray != undefined) {
+      temArray.forEach((trend) => {
+        tweetApi(
+          trend,
+          props.cameraRegion.cameraLatitude,
+          props.cameraRegion.cameraLongitude,
+          radius
+        );
+        // console.log(tweetResults);
+      });
+    }
 
-      //   return tweetResults;
-      // });
-      tweetApi(props.trendsResult[0],props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,radius);
-      setTweets(tweetResults.tweets);                      
+    // tweetApi(props.trendsResult[0],
+    //   props.cameraRegion.cameraLatitude,
+    //   props.cameraRegion.cameraLongitude,
+    //   radius);
+    // setTweets(tweetResults.tweets);
+  }, [trending]);
 
-    },[]);
-
-
-    useEffect(() => {
-      
-    },[tweets]);
-    
-
+  useEffect(() => {
+    if (tweetResults != undefined) {
+      setTweets((prevtweets) => {
+          prevtweets.concat(tweetResults.tweets);
+        console.log("concanated tweet results:::");
+          console.log(prevtweets);
+        }
+      );
+      // console.log(tweetResults);
+    }
+  }, [tweetResults]);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-
-
-  
 
   return (
     <View style={{ flex: 1 }}>
@@ -80,18 +89,16 @@ function TwitterComponent(props) {
         style={{ flex: 1, alignSelf: "center", padding: 10 }}
         onPress={() => {
           toggleModal();
-          
-          let trendsData = props.trendsResult.trends.map((trend,index) => {
-            return { name: trend, id:index };
+
+          let trendsData = props.trendsResult.trends.map((trend, index) => {
+            return { name: trend, id: index };
           });
-          
+
           setTrending(trendsData);
-      
+
           // console.log(props.tweetResults);
 
-           //tweetApi(trendsData[0].name ,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,20);
-         
-    
+          //tweetApi(trendsData[0].name ,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,20);
         }}
       >
         <View style={styles.buttonContainer}>
@@ -123,21 +130,20 @@ function TwitterComponent(props) {
               {/* <Text style={{fontSize:20}}>Map Camera latitude: {props.cameraRegion.cameraLatitude} </Text>
               <Text style={{fontSize:20}}>Map Camera longtitude: {props.cameraRegion.cameraLongitude} </Text>
               <Text style={{fontSize:20}}>Map Camera Northeast latitude: {props.cameraRegion.cameraNELatitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text> */}
+              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text>
 
-              <Text style={{ fontSize: 25, fontWeight: "bold" }}>Trending</Text>
+              <Text style={{ fontSize: 25, fontWeight: "bold" }}>Trending</Text> */}
 
               <FlatList
                 persistentScrollbar={true}
-                style={{ height: 200,  borderWidth:1}}
+                style={{ height: 200, borderWidth: 1 }}
                 keyExtractor={(item) => item.id.toString()}
                 data={trending}
                 renderItem={({ item }) => (
                   <TouchableOpacity
-                    onPress={   () => {
+                    onPress={() => {
                       setTrendTitle(item.name);
-                     setTweets(tweetResults.tweets);                      
-                      
+                      //  setTweets(tweetResults.tweets);
                     }}
                   >
                     <Text style={styles.trendingText}>{item.name}</Text>
@@ -145,9 +151,24 @@ function TwitterComponent(props) {
                 )}
               ></FlatList>
 
+              <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+                Tweet of trending:{"\n"}
+                {trendTitle}{" "}
+              </Text>
 
-              <Text style={{ fontSize: 25, fontWeight: "bold" }}>Tweet of trending:{"\n"}{trendTitle} </Text>
-              <FlatList
+              {/* {
+                        tweets.map((tweet) => {
+
+                          return (
+                            <Text>
+                              {tweet.text}
+                            </Text>
+                          )
+                  
+                        })}
+                    } */}
+
+              {/* <FlatList
               persistentScrollbar={true}
                 style={{ height: 300, borderWidth:1 }}
                 keyExtractor={(item) => item.id.toString()}
@@ -162,8 +183,7 @@ function TwitterComponent(props) {
                   </View>
          
                 )}
-              ></FlatList>
-
+              ></FlatList> */}
             </View>
           </View>
 
@@ -209,17 +229,16 @@ const styles = StyleSheet.create({
   trendingText: {
     fontSize: 20,
     marginVertical: 5,
-    color:"blue",
+    color: "blue",
   },
 
-  tweetUserText:{
+  tweetUserText: {
     fontSize: 16,
-    fontWeight:"bold",
+    fontWeight: "bold",
   },
-  tweetText:{
+  tweetText: {
     fontSize: 16,
-   
-  }
+  },
 });
 
 export default TwitterComponent;

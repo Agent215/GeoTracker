@@ -18,7 +18,7 @@ import { State } from "ionicons/dist/types/stencil-public-runtime";
 
 import useTwitterTrendsResults from "../hooks/useTwitterTrendsResult";
 import TwitterComponent from "../components/TwitterComponent";
-import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
+
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -42,7 +42,7 @@ let INITIALREGION = {
 const MapScreen = ({ navigation }) => {
 
   const [trendsApi, trendsResults, errorMessage] = useTwitterTrendsResults();
-  const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
+
 
 
   //get state from redux store
@@ -66,10 +66,10 @@ const MapScreen = ({ navigation }) => {
   let tempArray = []; // temp array to store filtered events
 
   let [cameraRegion, setCameraRegion] = useState({
-    cameraLatitude: 0,
-    cameraLongitude: 0,
-    cameraNELatitude: 0,
-    cameraNELongitude: 0,
+    cameraLatitude: 36.103,
+    cameraLongitude: -116.476,
+    cameraNELatitude: 45.953,
+    cameraNELongitude: -110.4587,
   });
 
 
