@@ -7,9 +7,9 @@ import SeaLakeIcePin from '../assets/Pins/SeaLakeIcePin.svg';
 import LandslidesPin from '../assets/Pins/LandslidesPin.svg';
 import ManmadePin from '../assets/Pins/ManmadePin.svg';
 import SevereStormsPin from '../assets/Pins/SevereStormsPin.svg';
-import VolcanoesPin from '../assets/Pins/VolcanoesPin.svg'
-import WildfiresPin from '../assets/Pins/WildfiresPin.svg'
-import SnowPin from '../assets/Pins/SnowPin.svg'
+import VolcanoesPin from '../assets/Pins/VolcanoesPin.svg';
+import WildfiresPin from '../assets/Pins/WildfiresPin.svg';
+import SnowPin from '../assets/Pins/SnowPin.svg';
 
 import React from 'react';
 

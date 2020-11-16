@@ -13,14 +13,13 @@ import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
 
 const { width, height } = Dimensions.get('screen');
 const SCREEN_WIDTH = width;
-const MODAL_HEIGHT = height / 4;
+const MODAL_HEIGHT = height / 2;
+
 
 // modal to cover part of map screen. 
 // contains event data
 const CustomModal = (props) => {
-
-
-
+    let properDate = new Date(props.startDate)
     const dispatch = useDispatch();
     const toastRef = useRef(CustomToast.prototype);
     let hasTweets = false;
@@ -68,7 +67,7 @@ const CustomModal = (props) => {
                             />
                         </View>
 
-
+                        <Text style={styles.title}> Start Date: {properDate.toDateString()}</Text>
                         {hasTweets ?
                             props.tweets.tweets.map((tweet) => {
                                 return (
