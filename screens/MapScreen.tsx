@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Header } from "react-native-elements";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Text } from "react-native";
 import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
-import { currentEventList, combinedEvents, historicalEventList } from '../App'
+import { currentEventList, combinedEvents, historicalEventList } from "../App";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { IconButton, Colors, Switch } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +21,8 @@ import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
 import { addDays, isWithinInterval, parseISO, format, isEqual } from "date-fns/esm";
+import TwitterComponent from "../components/TwitterComponent";
+
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -42,20 +43,26 @@ let INITIALREGION = {                                                           
 };
 
 const MapScreen = ({ navigation }) => {
+
+
   //get state from redux store
   const dispatch = useDispatch();
   const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker.
   const disasterFilter = useSelector((state) => state.disaster.disasterFilter);       // curent filter for disasters.
   const filteredDisasters = useSelector((state) => state.disaster.filteredDisasters); // only the filtered disasters.
   const weatherFilter = useSelector((state) => state.disaster.weatherFilter);
-
   const startDate = useSelector((state) => state.disaster.startDate);                 // start date of the time range from date picker.
   const endDate = useSelector((state) => state.disaster.endDate);                     // end date of time range from date picker.
-
   let mapRef = useRef(MapView.prototype);
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false); //useState of disaster modal
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
+  let [cameraRegion, setCameraRegion] = useState({
+    cameraLatitude: 36.103,
+    cameraLongitude: -116.476,
+    cameraNELatitude: 45.953,
+    cameraNELongitude: -110.4587,
+  });
 
   // States for animation
   const [currentDate, setCurrentDate] = useState(startDate);                          // Hook that keeps track of the current day that is animating.
@@ -147,6 +154,15 @@ const MapScreen = ({ navigation }) => {
     dispatch(actions.setHeaderDate(headerString))
   }, []);
 
+
+
+  /* check if current disaster has changed, if so then force rerender */
+  useEffect(() => {
+    if (currentDisaster != "") {
+      animateToDisaster();
+    }
+  }, [currentDisaster.title, dispatch]);
+
   /**
    * When the disaster filter is changed lets filter the disasters
    */
@@ -155,7 +171,7 @@ const MapScreen = ({ navigation }) => {
     if (startDate.toDateString() == endDate.toDateString()) {
       // if start and end are the same
       // then set disabled to true on play button because we are viewing a single day.
-   
+
       setCanPlay(true)
     } else {
       setCanPlay(false)
@@ -170,7 +186,7 @@ const MapScreen = ({ navigation }) => {
 
 
   /**
-   * standard shows streets 
+   * standard shows streets
    * hybrid shows town and city names over satilite view
    */
   const toggleMapMode = () => {
@@ -184,18 +200,19 @@ const MapScreen = ({ navigation }) => {
   };
 
   /**
-   * Toggle disaster modal
+   * Toggle disaster modal or twitter
    */
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
-
   };
+
   /*
   animateToUser 
   */
   const animateToUser = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+
         let coords = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -234,6 +251,7 @@ const MapScreen = ({ navigation }) => {
    * if so then make new events duplicated from the orignial one
    * return all the events
    */
+
   const splitAndDupEvents = (events) => {
     let returnEvents = [];
 
@@ -293,7 +311,7 @@ const MapScreen = ({ navigation }) => {
 
 
   /**
-   * 
+   *
    * filter the disaster markers
    * create a new temporary array composed of only filtered disasters
    * then dispatch that to the redux store. Make sure we reset this array
@@ -330,9 +348,8 @@ const MapScreen = ({ navigation }) => {
       else {
         event.isShow = false;
       }
-      return event
+      return event;
     });
-
 
     // create a new array from the array with correctly marked isShow prop
     disasterToFilter.forEach(element => {
@@ -351,13 +368,17 @@ const MapScreen = ({ navigation }) => {
     // setDisastersInRange(tempArray);
   };
 
+  // const getTrendsCallback = (lat, long)=>{
+  //   trendsApi(lat, long);
+  //   console.log("getTrendsCallback called ")
+
+  // }
 
   /*
    *function to be called at each interval of animation of markers 
     fitler by specific day of event not a range. 
    */
   const ShowMarkerOnDay = (currentdate) => {
-
 
     let tempArray = [];   // reset temp array
     // go through all events and mark which ones need to be filtered.
@@ -412,25 +433,49 @@ const MapScreen = ({ navigation }) => {
           zoomControlEnabled={true}
           loadingEnabled={true}
           maxZoomLevel={maxZoom}
+          // onMapReady={
+          //   async () => {
+          //     console.log("Map is ready");
+          //     let camera = await mapRef.current.getCamera();
+          //     console.log("camera center lat and long:");
+          //     console.log(camera.center.latitude, camera.center.longitude);
+          //     trendsApi(camera.center.latitude, camera.center.longitude);
+
+
+
+
+          //   }
+          // }
+          onRegionChangeComplete={async (NewRegion) => {
+          
+            let mapBoundry = await mapRef.current.getMapBoundaries();
+            setCameraRegion({
+              cameraLatitude: NewRegion.latitude,
+              cameraLongitude: NewRegion.longitude,
+              cameraNELatitude: mapBoundry.northEast.latitude,
+              cameraNELongitude: mapBoundry.northEast.longitude,
+            }
+            );
+            // tweetApi(trendsResults[0],NewRegion.latitude,NewRegion.longitude ,20);
+            console.log("map region change complete");
+          }}
         >
-
           {filteredDisasters.map((marker: EventEntity, index) => (
-
             <Marker
               key={index}
               coordinate={{
                 latitude: parseFloat(marker.currentLat),
-                longitude: parseFloat(marker.currentLong)
+                longitude: parseFloat(marker.currentLong),
               }}
               title={marker.title}
               description={marker.category}
               tracksViewChanges={false}
-              onPress={() => { toggleModal(); dispatch(actions.setCurrentDisaster(marker)) }}
+              onPress={() => {
+                toggleModal();
+                dispatch(actions.setCurrentDisaster(marker));
+              }}
             >
-              <DisasterPin
-                size={50}
-                category={marker.category}
-              />
+              <DisasterPin size={50} category={marker.category} />
             </Marker>
           ))}
 
@@ -458,6 +503,7 @@ const MapScreen = ({ navigation }) => {
           disaster={currentDisaster}
           startDate={currentDisaster.currentDate}
           toggleModal={toggleModal}
+     
         />
 
         <GooglePlacesAutocomplete
@@ -489,7 +535,7 @@ const MapScreen = ({ navigation }) => {
           textInputProps={{ clearButtonMode: "always" }}
         />
 
-        {/*current location button that shows on bottom right of the map */}
+        {/*current location icon button that shows on bottom right of the map */}
         <IconButton
           icon="crosshairs-gps"
           style={mapButtons.goToCurrent}
@@ -499,6 +545,20 @@ const MapScreen = ({ navigation }) => {
             animateToUser();
           }}
         />
+
+        {/* twitter icon button that shows on bottom left of the map */}
+        {/* a twitter modal will pop up on when clicked */}
+        <View style={iconOnMap.twitter}>
+          <TwitterComponent
+            cameraRegion={cameraRegion}
+            //trendsResult={trendsResults}
+            lat = {cameraRegion.cameraLatitude}
+            long = {cameraRegion.cameraLongitude}
+          />
+        </View>
+
+
+
         <IconButton
           icon="layers"
           style={mapButtons.toggleLayer}
@@ -605,11 +665,32 @@ const searchStyles = StyleSheet.create({
 });
 
 //style for the current location button
-const mapButtons = StyleSheet.create({
-  goToCurrent: {
+const iconOnMap = StyleSheet.create({
+  location: {
+    position: "absolute",
+    right: 0,
+    bottom: 55,
+  },
+  twitter: {
+
     position: "absolute",
     right: 0,
     bottom: 0,
+    backgroundColor: "transparent",
+    alignItems: "center",
+    // justifyContent:"center",
+  },
+});
+
+
+const mapButtons = StyleSheet.create({
+  goToCurrent: {
+    position: "absolute",
+    right: -8,
+    bottom: 55,
+    backgroundColor: "transparent",
+    alignItems: "center",
+    // justifyContent:"center",
   },
   animateButtons: {
     flex: 1,

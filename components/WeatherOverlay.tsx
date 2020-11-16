@@ -13,50 +13,50 @@ const WeatherOverlay = (props) => {
     let clouds = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
+            urlTemplate={'https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
-            key={Date.now()}
+          
         />
 
     );
     let temp = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
+            urlTemplate={'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
-            key={Date.now()}
+          
         />
 
     );
     let precip = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
+            urlTemplate={'https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
-            key={Date.now()}
+           
         />
 
     );
     let pressure = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
+            urlTemplate={'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
-            key={Date.now()}
+           
         />
 
     );
     let wind = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=52621d09b1f91b7e4cbc93777fb2801b'}
+            urlTemplate={'https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
-            key={Date.now()}
+          
         />
 
     );
