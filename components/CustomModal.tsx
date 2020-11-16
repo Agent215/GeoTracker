@@ -23,7 +23,9 @@ const CustomModal = (props) => {
     const dispatch = useDispatch();
     const toastRef = useRef(CustomToast.prototype);
     let hasTweets = false;
-
+    const currentDisaster = useSelector((state) => state.disaster.currentDisaster);
+    const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
+    let [tweets, setTweets] = useState([]);
     const onSave = (disaster) => {
 
         dispatch(actions.saveDisaster(disaster));
@@ -32,10 +34,41 @@ const CustomModal = (props) => {
     }
 
     const checkTweets = () => {
-        if ((props.tweets.response_size != 0) && (props.tweets.response_size != undefined)) { hasTweets = true }
-
-
+        if ((tweets.response_size != 0) && (tweets.response_size != undefined)) { hasTweets = true }
     }
+    const runTweetsApi = () => {
+        try {
+            tweetApi(
+                currentDisaster.title,
+                currentDisaster.currentLat,
+                currentDisaster.currentLong,
+                400
+            );
+        } catch (err) {
+
+            alert(err + " " + tweetErrorMessage)
+        }
+    }
+
+    useEffect(() => {
+        if (tweetResults != undefined) {
+
+            if (tweetResults[0] = undefined) {
+                tweetResults.shift();
+
+            }
+            setTweets(tweetResults);
+        }
+    }, [tweetResults]);
+
+    useEffect(() => {
+        if (currentDisaster != "") {
+
+            runTweetsApi();
+        }
+    }, [currentDisaster.title, dispatch]);
+
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -68,7 +101,7 @@ const CustomModal = (props) => {
 
                         <Text style={styles.title}> Start Date: {properDate.toDateString()}</Text>
                         {hasTweets ?
-                            props.tweets.tweets.map((tweet) => {
+                            tweets.tweets.map((tweet) => {
                                 return (
                                     <View>
                                         <Text style={styles.user} >

@@ -21,10 +21,8 @@ import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
 import { addDays, isWithinInterval, parseISO, format, isEqual } from "date-fns/esm";
-
-import useTwitterTrendsResults from "../hooks/useTwitterTrendsResult";
 import TwitterComponent from "../components/TwitterComponent";
-import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
+
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -46,7 +44,7 @@ let INITIALREGION = {                                                           
 
 const MapScreen = ({ navigation }) => {
 
-  const [trendsApi, trendsResults, errorMessage] = useTwitterTrendsResults();
+
   //get state from redux store
   const dispatch = useDispatch();
   const currentDisaster = useSelector((state) => state.disaster.currentDisaster);     // set when user presses a marker.
@@ -59,9 +57,6 @@ const MapScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false); //useState of disaster modal
   const [mapMode, setMapMode] = useState("hybrid");
   const [toggleMap, setToggleMap] = useState(false);
-  let tempArray = []; // temp array to store filtered events
-  const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
-  let [tweets, setTweets] = useState([]);
   let [cameraRegion, setCameraRegion] = useState({
     cameraLatitude: 36.103,
     cameraLongitude: -116.476,
@@ -165,7 +160,6 @@ const MapScreen = ({ navigation }) => {
   useEffect(() => {
     if (currentDisaster != "") {
       animateToDisaster();
-      runApi();
     }
   }, [currentDisaster.title, dispatch]);
 
@@ -211,29 +205,6 @@ const MapScreen = ({ navigation }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-
-
-  const runApi = () => {
-
-    tweetApi(
-      currentDisaster.title,
-      currentDisaster.currentLat,
-      currentDisaster.currentLong,
-      400
-    );
-  }
-
-  useEffect(() => {
-    if (tweetResults != undefined) {
-
-      if (tweetResults[0] = undefined) {
-        tweetResults.shift();
-
-      }
-      setTweets(tweetResults);
-    }
-  }, [tweetResults]);
 
   /*
   animateToUser 
@@ -532,7 +503,7 @@ const MapScreen = ({ navigation }) => {
           disaster={currentDisaster}
           startDate={currentDisaster.currentDate}
           toggleModal={toggleModal}
-          tweets={tweets}
+     
         />
 
         <GooglePlacesAutocomplete

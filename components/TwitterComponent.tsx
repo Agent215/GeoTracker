@@ -132,7 +132,6 @@ function TwitterComponent(props) {
         }
 
         try {
-
           tweetApi(
             trend,
             props.cameraRegion.cameraLatitude,
@@ -142,25 +141,17 @@ function TwitterComponent(props) {
         } catch (err) {
           alert(err + " " + tweetErrorMessage)
         }
-        // console.log("trend index: "+index);
-
-        // cons ole.log(tweetResults);
       });
     }
   }, [trending]);
 
   useEffect(() => {
-    // console.log("tweets are:");
-    // console.log(tweets);
-
-    // console.log(tweetResults);
+    
     if (tweetResults != undefined) {
-      // Object.keys(tweets).forEach(e => console.log(`key=${e}  value=${tweets[e]}`));
+    
       Object.keys(tweets).forEach((e) => {
-        // console.log(`key=${e}  value=${tweets[e]}`)
         if (tweets[e].trend == tweetResults.query) {
           console.log("Updaing tweets:::");
-
           switch (e) {
             case "trend_0":
               setTweets((prevState) => ({
@@ -249,6 +240,7 @@ function TwitterComponent(props) {
     if (trendsResults != undefined && trendsResults != "") {
       try {
         let trendsData = trendsResults.trends.map((trend, index) => {
+         // trend = (trend.length && trend[0] == '#') ? trend.slice(1) : trend; // remove #
           return { name: trend, id: index };
         });
 
