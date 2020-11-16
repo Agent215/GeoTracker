@@ -397,6 +397,11 @@ const MapScreen = ({ navigation }) => {
     // setDisastersInRange(tempArray);
   };
 
+  // const getTrendsCallback = (lat, long)=>{
+  //   trendsApi(lat, long);
+  //   console.log("getTrendsCallback called ")
+
+  // }
 
   /*
    *function to be called at each interval of animation of markers 
@@ -457,21 +462,21 @@ const MapScreen = ({ navigation }) => {
           zoomControlEnabled={true}
           loadingEnabled={true}
           maxZoomLevel={maxZoom}
-          onMapReady={
-            async () => {
-              console.log("Map is ready");
-              let camera = await mapRef.current.getCamera();
-              console.log("camera center lat and long:");
-              console.log(camera.center.latitude, camera.center.longitude);
-              trendsApi(camera.center.latitude, camera.center.longitude);
+          // onMapReady={
+          //   async () => {
+          //     console.log("Map is ready");
+          //     let camera = await mapRef.current.getCamera();
+          //     console.log("camera center lat and long:");
+          //     console.log(camera.center.latitude, camera.center.longitude);
+          //     trendsApi(camera.center.latitude, camera.center.longitude);
 
 
 
 
-            }
-          }
+          //   }
+          // }
           onRegionChangeComplete={async (NewRegion) => {
-            trendsApi(NewRegion.latitude, NewRegion.longitude);
+          
             let mapBoundry = await mapRef.current.getMapBoundaries();
             setCameraRegion({
               cameraLatitude: NewRegion.latitude,
@@ -575,7 +580,9 @@ const MapScreen = ({ navigation }) => {
         <View style={iconOnMap.twitter}>
           <TwitterComponent
             cameraRegion={cameraRegion}
-            trendsResult={trendsResults}
+            //trendsResult={trendsResults}
+            lat = {cameraRegion.cameraLatitude}
+            long = {cameraRegion.cameraLongitude}
           />
         </View>
 

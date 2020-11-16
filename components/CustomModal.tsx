@@ -39,8 +39,7 @@ const CustomModal = (props) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {console.log(props.tweets)}
-            {console.log("passed tweets")}
+
             {checkTweets()}
             <CustomToast ref={toastRef} />
             <Modal

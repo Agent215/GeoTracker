@@ -9,12 +9,12 @@ import {
 import Modal from "react-native-modal";
 import { Button } from "react-native-paper";
 import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
-
+import useTwitterTrendsResults from "../hooks/useTwitterTrendsResult";
 import { AntDesign } from "@expo/vector-icons";
 
 function TwitterComponent(props) {
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const [trendsApi, trendsResults, errorMessage] = useTwitterTrendsResults();
   let [trending, setTrending] = useState([]);
   let [tweets, setTweets] = useState({});
   let [trendTitle, setTrendTitle] = useState("");
@@ -48,7 +48,7 @@ function TwitterComponent(props) {
     // console.log("Trending has changed...");
     // console.log(props.trendsResult);
     let temArray = [];
-    temArray = props.trendsResult.trends;
+    temArray = trendsResults.trends;
 
     console.log("temp Array is");
     console.log(temArray);
@@ -131,13 +131,19 @@ function TwitterComponent(props) {
             break;
         }
 
+        try {
+
+          tweetApi(
+            trend,
+            props.cameraRegion.cameraLatitude,
+            props.cameraRegion.cameraLongitude,
+            radius
+          );
+        } catch (err) {
+          alert(err + " " + tweetErrorMessage)
+        }
         // console.log("trend index: "+index);
-        tweetApi(
-          trend,
-          props.cameraRegion.cameraLatitude,
-          props.cameraRegion.cameraLongitude,
-          radius
-        );
+
         // cons ole.log(tweetResults);
       });
     }
@@ -238,26 +244,38 @@ function TwitterComponent(props) {
     setModalVisible(!isModalVisible);
   };
 
+  useEffect(() => {
+    console.log(trendsResults + "trendsResults")
+    if (trendsResults != undefined && trendsResults != "") {
+      try {
+        let trendsData = trendsResults.trends.map((trend, index) => {
+          return { name: trend, id: index };
+        });
+
+        setTrending(trendsData);
+      }
+      catch {
+        console.log("\n\n\n\n\nSomething wrong getting the trend");
+        alert("fetching trending tweets from twitter API failed");
+        setTrending([]);
+      }
+    }
+  }, [trendsResults])
+
+
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity
         style={{ flex: 1, alignSelf: "center", padding: 10 }}
         onPress={() => {
           toggleModal();
+          //   props.getTrendsCallback();
+          try {
 
-          try{
-            let trendsData = props.trendsResult.trends.map((trend, index) => {
-              return { name: trend, id: index };
-            });
-  
-            setTrending(trendsData);
+            trendsApi(props.lat, props.long);
+          } catch (err) {
+            alert(err + " " + errorMessage)
           }
-          catch{
-            console.log("\n\n\n\n\nSomething wrong getting the trend");
-            alert("fetching trending tweets from twitter API failed");
-            setTrending([]);
-          }
-          
 
         }}
       >
@@ -305,26 +323,25 @@ function TwitterComponent(props) {
                       setTrendTitle(item.name);
 
                       Object.keys(tweets).forEach((e) =>
-                        //  console.log(`key=${e}  value=${obj[e]}`)
-                        {
-                          if (tweets[e].trend == item.name) {
-                            // console.log("\n\n\n\n\nHere's the selected tweet array:");
-                            console.log(tweets[e].tweetObject.tweets);
-                            if(tweets[e].tweetObject.tweets==undefined || tweets[e].tweetObject.tweets==null || tweets[e].tweetObject.tweets.length==0)
-                            {
-                              setSelectedTweets([
-                                {
-                                  text: "There are no tweets responsed from the server at the moment, please try later ",
-                                  id: 0,
-                                  user: "",
-                                },
-                              ])
-                            }else{
-                              setSelectedTweets(tweets[e].tweetObject.tweets);
+                      //  console.log(`key=${e}  value=${obj[e]}`)
+                      {
+                        if (tweets[e].trend == item.name) {
+                          // console.log("\n\n\n\n\nHere's the selected tweet array:");
+                          console.log(tweets[e].tweetObject.tweets);
+                          if (tweets[e].tweetObject.tweets == undefined || tweets[e].tweetObject.tweets == null || tweets[e].tweetObject.tweets.length == 0) {
+                            setSelectedTweets([
+                              {
+                                text: "There are no tweets responsed from the server at the moment, please try later ",
+                                id: 0,
+                                user: "",
+                              },
+                            ])
+                          } else {
+                            setSelectedTweets(tweets[e].tweetObject.tweets);
 
-                            }
                           }
                         }
+                      }
                       );
                     }}
                   >
@@ -341,25 +358,25 @@ function TwitterComponent(props) {
 
 
               <FlatList
-              persistentScrollbar={true}
-                style={{ height: 300, borderWidth:1 }}
+                persistentScrollbar={true}
+                style={{ height: 300, borderWidth: 1 }}
                 keyExtractor={(item) => item.id.toString()}
                 data={selectedTweets}
                 renderItem={({ item }) => (
-                
-                  <View style={{marginVertical:8}}>
-                    <Text style={styles.tweetUserText}>{item.user}</Text>                 
-                  
-                   <Text style={styles.tweetText} >{item.text}</Text>
+
+                  <View style={{ marginVertical: 8 }}>
+                    <Text style={styles.tweetUserText}>{item.user}</Text>
+
+                    <Text style={styles.tweetText} >{item.text}</Text>
 
                   </View>
-         
+
                 )}
               ></FlatList>
 
 
 
-           </View>
+            </View>
           </View>
 
           <Button

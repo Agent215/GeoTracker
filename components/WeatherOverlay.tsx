@@ -23,7 +23,7 @@ const WeatherOverlay = (props) => {
     let temp = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=242e0063ccc5945c78753d4abe86d54a'}
+            urlTemplate={'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
           
@@ -33,7 +33,7 @@ const WeatherOverlay = (props) => {
     let precip = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=242e0063ccc5945c78753d4abe86d54a'}
+            urlTemplate={'https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
            
@@ -43,7 +43,7 @@ const WeatherOverlay = (props) => {
     let pressure = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=242e0063ccc5945c78753d4abe86d54a'}
+            urlTemplate={'https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
            
@@ -53,7 +53,7 @@ const WeatherOverlay = (props) => {
     let wind = (
         <UrlTile
             key={Date.now()}
-            urlTemplate={'https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=242e0063ccc5945c78753d4abe86d54a'}
+            urlTemplate={'https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=f0f9f21de27e796dc9cb4943c6a34ecc'}
             maximumZ={19}
             flipY={false}
           
