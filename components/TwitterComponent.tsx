@@ -18,7 +18,13 @@ function TwitterComponent(props) {
   let [trending, setTrending] = useState([]);
   let [tweets, setTweets] = useState({});
   let [trendTitle, setTrendTitle] = useState("");
-  let [selectedTweets, setSelectedTweets]=useState([{text:"click on one of the trending above to see corresponding tweets. ", id:0, user:"click trending above"}]);
+  let [selectedTweets, setSelectedTweets] = useState([
+    {
+      text: "click on one of the trending above to see corresponding tweets. ",
+      id: 0,
+      user: "click trending above",
+    },
+  ]);
 
   const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
 
@@ -121,7 +127,7 @@ function TwitterComponent(props) {
             break;
 
           default:
-          // code block
+            // code block
             break;
         }
 
@@ -133,11 +139,7 @@ function TwitterComponent(props) {
           radius
         );
         // cons ole.log(tweetResults);
-
-        
       });
-
-      
     }
   }, [trending]);
 
@@ -147,100 +149,90 @@ function TwitterComponent(props) {
 
     // console.log(tweetResults);
     if (tweetResults != undefined) {
-
-
       // Object.keys(tweets).forEach(e => console.log(`key=${e}  value=${tweets[e]}`));
-      Object.keys(tweets).forEach(
-        e => 
-        {
-          // console.log(`key=${e}  value=${tweets[e]}`)
-          if(tweets[e].trend==tweetResults.query){
-            console.log("Updaing tweets:::");
-           
-            switch (e) {
-              case "trend_0":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_0: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-              case "trend_1":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_1: { trend: tweets[e].trend, tweetObject: tweetResults},
-                }));
-                break;
-              case "trend_2":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_2: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-              case "trend_3":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_3: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-    
-              case "trend_4":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_4: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-    
-              case "trend_5":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_5: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-    
-              case "trend_6":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_6: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-    
-              case "trend_7":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_7: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-    
-              case "trend_8":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_8: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-    
-              case "trend_9":
-                setTweets((prevState) => ({
-                  ...prevState,
-                  trend_9: { trend: tweets[e].trend, tweetObject: tweetResults },
-                }));
-                break;
-    
-              default:
-              // code block
-                break;
-            }
-          }
-        }  
-        
-      );
+      Object.keys(tweets).forEach((e) => {
+        // console.log(`key=${e}  value=${tweets[e]}`)
+        if (tweets[e].trend == tweetResults.query) {
+          console.log("Updaing tweets:::");
 
+          switch (e) {
+            case "trend_0":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_0: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+            case "trend_1":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_1: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+            case "trend_2":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_2: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+            case "trend_3":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_3: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+
+            case "trend_4":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_4: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+
+            case "trend_5":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_5: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+
+            case "trend_6":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_6: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+
+            case "trend_7":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_7: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+
+            case "trend_8":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_8: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+
+            case "trend_9":
+              setTweets((prevState) => ({
+                ...prevState,
+                trend_9: { trend: tweets[e].trend, tweetObject: tweetResults },
+              }));
+              break;
+
+            default:
+              // code block
+              break;
+          }
+        }
+      });
     }
     // console.log(tweets);
     // console.log( Object.keys(tweets).length);
   }, [tweetResults]);
-
-
-
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -305,23 +297,30 @@ function TwitterComponent(props) {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     onPress={() => {
-                      setTrendTitle(item.name);                  
-                                        
-      
-                      Object.keys(tweets).forEach(e =>
+                      setTrendTitle(item.name);
 
+                      Object.keys(tweets).forEach((e) =>
                         //  console.log(`key=${e}  value=${obj[e]}`)
                         {
-                          if(tweets[e].trend==item.name)
-                          {
-                            // console.log("\n\n\n\n\nhey the the tweet:");
-                            // console.log(tweets[e].tweetObject);
-                            setSelectedTweets(tweets[e].tweetObject.tweets);
-                          }
-                        }                        
-                    
-                     );
+                          if (tweets[e].trend == item.name) {
+                            // console.log("\n\n\n\n\nHere's the selected tweet array:");
+                            console.log(tweets[e].tweetObject.tweets);
+                            if(tweets[e].tweetObject.tweets==undefined || tweets[e].tweetObject.tweets==null || tweets[e].tweetObject.tweets.length==0)
+                            {
+                              setSelectedTweets([
+                                {
+                                  text: "There are no tweets responsed from the server at the moment, please try later ",
+                                  id: 0,
+                                  user: "",
+                                },
+                              ])
+                            }else{
+                              setSelectedTweets(tweets[e].tweetObject.tweets);
 
+                            }
+                          }
+                        }
+                      );
                     }}
                   >
                     <Text style={styles.trendingText}>{item.name}</Text>
@@ -335,6 +334,7 @@ function TwitterComponent(props) {
               </Text>
 
 
+
               <FlatList
               persistentScrollbar={true}
                 style={{ height: 300, borderWidth:1 }}
@@ -343,7 +343,7 @@ function TwitterComponent(props) {
                 renderItem={({ item }) => (
                 
                   <View style={{marginVertical:8}}>
-                    <Text style={styles.tweetUserText}>{item.user}:</Text>                 
+                    <Text style={styles.tweetUserText}>{item.user}</Text>                 
                   
                    <Text style={styles.tweetText} >{item.text}</Text>
 
@@ -353,7 +353,8 @@ function TwitterComponent(props) {
               ></FlatList>
 
 
-            </View>
+
+           </View>
           </View>
 
           <Button
