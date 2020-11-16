@@ -254,6 +254,7 @@ function TwitterComponent(props) {
           }
           catch{
             console.log("\n\n\n\n\nSomething wrong getting the trend");
+            alert("fetching trending tweets from twitter API failed");
             setTrending([]);
           }
           
