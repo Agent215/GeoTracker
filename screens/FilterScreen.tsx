@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { StyleSheet, Image, Platform } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch } from "react-redux";
@@ -9,6 +9,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
+import { useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 function FilterScreen() {
   const dispatch = useDispatch();
@@ -40,36 +42,25 @@ function FilterScreen() {
     { label: "None", value: "none" },
   ];
 
-  const [weatherValue, setWeatherValue] = useState(null);
-  const [weatherItems, setWeatherItems] = useState(weather);
-  let weatherController;
-
-  const [eventValue, setEventValue] = useState(null);
-  const [eventItems, setEventItems] = useState(event);
+  const [weatherValue, setWeatherValue] = useState({ label: null, value: null });
+  const [eventValue, seteventValue] = useState({ label: null, value: null });
+  let weatherController;    // use these controller to access methods on filters
   let eventController;
-
   const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(
     false
   );
-
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-
-  const startDateOnPicker = useRef(new Date(2019, 0, 1));
+  const startDateOnPicker = useRef(new Date(2020, 8, 1));
   const endDateOnPicker = useRef(new Date());
-  const [startDate, setStartDate] = useState(new Date(2019, 0, 1));
-
+  const [startDate, setStartDate] = useState(new Date(2020, 8, 1));    //TODO: set back to (2019, 0, 1) later changed for testing purposes
   const [endDate, setEndDate] = useState(new Date());
+  const navigation = useNavigation();
 
-  //test commit
 
-  let eventItem = null;
-  let weatherItem = null;
-  const setEventItem = (eventItemPicked) => {
-    eventItem = eventItemPicked;
-  };
-  const setWeatherItem = (weatherItemPicked) => {
-    weatherItem = weatherItemPicked;
-  };
+  useEffect(() => {
+    setDates(startDate, endDate)
+  }, []);
+
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -79,10 +70,12 @@ function FilterScreen() {
     setStartDatePickerVisibility(false);
   };
 
+
+
   const handleStartDateConfirm = (date) => {
     console.log("Start Date Picked: ", date);
-    
-    
+
+
     //VALID start date chosen
     if (checkValidDateRange(date, endDate)) {
       // console.log("valid start date!!!!");
@@ -99,6 +92,13 @@ function FilterScreen() {
     }
   };
 
+  const setDates = (start, end) => {
+
+    if (checkValidDateRange(start, end)) {
+      console.log("date filter triggered");
+      dispatch(actions.setDateFilter(start, end));
+    }
+  }
   const showEndDatePicker = () => {
     setEndDatePickerVisibility(true);
   };
@@ -106,6 +106,38 @@ function FilterScreen() {
   const hideEndDatePicker = () => {
     setEndDatePickerVisibility(false);
   };
+
+  const onFilterPress = (start, end) => {
+    //eventItem is empty by default,
+    // only triger event filter if event dropdown is changed
+    if (eventValue == null) {
+      //donothing for default event filter option, hence reduce render burden
+      console.log("event Item " + eventValue)
+    } else {
+      console.log("event filter triggered!");
+      dispatch(actions.setDisasterFilter(eventValue));
+    }
+
+    //weatehrItem is empty by default,
+    //only triger weatehr filter if weaterh dropdown is changed.
+    if (weatherValue == null) {
+      //do nothing for default weather filter option, hence reduce render burden
+      console.log("weather Item " + weatherValue)
+    } else {
+      console.log("weather filter triggered!");
+      dispatch(actions.setWeatherFilter(weatherValue));
+    }
+
+    //only triger date filter if the date range is valid
+    if (checkValidDateRange(start, end)) {
+      console.log("date filter triggered");
+      setStartDate(start);
+      setEndDate(end);
+      dispatch(actions.setDateFilter(start, end));
+    }
+    navigation.navigate("Map");
+
+  }
 
   const handleEndDateConfirm = (date) => {
     console.log("End Date Picked: ", date);
@@ -137,38 +169,29 @@ function FilterScreen() {
     <View style={styles.grandContainer}>
       <View style={styles.buttonContainer}>
         <Button
-          icon="play-circle-outline"
           mode="contained"
           contentStyle={{ backgroundColor: "green" }}
           labelStyle={{ fontSize: 20 }}
           onPress={() => {
-            //eventItem is empty by default,
-            // only triger event filter if event dropdown is changed
-            if (eventItem == null) {
-              //donothing for default event filter option, hence reduce render burden
-            } else {
-              console.log("event filter triggered!");
-              dispatch(actions.setDisasterFilter(eventItem));
-            }
-
-            //weatehrItem is empty by default,
-            //only triger weatehr filter if weaterh dropdown is changed.
-            if (weatherItem == null) {
-              //do nothing for default weather filter option, hence reduce render burden
-            } else {
-              console.log("weather filter triggered!");
-              dispatch(actions.setWeatherFilter(weatherItem));
-            }
-
-            //only triger date filter if the date range is valid
-            if (checkValidDateRange(startDate, endDate)) {
-              console.log("date filter triggered");
-              dispatch(actions.setDateFilter(startDate, endDate));
-            }
+            onFilterPress(new Date(), new Date());  // set start and end to today. because we only show current day
           }}
         >
-          Start Filter
+          Go To Today
         </Button>
+        <Button
+          mode="contained"
+          contentStyle={{ backgroundColor: "green" }}
+          labelStyle={{ fontSize: 20 }}
+          onPress={() => {
+            onFilterPress(startDate, endDate);
+            dispatch(actions.setIsGibsVisible(true))
+          }}
+        >
+          Filter Range
+          </Button>
+
+
+
       </View>
 
       <View style={styles.datePickerContianer}>
@@ -192,8 +215,8 @@ function FilterScreen() {
               display="spinner"
               onConfirm={(date) => {
                 handleStartDateConfirm(date);
-                startDateOnPicker.current=date;
-              } }
+                startDateOnPicker.current = date;
+              }}
               onCancel={hideStartDatePicker}
             />
           </TouchableOpacity>
@@ -217,9 +240,8 @@ function FilterScreen() {
               display="spinner"
               onConfirm={(date) => {
                 handleEndDateConfirm(date);
-                endDateOnPicker.current=date;
+                endDateOnPicker.current = date;
               }
-                
               }
               onCancel={hideEndDatePicker}
             />
@@ -229,40 +251,32 @@ function FilterScreen() {
 
       <View style={styles.filterContainer}>
         <DropDownPicker
-          items={weatherItems}
+          items={weather}
           controller={(instance) => (weatherController = instance)}
-          onChangeList={(items, callback) => {
-            new Promise((resolve, reject) => resolve(setWeatherItems(items)))
-              .then(() => callback())
-              .catch(() => {});
-          }}
-          defaultValue={weatherValue}
+          defaultValue={null}
           dropDownMaxHeight={300}
           placeholder="Select Weather"
           containerStyle={{ flex: 3, height: 50 }}
           selectedLabelStyle={{ color: "blue" }}
           onChangeItem={(item) => {
-            setWeatherItem(item);
+            console.log("weather filter is:");
+            console.log(item);
+            setWeatherValue(item);
           }}
         />
 
         <DropDownPicker
-          items={eventItems}
+          items={event}
           controller={(instance) => (eventController = instance)}
           dropDownMaxHeight={300}
-          onChangeList={(items, callback) => {
-            new Promise((resolve, reject) => resolve(setEventItems(items)))
-              .then(() => callback())
-              .catch(() => {});
-          }}
-          defaultValue={eventValue}
+          defaultValue={null}
           placeholder="Select Event"
           containerStyle={{ flex: 3, height: 50 }}
           selectedLabelStyle={{ color: "blue" }}
           onChangeItem={(item) => {
-            // console.log("item filter is:");
-            // console.log(item);
-            setEventItem(item);
+            console.log("event filter is:");
+            console.log(item);
+            seteventValue(item);
           }}
         />
       </View>
@@ -281,16 +295,6 @@ const styles = StyleSheet.create({
   filterContainer: {
     flex: 3.5,
     flexDirection: "row",
-    // backgroundColor: "purple",
-    // ...Platform.select({
-    //   ios: {
-
-    //   },
-    //   android: {
-
-    //   }
-    // })
-
     // The solution: Apply zIndex to any device except Android
     ...(Platform.OS !== "android" && {
       zIndex: 10,
@@ -309,10 +313,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "20%",
-    //  width:"30%",
-    //  zIndex:-1, //this will freeze up the dropdown button, bug of the component
-
-    // backgroundColor: "green",
   },
 });
 

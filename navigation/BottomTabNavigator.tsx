@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -74,15 +75,15 @@ const EventFeedStack = createStackNavigator<EventScreenParamList>();
   );
 }
 
-const MapScreenStack = createStackNavigator<MapScreenParamList>();
-
+const MapScreenStack = createStackNavigator<MapScreenParamList>()
 function MapScreenNavigator() {
+  const headerDate = useSelector((state) => state.disaster.headerDate);
   return (
     <MapScreenStack.Navigator>
       <MapScreenStack.Screen
         name="MapScreen"
         component={MapScreen}
-        options={{ headerTitle: 'Map Screen Title' }}
+        options={{ headerTitle: headerDate, headerTitleAlign: "center" }}
       />
     </MapScreenStack.Navigator>
   );

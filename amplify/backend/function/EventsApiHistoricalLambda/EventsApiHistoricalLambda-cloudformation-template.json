@@ -69,7 +69,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-geotracker-dev-132225-deployment",
-          "S3Key": "amplify-builds/EventsApiHistoricalLambda-75683839512f5942474d-build.zip"
+          "S3Key": "amplify-builds/EventsApiHistoricalLambda-6a4c707a34314f364d6d-build.zip"
         }
       }
     },

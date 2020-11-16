@@ -36,13 +36,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyAlsKpDesuTMqcBiO0lTgRXEJJKnm8l41Y"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "android": {
       "package": "com.temple.geotracker",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAlsKpDesuTMqcBiO0lTgRXEJJKnm8l41Y"
+        }
+      },
       "versionCode": 1
     },
     "scheme": "geotracker"
