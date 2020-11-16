@@ -498,14 +498,14 @@ const iconOnMap = StyleSheet.create({
   location: {
     position: "absolute",
     right: 0,
-    bottom: 0,
+    bottom:55,
   },
 
   twitter: {
 
     position: "absolute",
-    left: 5,
-    bottom: 5,
+    right: 0,
+    bottom: 0,
     
     backgroundColor:"transparent",
 
