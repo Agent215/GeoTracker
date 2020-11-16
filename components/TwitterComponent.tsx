@@ -45,8 +45,8 @@ function TwitterComponent(props) {
   // console.log("radius is "+radius);
 
   useEffect(() => {
-    console.log("Trending has changed...");
-    console.log(props.trendsResult);
+    // console.log("Trending has changed...");
+    // console.log(props.trendsResult);
     let temArray = [];
     temArray = props.trendsResult.trends;
 
@@ -245,15 +245,19 @@ function TwitterComponent(props) {
         onPress={() => {
           toggleModal();
 
-          let trendsData = props.trendsResult.trends.map((trend, index) => {
-            return { name: trend, id: index };
-          });
+          try{
+            let trendsData = props.trendsResult.trends.map((trend, index) => {
+              return { name: trend, id: index };
+            });
+  
+            setTrending(trendsData);
+          }
+          catch{
+            console.log("\n\n\n\n\nSomething wrong getting the trend");
+            setTrending([]);
+          }
+          
 
-          setTrending(trendsData);
-
-          // console.log(props.tweetResults);
-
-          //tweetApi(trendsData[0].name ,props.cameraRegion.cameraLatitude,props.cameraRegion.cameraLongitude,20);
         }}
       >
         <View style={styles.buttonContainer}>
@@ -265,7 +269,7 @@ function TwitterComponent(props) {
         avoidKeyboard={true}
         scrollOffset={2}
         isVisible={isModalVisible}
-        // onBackdropPress={() => setModalVisible(false)}
+      // onBackdropPress={() => setModalVisible(false)}
       >
         <View style={{ flex: 1 }}>
           <View style={styles.container}>

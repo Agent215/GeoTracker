@@ -18,7 +18,7 @@ import { State } from "ionicons/dist/types/stencil-public-runtime";
 
 import useTwitterTrendsResults from "../hooks/useTwitterTrendsResult";
 import TwitterComponent from "../components/TwitterComponent";
-
+import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
 
 
 const GOOGLE_PLACES_API_KEY = Keys.googlePlacesKey;
@@ -65,6 +65,10 @@ const MapScreen = ({ navigation }) => {
   const [toggleMap, setToggleMap] = useState(false);
   let tempArray = []; // temp array to store filtered events
 
+  const [tweetApi, tweetResults, tweetErrorMessage] = useTwitterTweetsResults();
+  let [tweets, setTweets] = useState([]);
+
+
   let [cameraRegion, setCameraRegion] = useState({
     cameraLatitude: 36.103,
     cameraLongitude: -116.476,
@@ -100,6 +104,11 @@ const MapScreen = ({ navigation }) => {
     
   }, []);
 
+  useEffect(() => {
+
+    console.log(tweetResults)
+  }, [tweetResults]);
+
   /**
    * standard shows streets
    * hybrid shows town and city names over satilite view
@@ -120,6 +129,33 @@ const MapScreen = ({ navigation }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+
+  const runApi = () => {
+
+    tweetApi(
+        currentDisaster.title,
+        currentDisaster.currentLat,
+        currentDisaster.currentLong,
+        400
+    );
+}
+
+useEffect(() => {
+    if (tweetResults != undefined) {
+
+      if (tweetResults[0] = undefined) {
+        tweetResults.shift();
+       
+       }
+
+       setTweets(tweetResults);
+      
+
+      // console.log("in useEffect");
+      // console.log(tweets);
+    }
+  }, [tweetResults]);
 
   /*
   animateToUser 
@@ -179,6 +215,7 @@ const MapScreen = ({ navigation }) => {
   useEffect(() => {
     if (currentDisaster != "") {
       animateToDisaster();
+      runApi();
     }
   }, [currentDisaster.title, dispatch]);
 
@@ -246,24 +283,26 @@ const MapScreen = ({ navigation }) => {
           zoomControlEnabled={true}
           loadingEnabled={true}
 
-        //   onMapReady={
-        //     async()=>{
-        //       console.log("Map is ready");
-        //       let camera = await mapRef.current.getCamera();
-        //       console.log("camera center lat and long:" );
+          onMapReady={
+            async()=>{
+              console.log("Map is ready");
+              let camera = await mapRef.current.getCamera();
+              console.log("camera center lat and long:" );
 
-        //       console.log(camera.center.latitude, camera.center.longitude );
+              console.log(camera.center.latitude, camera.center.longitude );
 
-        //  //     trendsApi(camera.center.latitude,camera.center.longitude );
+             trendsApi(camera.center.latitude,camera.center.longitude );
 
 
               
             
-        //     }
-        //   }
+            }
+          }
 
           onRegionChangeComplete={async (NewRegion) => {
                   
+            trendsApi(NewRegion.latitude,NewRegion.longitude);
+
             let mapBoundry = await mapRef.current.getMapBoundaries();
            
             setCameraRegion({
@@ -275,7 +314,7 @@ const MapScreen = ({ navigation }) => {
             }
             );
 
-            trendsApi(NewRegion.latitude,NewRegion.longitude);
+            
         
             // tweetApi(trendsResults[0],NewRegion.latitude,NewRegion.longitude ,20);
             console.log("map region change complete");
@@ -311,6 +350,7 @@ const MapScreen = ({ navigation }) => {
           visable={isModalVisible}
           disaster={currentDisaster}
           toggleModal={toggleModal}
+          tweets = {tweets}
         />
 
         <GooglePlacesAutocomplete
