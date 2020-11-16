@@ -54,7 +54,10 @@ const CustomModal = (props) => {
 
 
                 <View style={styles.container}>
-                    <Text style={styles.title}>Title: {props.title}</Text>
+                    <Text 
+                        adjustsFontSizeToFit
+                        numberOfLines={3}
+                        style={styles.title}>Title: {props.title}</Text>
                     <ScrollView>
                         <View style={{ flexDirection: "row" }}>
                             <FeedScreenShare sourceLink={props.sourceLink} color="white" size={50} />
