@@ -39,19 +39,23 @@ GeoTracker uses react native maps to display environmental events that are updat
 ## How To Use
 
 ### Installation for Andriod OS
-- Log into GeoTracker using User: geotracker | password: GeoTracker and download the apk from this link <br />
-[GeoTracker APK](https://expo.io/accounts/geotracker/projects/GeoTracker/builds/663ac73e-c53f-4dcc-80d7-0f8cf3a6b444
-)
+Download the apk from this link <br />
+[GeoTracker APK](https://exp-shell-app-assets.s3.us-west-1.amazonaws.com/android/%40geotracker/GeoTracker-70a78826d899437b894db8d9011807de-signed.apk)
 
 or
 
-- For users testing the release, download the apk given with release.
+Download Expo for Andriod.
+- Go to Profile tab upon the loading of Expo Client.
+- Sign in with User: geotracker | Password: GeoTracker
+- Under Published Projects choose GeoTracker.
 
+or
 
+For users testing the release, download the apk given with release.
 
 
 ### Installation for iOS
-- Download Expo Client for iOS.
+Download Expo Client for iOS.
 - Go to Profile tab upon the loading of Expo Client.
 - Sign in with User: geotracker | Password: GeoTracker
 - Under Published Projects choose GeoTracker.
