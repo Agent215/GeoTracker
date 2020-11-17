@@ -39,13 +39,21 @@ GeoTracker uses react native maps to display environmental events that are updat
 ## How To Use
 
 ### Installation for Andriod OS
+- Log into GeoTracker using User: geotracker | password: GeoTracker and download the apk from this link <br />
+[GeoTracker APK](https://expo.io/accounts/geotracker/projects/GeoTracker/builds/663ac73e-c53f-4dcc-80d7-0f8cf3a6b444
+)
+
+or
+
 - For users testing the release, download the apk given with release.
+
+
 
 
 ### Installation for iOS
 - Download Expo Client for iOS.
 - Go to Profile tab upon the loading of Expo Client.
-- Sign in with User: GeoTracker | Password: geotracker
+- Sign in with User: geotracker | Password: GeoTracker
 - Under Published Projects choose GeoTracker.
 
 [Back To The Top](#read-me-template)
@@ -80,7 +88,7 @@ Demo 3 feature release
 - Drop downs on filter screen should go away upon pressing outside of them.
 - User should not be able to select a date in the future on the calenders. 
 - App loading error crashed on load occasionally happens.
-- Earthquakes don't show on animation play.
+- Earthquakes don't show on animation play
 
 --- 
 ## References
