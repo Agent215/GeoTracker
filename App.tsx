@@ -76,7 +76,7 @@ async function loadAllData() {
 
 function concatArrays() {
   let tempArray = [].concat(historicalEventList,currentEventList);
-  combinedEvents = [].concat(tempArray, earthquakeEventList);
+  combinedEvents = [].concat(tempArray, earthquakeEventList); 
 }
 
 async function getEarthquakeData() {
