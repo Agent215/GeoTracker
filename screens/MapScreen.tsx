@@ -401,7 +401,6 @@ const MapScreen = ({ navigation }) => {
       }
       else {
         event.isShow = false;
-   
       }
       return event
     });
