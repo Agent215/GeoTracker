@@ -99,6 +99,7 @@ const MapScreen = ({ navigation }) => {
     setCurrentDate(startDate);            // reset start date back to begining.
     filterDisasters();                    // filter all the disasters again to give us the intitial set we started with
     setMaxZoom(19)                        // let user zoom again!!
+    setDisastersInRange(filteredDisasters);
   }
 
   useEffect(() => {
@@ -119,7 +120,6 @@ const MapScreen = ({ navigation }) => {
       setAnimationButton("play-circle")
       setMaxZoom(19);
       filterDisasters();
-      setDisastersInRange(filteredDisasters);
       setCurrentDate(startDate);            // reset start date back to begining.
     }
   }, [currentDate])
@@ -332,7 +332,6 @@ const MapScreen = ({ navigation }) => {
         // so then set end date to today, to make sure we show it.
       }
       else { endDate = event.isClosed }       // else set endDate to date supplied by API
-
       if
         (
         (disasterFilter.value === "all"      // filter for all
@@ -342,7 +341,10 @@ const MapScreen = ({ navigation }) => {
         )
         &&
         (
-          startDate_ISO <= event.currentDate && endDate <= endDate_ISO
+          isWithinInterval(parseISO(event.currentDate), {
+            start: startDate,
+            end: parseISO(endDate_ISO)
+          }) 
         )
       ) { event.isShow = true }
       else {
@@ -353,7 +355,7 @@ const MapScreen = ({ navigation }) => {
 
     // create a new array from the array with correctly marked isShow prop
     disasterToFilter.forEach(element => {
-      if (element.isShow) tempArray.push(element)
+      if (element.isShow) {tempArray.push(element);}
     })
 
     if (disasterFilter.value != "none") {
@@ -368,11 +370,6 @@ const MapScreen = ({ navigation }) => {
     // setDisastersInRange(tempArray);
   };
 
-  // const getTrendsCallback = (lat, long)=>{
-  //   trendsApi(lat, long);
-  //   console.log("getTrendsCallback called ")
-
-  // }
 
   /*
    *function to be called at each interval of animation of markers 
