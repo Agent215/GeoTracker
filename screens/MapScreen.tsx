@@ -401,7 +401,7 @@ const MapScreen = ({ navigation }) => {
       }
       else {
         event.isShow = false;
-       // console.log(startDate + " " +endingDate + " "+ currentdate)
+   
       }
       return event
     });
