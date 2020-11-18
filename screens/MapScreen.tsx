@@ -382,7 +382,6 @@ const MapScreen = ({ navigation }) => {
     const disastersOnDay = disastersInRange.map((event) => {
       let startDate = event.currentDate;
       let endingDate;
-      
       if (event.isClosed == null) {        // id isClosed is null then event is open so set endate to today
         endingDate = new Date().toISOString();
       }
