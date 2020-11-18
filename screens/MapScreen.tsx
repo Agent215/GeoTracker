@@ -397,7 +397,7 @@ const MapScreen = ({ navigation }) => {
           || event.category === disasterFilter.value
         )) {
         event.isShow = true
-      //  console.log(parseISO(startDate) + " " +parseISO(endingDate) + " "+ currentdate)
+ 
       }
       else {
         event.isShow = false;
