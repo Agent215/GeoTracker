@@ -397,7 +397,6 @@ const MapScreen = ({ navigation }) => {
           || event.category === disasterFilter.value
         )) {
         event.isShow = true
- 
       }
       else {
         event.isShow = false;
