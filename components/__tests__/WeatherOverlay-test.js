@@ -26,7 +26,7 @@ describe('<WeatherOverlay />', () => {
 
     it('WeatherOVerlay is null if gibs is visible', () => {
 
-        const weatherOverlayComponent = renderer.create(<WeatherOverlay category={"none"} />).toJSON()
+        const weatherOverlayComponent = renderer.create(<WeatherOverlay category={"clouds"} gibsVisible={true} />).toJSON()
         expect(weatherOverlayComponent).toBeNull();
     })
 })
