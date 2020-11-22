@@ -20,7 +20,7 @@ jest.mock('@react-navigation/native', () => {
 });
 
 enzyme.configure({ adapter: new Adapter() });
-// mock of props to pass disaster card
+// mock of  props to pass disaster card
 const size= 22;
 const category = "clouds"
 

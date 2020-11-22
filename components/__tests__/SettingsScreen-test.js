@@ -7,12 +7,9 @@ import signOut from '../../screens/SettingsScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
 import * as enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import Amplify from 'aws-amplify';
-import awsconfig from '../../aws-exports';
+
 
 enzyme.configure({ adapter: new Adapter() });
-
-Amplify.configure(awsconfig);
 
 Auth.signUp = jest.fn().mockImplementation(
     () => {
@@ -41,11 +38,3 @@ it('calls actions as expected when pressing buttons', () => {
         child.simulate('press');
     });
 });
-
-
-
-
-
-
-
-
