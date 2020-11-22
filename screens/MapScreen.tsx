@@ -254,26 +254,19 @@ const MapScreen = ({ navigation }) => {
 
   const splitAndDupEvents = (events) => {
     let returnEvents = [];
-
     // for each event
     events.forEach(event => {
       let dupEvents = [];
       if (event.locationList != undefined) {
-
         if (event.locationList.length > 1) {
-
           let temp = [...event.locationList];
           // for each location
           temp.forEach(location => {
-
             //if dupEvents!contains event with location.date
             let compareDate = new Date(location.date);
             if (dupEvents.includes(compareDate.toDateString())) {
               // do nothing 
-
             } else {
-
-
               let dup: EventEntity = {
                 title: "",
                 category: "",
@@ -430,19 +423,6 @@ const MapScreen = ({ navigation }) => {
           zoomControlEnabled={true}
           loadingEnabled={true}
           maxZoomLevel={maxZoom}
-          // onMapReady={
-          //   async () => {
-          //     console.log("Map is ready");
-          //     let camera = await mapRef.current.getCamera();
-          //     console.log("camera center lat and long:");
-          //     console.log(camera.center.latitude, camera.center.longitude);
-          //     trendsApi(camera.center.latitude, camera.center.longitude);
-
-
-
-
-          //   }
-          // }
           onRegionChangeComplete={async (NewRegion) => {
           
             let mapBoundry = await mapRef.current.getMapBoundaries();
@@ -485,6 +465,7 @@ const MapScreen = ({ navigation }) => {
           <WeatherOverlay
             category={weatherFilter.value}
             gibsVisible={isGibsVisible}
+            date={format(currentDate, "yyyy-MM-dd")}
           />
 
         </MapView>
