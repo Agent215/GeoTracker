@@ -3,8 +3,6 @@ import renderer from 'react-test-renderer';
 import WeatherOverlay from '../../components/WeatherOverlay';
 import * as enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Provider } from 'react-redux'
-import configureStore from 'redux-mock-store'
 
 enzyme.configure({ adapter: new Adapter() });
 
