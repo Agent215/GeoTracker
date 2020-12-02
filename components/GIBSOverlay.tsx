@@ -19,7 +19,7 @@ const GIBSOverlay = (props) => {
         urlTemplate={gibsUrl}
         maximumZ={6}
         flipY={false}
-        key={props.date}
+        key={props.date + props.category}
         />)
     };
 
