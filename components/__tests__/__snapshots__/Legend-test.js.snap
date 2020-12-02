@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Legend Component Legend renders correctly 1`] = `
+<SvgMock
+  style={
+    Object {
+      "marginTop": 40,
+    }
+  }
+  width={22}
+/>
+`;

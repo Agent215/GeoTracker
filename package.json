@@ -13,6 +13,9 @@
     "setupFilesAfterEnv": [
       "jest-enzyme"
     ],
+    "moduleNameMapper": {
+      "\\.svg": "<rootDir>/__mocks__/svgMocks.js"
+    },
     "testEnvironment": "enzyme",
     "testEnvironmentOptions": {
       "enzymeAdapter": "react16"
