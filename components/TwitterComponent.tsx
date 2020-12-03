@@ -12,6 +12,7 @@ import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
 import useTwitterTrendsResults from "../hooks/useTwitterTrendsResult";
 import { AntDesign } from "@expo/vector-icons";
 
+
 function TwitterComponent(props) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [trendsApi, trendsResults, errorMessage] = useTwitterTrendsResults();
@@ -36,6 +37,8 @@ function TwitterComponent(props) {
       : Math.abs(long1 - long2) * 54.6;
   };
 
+
+
   let radius = getRadius(
     props.cameraRegion.cameraLatitude,
     props.cameraRegion.cameraNELatitude,
@@ -44,6 +47,7 @@ function TwitterComponent(props) {
   );
   // console.log("radius is "+radius);
 
+ 
   useEffect(() => {
     // console.log("Trending has changed...");
     // console.log(props.trendsResult);
@@ -146,9 +150,9 @@ function TwitterComponent(props) {
   }, [trending]);
 
   useEffect(() => {
-    
+
     if (tweetResults != undefined) {
-    
+
       Object.keys(tweets).forEach((e) => {
         if (tweets[e].trend == tweetResults.query) {
           console.log("Updaing tweets:::");
@@ -240,7 +244,7 @@ function TwitterComponent(props) {
     if (trendsResults != undefined && trendsResults != "") {
       try {
         let trendsData = trendsResults.trends.map((trend, index) => {
-         // trend = (trend.length && trend[0] == '#') ? trend.slice(1) : trend; // remove #
+          // trend = (trend.length && trend[0] == '#') ? trend.slice(1) : trend; // remove #
           return { name: trend, id: index };
         });
 
