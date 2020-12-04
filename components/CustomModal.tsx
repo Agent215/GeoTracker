@@ -1,19 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Linking } from 'react-native';
 import CustomToast from '../components/CustomToast';
 import Modal from 'react-native-modal';
 import { Dimensions } from 'react-native';
 import * as actions from '../store/actions/actions';
 import { IconButton, Colors } from "react-native-paper";
-import { Row } from 'native-base';
 import FeedScreenShare from './ShareFeat';
 import { useDispatch, useSelector } from 'react-redux';
 import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
+import TweetCard from './tweetCard';
 
 
 const { width, height } = Dimensions.get('screen');
 const SCREEN_WIDTH = width;
-const MODAL_HEIGHT = height / 2;
+const MODAL_HEIGHT = height;
 
 
 // modal to cover part of map screen. 
@@ -32,6 +32,7 @@ const CustomModal = (props) => {
         toastRef.current.show(`EventSaved`, 500);
 
     }
+
 
     const checkTweets = () => {
         if ((tweets.response_size != 0) && (tweets.response_size != undefined)) { hasTweets = true }
@@ -87,7 +88,7 @@ const CustomModal = (props) => {
 
 
                 <View style={styles.container}>
-                    <Text 
+                    <Text
                         adjustsFontSizeToFit
                         numberOfLines={3}
                         style={styles.title}>Title: {props.title}</Text>
@@ -106,16 +107,12 @@ const CustomModal = (props) => {
                         {hasTweets ?
                             tweets.tweets.map((tweet) => {
                                 return (
-                                    <View>
-                                        <Text style={styles.user} >
-
-                                            {tweet.user}
-                                        </Text>
-                                        <Text style={styles.tweets}>
-
-                                            {tweet.text}
-                                        </Text>
-                                    </View>
+                                    <TweetCard 
+                                    user = {tweet.user}
+                                    url = {tweet.url}
+                                    text = {tweet.text}
+                                    date = {tweet.date}
+                                    />
                                 )
                             }) : <Text style={styles.title}>
 
@@ -173,15 +170,22 @@ const styles = StyleSheet.create({
     },
     modal: {
         flex: 1,
-        marginTop: height / 2,
+        marginTop: height /2.5,
         marginLeft: 0,
         marginRight: 0,
-
 
     }
     ,
     eventData: {
         color: 'white',
+        fontSize: 20
+    },
+    date: {
+        color: 'white',
+        fontSize: 20
+    },
+    link: {
+        color: 'blue',
         fontSize: 20
     }
 });

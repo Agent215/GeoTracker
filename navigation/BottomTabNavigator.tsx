@@ -69,7 +69,7 @@ const EventFeedStack = createStackNavigator<EventScreenParamList>();
       <EventFeedStack.Screen
         name="EventFeedScreen"
         component={EventFeedScreen}
-        options={{ headerTitle: 'Event Screen Title' }}
+        options={{ headerTitle: 'Event Feed' }}
       />
     </EventFeedStack.Navigator>
   );
@@ -97,7 +97,7 @@ const SettingsStack = createStackNavigator<SettingsScreenParamList>();
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
-        options={{ headerTitle: 'Settings Screen Title' }}
+        options={{ headerTitle: 'Login Screen' }}
       />
     </SettingsStack.Navigator>
   );
@@ -111,7 +111,7 @@ function FilterScreenNavigator() {
       <FilterStack.Screen
         name="FilterScreen"
         component={FilterScreen}
-        options={{ headerTitle: 'Filter Screen Title' }}
+        options={{ headerTitle: 'Filter Settings' }}
       />
     </FilterStack.Navigator>
   );

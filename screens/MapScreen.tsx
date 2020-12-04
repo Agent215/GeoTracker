@@ -319,6 +319,15 @@ const MapScreen = ({ navigation }) => {
     const disasterToFilter = allEvents.map((event) => {
 
 
+      function CheckOnSameDay(event) {
+
+        let current = format(parseISO(event.currentDate), "yyyy-MM-dd");
+        let end = (format(parseISO(endDate_ISO), "yyyy-MM-dd"))
+        if (current == end) {
+          return true;
+        }
+      }
+
       let endDate;
       if (event.isClosed == null) {
         endDate = new Date().toISOString();  // if isclosed is null then that means event is still open
@@ -334,10 +343,10 @@ const MapScreen = ({ navigation }) => {
         )
         &&
         (
-          isWithinInterval(parseISO(event.currentDate), {
+          (isWithinInterval(parseISO(event.currentDate), {
             start: startDate,
             end: parseISO(endDate_ISO)
-          }) 
+          })) || CheckOnSameDay(event)
         )
       ) { event.isShow = true }
       else {
@@ -348,7 +357,7 @@ const MapScreen = ({ navigation }) => {
 
     // create a new array from the array with correctly marked isShow prop
     disasterToFilter.forEach(element => {
-      if (element.isShow) {tempArray.push(element);}
+      if (element.isShow) { tempArray.push(element); }
     })
 
     if (disasterFilter.value != "none") {
@@ -375,6 +384,7 @@ const MapScreen = ({ navigation }) => {
     const disastersOnDay = disastersInRange.map((event) => {
       let startDate = event.currentDate;
       let endingDate;
+
       if (event.isClosed == null) {        // id isClosed is null then event is open so set endate to today
         endingDate = new Date().toISOString();
       }
@@ -382,7 +392,8 @@ const MapScreen = ({ navigation }) => {
       if ((isWithinInterval(currentdate, {
         start: parseISO(startDate),
         end: parseISO(endingDate)
-      }) || (new Date(startDate).toDateString() == new Date(currentDate).toDateString()))
+      }) || (format(parseISO(startDate), "yyyy-MM-dd") == format(currentdate, "yyyy-MM-dd"))
+      )
         && (disasterFilter.value === "all"      // filter for all
           || disasterFilter.value === ""        // first time we render
           || disasterFilter.value == undefined  //just in case
@@ -424,7 +435,7 @@ const MapScreen = ({ navigation }) => {
           loadingEnabled={true}
           maxZoomLevel={maxZoom}
           onRegionChangeComplete={async (NewRegion) => {
-          
+
             let mapBoundry = await mapRef.current.getMapBoundaries();
             setCameraRegion({
               cameraLatitude: NewRegion.latitude,
@@ -481,7 +492,7 @@ const MapScreen = ({ navigation }) => {
           disaster={currentDisaster}
           startDate={currentDisaster.currentDate}
           toggleModal={toggleModal}
-     
+
         />
 
         <GooglePlacesAutocomplete
@@ -530,8 +541,8 @@ const MapScreen = ({ navigation }) => {
           <TwitterComponent
             cameraRegion={cameraRegion}
             //trendsResult={trendsResults}
-            lat = {cameraRegion.cameraLatitude}
-            long = {cameraRegion.cameraLongitude}
+            lat={cameraRegion.cameraLatitude}
+            long={cameraRegion.cameraLongitude}
           />
         </View>
 

@@ -12,6 +12,7 @@ import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
 import useTwitterTrendsResults from "../hooks/useTwitterTrendsResult";
 import { AntDesign } from "@expo/vector-icons";
 
+
 function TwitterComponent(props) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [trendsApi, trendsResults, errorMessage] = useTwitterTrendsResults();
@@ -36,6 +37,8 @@ function TwitterComponent(props) {
       : Math.abs(long1 - long2) * 54.6;
   };
 
+
+
   let radius = getRadius(
     props.cameraRegion.cameraLatitude,
     props.cameraRegion.cameraNELatitude,
@@ -43,6 +46,7 @@ function TwitterComponent(props) {
     props.cameraRegion.cameraNELongitude
   );
   // console.log("radius is "+radius);
+
 
   useEffect(() => {
     // console.log("Trending has changed...");
@@ -131,6 +135,11 @@ function TwitterComponent(props) {
             break;
         }
 
+
+        let query = unescape(encodeURIComponent(trend))
+        console.log(query)
+        //  let s = decodeURIComponent(escape(query)).toString();
+        //  console.log("s " +s);
         try {
           tweetApi(
             trend,
@@ -139,16 +148,16 @@ function TwitterComponent(props) {
             radius
           );
         } catch (err) {
-          alert(err + " " + tweetErrorMessage)
+          alert(+ "there was a problem fetching tweets for : " + trend + " " + err + " " + tweetErrorMessage)
         }
       });
     }
   }, [trending]);
 
   useEffect(() => {
-    
+
     if (tweetResults != undefined) {
-    
+
       Object.keys(tweets).forEach((e) => {
         if (tweets[e].trend == tweetResults.query) {
           console.log("Updaing tweets:::");
@@ -240,7 +249,7 @@ function TwitterComponent(props) {
     if (trendsResults != undefined && trendsResults != "") {
       try {
         let trendsData = trendsResults.trends.map((trend, index) => {
-         // trend = (trend.length && trend[0] == '#') ? trend.slice(1) : trend; // remove #
+          // trend = (trend.length && trend[0] == '#') ? trend.slice(1) : trend; // remove #
           return { name: trend, id: index };
         });
 
@@ -298,9 +307,9 @@ function TwitterComponent(props) {
               }}
             >
               {/* <Text style={{fontSize:20}}>Map Camera latitude: {props.cameraRegion.cameraLatitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera longtitude: {props.cameraRegion.cameraLongitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera Northeast latitude: {props.cameraRegion.cameraNELatitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text>*/}
+              <Text style={{fontSize:20}}>Map Camera longtitude: {props.cameraRegion.cameraLongitude} </Text> */}
+              {/* <Text style={{fontSize:20}}>Map Camera Northeast latitude: {props.cameraRegion.cameraNELatitude} </Text>
+              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text> */}
 
               <Text style={{ fontSize: 25, fontWeight: "bold" }}>Trending</Text>
 
