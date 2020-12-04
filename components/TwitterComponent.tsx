@@ -47,7 +47,7 @@ function TwitterComponent(props) {
   );
   // console.log("radius is "+radius);
 
- 
+
   useEffect(() => {
     // console.log("Trending has changed...");
     // console.log(props.trendsResult);
@@ -135,6 +135,8 @@ function TwitterComponent(props) {
             break;
         }
 
+
+    
         try {
           tweetApi(
             trend,
@@ -143,7 +145,7 @@ function TwitterComponent(props) {
             radius
           );
         } catch (err) {
-          alert(err + " " + tweetErrorMessage)
+          alert(+ "there was a problem fetching tweets for : " + trend + " " + err + " " + tweetErrorMessage)
         }
       });
     }
@@ -302,9 +304,9 @@ function TwitterComponent(props) {
               }}
             >
               {/* <Text style={{fontSize:20}}>Map Camera latitude: {props.cameraRegion.cameraLatitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera longtitude: {props.cameraRegion.cameraLongitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera Northeast latitude: {props.cameraRegion.cameraNELatitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text>*/}
+              <Text style={{fontSize:20}}>Map Camera longtitude: {props.cameraRegion.cameraLongitude} </Text> */}
+              {/* <Text style={{fontSize:20}}>Map Camera Northeast latitude: {props.cameraRegion.cameraNELatitude} </Text>
+              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text> */}
 
               <Text style={{ fontSize: 25, fontWeight: "bold" }}>Trending</Text>
 

@@ -5,11 +5,9 @@ import Modal from 'react-native-modal';
 import { Dimensions } from 'react-native';
 import * as actions from '../store/actions/actions';
 import { IconButton, Colors } from "react-native-paper";
-import { Row } from 'native-base';
 import FeedScreenShare from './ShareFeat';
 import { useDispatch, useSelector } from 'react-redux';
 import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
-import * as WebBrowser from 'expo-web-browser';
 import TweetCard from './tweetCard';
 
 
@@ -35,9 +33,6 @@ const CustomModal = (props) => {
 
     }
 
-    const _handleOpenWithWebBrowser = (link) => {
-        Linking.openURL(link);
-    };
 
     const checkTweets = () => {
         if ((tweets.response_size != 0) && (tweets.response_size != undefined)) { hasTweets = true }
@@ -178,7 +173,6 @@ const styles = StyleSheet.create({
         marginTop: height /2.5,
         marginLeft: 0,
         marginRight: 0,
-
 
     }
     ,
