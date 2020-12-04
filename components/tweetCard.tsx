@@ -3,7 +3,7 @@ import { Card, CardItem, Text } from "native-base";
 import { Col, Grid } from "react-native-easy-grid";
 import { StyleSheet, Linking } from "react-native";
 import { View } from "./Themed";
-import { format} from "date-fns/esm";
+import {format} from "date-fns/esm";
 
 const TweetCard = (props) => {
 
