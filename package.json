@@ -21,7 +21,7 @@
       "enzymeAdapter": "react16"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|@codler|react-native-keyboard-aware-scroll-view|listenToKeyboardEvents|sentry-expo|native-base|@sentry/.*)"
+      "node_modules/(?!(jest-)?react-native|(date-fns/esm)|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|@codler|react-native-keyboard-aware-scroll-view|listenToKeyboardEvents|sentry-expo|native-base|@sentry/.*)"
     ]
   },
   "dependencies": {
