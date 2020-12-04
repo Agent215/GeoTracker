@@ -559,6 +559,15 @@ const MapScreen = ({ navigation }) => {
           style={mapButtons.animateButtons}
         >
           <IconButton
+            icon="rewind"
+            color={Colors.blue600}
+            size={50}
+            disabled={canPlay}
+            onPress={() => {
+              toggleAnimation();
+            }}
+          />
+          <IconButton
             icon={animateButton}
             color={Colors.blue600}
             size={50}
@@ -574,6 +583,15 @@ const MapScreen = ({ navigation }) => {
             size={50}
             onPress={() => {
               stopAnimation();
+            }}
+          />
+          <IconButton
+            icon="fast-forward"
+            color={Colors.blue600}
+            size={50}
+            disabled={canPlay}
+            onPress={() => {
+              toggleAnimation();
             }}
           />
         </View>
