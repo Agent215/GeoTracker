@@ -136,7 +136,10 @@ function TwitterComponent(props) {
         }
 
 
-    
+        let query = unescape(encodeURIComponent(trend))
+        console.log(query)
+        //  let s = decodeURIComponent(escape(query)).toString();
+        //  console.log("s " +s);
         try {
           tweetApi(
             trend,

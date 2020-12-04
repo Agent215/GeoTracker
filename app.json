@@ -46,6 +46,9 @@
     },
     "android": {
       "package": "com.temple.geotracker",
+      "adaptiveIcon":{
+        "foregroundImage": "./assets/AppIcon.png"
+      },
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyAlsKpDesuTMqcBiO0lTgRXEJJKnm8l41Y"
