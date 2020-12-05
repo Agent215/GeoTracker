@@ -281,7 +281,7 @@ function TwitterComponent(props) {
         }}
       >
         <View style={styles.buttonContainer}>
-          <AntDesign name="twitter" size={40} color="#95e4f8" />
+          <AntDesign name="twitter" size={45} color="#2A84F1" />
         </View>
       </TouchableOpacity>
 
@@ -402,21 +402,10 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    //supposed to show shadow in android but it doesn't
-    //https://stackoverflow.com/questions/45972506/creating-a-ui-with-box-shadow-in-react-native
     elevation: 5,
-
-    //shadow effect on IOS
-    backgroundColor: "#2E9298",
     borderRadius: 15,
-    padding: 6,
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 5,
-      height: 3,
-    },
-    shadowRadius: 5,
-    shadowOpacity: 2.0,
+    padding: 4,
+    bottom: 5
   },
 
   trendingText: {
