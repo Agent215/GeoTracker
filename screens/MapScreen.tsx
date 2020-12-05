@@ -126,7 +126,7 @@ const MapScreen = ({ navigation }) => {
   //useEffect to enable jumpForward Button during animation
   useEffect(() => {
     let jumpDate = addDays(currentDate, JUMPDELTA)
-    if(isBefore(jumpDate, endDate) && isPlaying){
+    if(isBefore(jumpDate, endDate) && isGibsVisible){
       setCanJumpForward(true)
     } else {
       setCanJumpForward(false)
@@ -136,7 +136,7 @@ const MapScreen = ({ navigation }) => {
   //useEffect to enable jumpBack button during animation
   useEffect(() => {
     let jumpDate = subDays(currentDate, JUMPDELTA)
-    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate) && isPlaying){
+    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate) && isGibsVisible){
       setCanJumpBack(true)
     } else {
       setCanJumpBack(false)
