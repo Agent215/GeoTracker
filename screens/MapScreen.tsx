@@ -20,7 +20,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
-import { addDays, subDays, isWithinInterval, parseISO, format, isEqual } from "date-fns/esm";
+import { addDays, subDays, isWithinInterval, parseISO, format, isBefore, isAfter } from "date-fns/esm";
 import TwitterComponent from "../components/TwitterComponent";
 
 
@@ -103,17 +103,19 @@ const MapScreen = ({ navigation }) => {
   }
 
   const jumpForward = () => {
-
     let jumpDate = addDays(currentDate, 3)
-    setCurrentDate(jumpDate)
-    ShowMarkerOnDay(jumpDate)
+    if(isBefore(jumpDate, endDate)){
+      setCurrentDate(jumpDate)
+      ShowMarkerOnDay(jumpDate)
+    }
   }
 
   const jumpBack = () => {
-
     let jumpDate = subDays(currentDate, 3)
-    setCurrentDate(jumpDate)
-    ShowMarkerOnDay(jumpDate)
+    if(isAfter(jumpDate, startDate) ){
+      setCurrentDate(jumpDate)
+      ShowMarkerOnDay(jumpDate)
+    }
   }
 
   useEffect(() => {
@@ -576,7 +578,7 @@ const MapScreen = ({ navigation }) => {
             icon="rewind"
             color={Colors.blue600}
             size={50}
-            disabled={canPlay}
+            disabled={!isGibsVisible}
             onPress={() => {
               jumpBack();
             }}
@@ -603,7 +605,7 @@ const MapScreen = ({ navigation }) => {
             icon="fast-forward"
             color={Colors.blue600}
             size={50}
-            disabled={canPlay}
+            disabled={!isGibsVisible}
             onPress={() => {
               jumpForward();
             }}
