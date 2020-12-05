@@ -22,6 +22,7 @@ import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
 import { addDays, subDays, isWithinInterval, parseISO, format, isBefore, isAfter, isEqual } from "date-fns/esm";
 import TwitterComponent from "../components/TwitterComponent";
+import { BREAK } from "graphql";
 
 
 
@@ -107,21 +108,25 @@ const MapScreen = ({ navigation }) => {
   //This funcion jumps animation forward a number of days equal to JUMPDELTA
   const jumpForward = () => {
     let jumpDate = addDays(currentDate, JUMPDELTA)
-    setCurrentDate(jumpDate)
-    ShowMarkerOnDay(jumpDate)
+    if(isBefore(jumpDate, endDate)){
+      setCurrentDate(jumpDate)
+      ShowMarkerOnDay(jumpDate)
+    }
   }
 
   //This function jumps animation back a number of days equal to JUMPDELTA
   const jumpBack = () => {
     let jumpDate = subDays(currentDate, JUMPDELTA)
-    setCurrentDate(jumpDate)
-    ShowMarkerOnDay(jumpDate)
+    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate)){
+      setCurrentDate(jumpDate)
+      ShowMarkerOnDay(jumpDate)
+    }
   }
 
   //useEffect to enable jumpForward Button during animation
   useEffect(() => {
     let jumpDate = addDays(currentDate, JUMPDELTA)
-    if(isEqual(jumpDate, endDate) || isBefore(jumpDate, endDate) && isGibsVisible){
+    if(isBefore(jumpDate, endDate) && isPlaying){
       setCanJumpForward(true)
     } else {
       setCanJumpForward(false)
@@ -131,7 +136,7 @@ const MapScreen = ({ navigation }) => {
   //useEffect to enable jumpBack button during animation
   useEffect(() => {
     let jumpDate = subDays(currentDate, JUMPDELTA)
-    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate) && isGibsVisible){
+    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate) && isPlaying){
       setCanJumpBack(true)
     } else {
       setCanJumpBack(false)
