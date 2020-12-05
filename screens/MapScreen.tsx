@@ -4,7 +4,7 @@ import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { currentEventList, combinedEvents, historicalEventList } from "../App";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { IconButton, Colors, Switch } from "react-native-paper";
+import { IconButton, Colors} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -661,10 +661,9 @@ const iconOnMap = StyleSheet.create({
     bottom: 55,
   },
   twitter: {
-
     position: "absolute",
     right: 0,
-    bottom: 0,
+    top: 185,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
@@ -676,7 +675,7 @@ const mapButtons = StyleSheet.create({
   goToCurrent: {
     position: "absolute",
     right: -8,
-    bottom: 55,
+    top: 115,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
