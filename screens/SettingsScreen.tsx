@@ -51,10 +51,10 @@ function SettingsScreen() {
       <Text style={styles.title}>Click below to Delete User</Text>
       {<Button title='Delete User' onPress={onDeleteUser} />}
       {/* {<Button title='Log response from API for event/all query' onPress={testAPI} />} */}
-      {<Button title='Log response from API for event/all query' onPress={testAPI} />}
+      {/* {<Button title='Log response from API for event/all query' onPress={testAPI} />}
       {<Button title='Save test event to datastore' onPress={saveTestEvent} />}
       {<Button title='Read events from datastore' onPress={readFromDatastore} />}
-      {<Button title='Force datastore sync' onPress={forceDatastoreSync} />}
+      {<Button title='Force datastore sync' onPress={forceDatastoreSync} />} */}
     </View>
   );
 }
