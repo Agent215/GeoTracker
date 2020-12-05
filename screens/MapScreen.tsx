@@ -710,7 +710,7 @@ const mapButtons = StyleSheet.create({
   goToCurrent: {
     position: "absolute",
     right: -8,
-    bottom: 125,
+    bottom: 155,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
