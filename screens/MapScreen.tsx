@@ -20,7 +20,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
-import { addDays, subDays, isWithinInterval, parseISO, format, isBefore, isAfter } from "date-fns/esm";
+import { addDays, subDays, isWithinInterval, parseISO, format, isBefore, isAfter, isEqual } from "date-fns/esm";
 import TwitterComponent from "../components/TwitterComponent";
 
 
@@ -41,6 +41,7 @@ let INITIALREGION = {                                                           
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
+let JUMPDELTA = 3;
 
 const MapScreen = ({ navigation }) => {
 
@@ -72,7 +73,8 @@ const MapScreen = ({ navigation }) => {
   const [maxZoom, setMaxZoom] = useState(19);
   const [canPlay, setCanPlay] = useState(false);
   const isGibsVisible = useSelector((state) => state.disaster.isGibsVisible);         // keep track of if the GIBS data is visible
-
+  const [canJumpBack, setCanJumpBack] = useState(false);                              // keep track of jumpBack enabled
+  const [canJumpForward, setCanJumpForward] = useState(false);                        // keep track of jumpForward enabled
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
@@ -102,21 +104,39 @@ const MapScreen = ({ navigation }) => {
     //setDisastersInRange(filteredDisasters);
   }
 
+  //This funcion jumps animation forward a number of days equal to JUMPDELTA
   const jumpForward = () => {
-    let jumpDate = addDays(currentDate, 3)
-    if(isBefore(jumpDate, endDate)){
-      setCurrentDate(jumpDate)
-      ShowMarkerOnDay(jumpDate)
-    }
+    let jumpDate = addDays(currentDate, JUMPDELTA)
+    setCurrentDate(jumpDate)
+    ShowMarkerOnDay(jumpDate)
   }
 
+  //This function jumps animation back a number of days equal to JUMPDELTA
   const jumpBack = () => {
-    let jumpDate = subDays(currentDate, 3)
-    if(isAfter(jumpDate, startDate)){
-      setCurrentDate(jumpDate)
-      ShowMarkerOnDay(jumpDate)
-    }
+    let jumpDate = subDays(currentDate, JUMPDELTA)
+    setCurrentDate(jumpDate)
+    ShowMarkerOnDay(jumpDate)
   }
+
+  //useEffect to enable jumpForward Button during animation
+  useEffect(() => {
+    let jumpDate = addDays(currentDate, JUMPDELTA)
+    if(isEqual(jumpDate, endDate) || isBefore(jumpDate, endDate) && isGibsVisible){
+      setCanJumpForward(true)
+    } else {
+      setCanJumpForward(false)
+    }
+  })
+
+  //useEffect to enable jumpBack button during animation
+  useEffect(() => {
+    let jumpDate = subDays(currentDate, JUMPDELTA)
+    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate) && isGibsVisible){
+      setCanJumpBack(true)
+    } else {
+      setCanJumpBack(false)
+    }
+  })
 
   useEffect(() => {
     if (!isGibsVisible) {
@@ -578,7 +598,7 @@ const MapScreen = ({ navigation }) => {
             icon="rewind"
             color={Colors.blue600}
             size={50}
-            disabled={!isGibsVisible}
+            disabled={!canJumpBack}
             onPress={() => {
               jumpBack();
             }}
@@ -605,7 +625,7 @@ const MapScreen = ({ navigation }) => {
             icon="fast-forward"
             color={Colors.blue600}
             size={50}
-            disabled={!isGibsVisible}
+            disabled={!canJumpForward}
             onPress={() => {
               jumpForward();
             }}
