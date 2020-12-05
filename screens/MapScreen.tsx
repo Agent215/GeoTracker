@@ -20,7 +20,7 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
-import { addDays, isWithinInterval, parseISO, format, isEqual } from "date-fns/esm";
+import { addDays, subDays, isWithinInterval, parseISO, format, isEqual } from "date-fns/esm";
 import TwitterComponent from "../components/TwitterComponent";
 
 
@@ -99,7 +99,21 @@ const MapScreen = ({ navigation }) => {
     setCurrentDate(startDate);            // reset start date back to begining.
     filterDisasters();                    // filter all the disasters again to give us the intitial set we started with
     setMaxZoom(19)                        // let user zoom again!!
-    setDisastersInRange(filteredDisasters);
+    //setDisastersInRange(filteredDisasters);
+  }
+
+  const jumpForward = () => {
+
+    let jumpDate = addDays(currentDate, 3)
+    setCurrentDate(jumpDate)
+    ShowMarkerOnDay(jumpDate)
+  }
+
+  const jumpBack = () => {
+
+    let jumpDate = subDays(currentDate, 3)
+    setCurrentDate(jumpDate)
+    ShowMarkerOnDay(jumpDate)
   }
 
   useEffect(() => {
@@ -564,7 +578,7 @@ const MapScreen = ({ navigation }) => {
             size={50}
             disabled={canPlay}
             onPress={() => {
-              toggleAnimation();
+              jumpBack();
             }}
           />
           <IconButton
@@ -591,7 +605,7 @@ const MapScreen = ({ navigation }) => {
             size={50}
             disabled={canPlay}
             onPress={() => {
-              toggleAnimation();
+              jumpForward();
             }}
           />
         </View>
