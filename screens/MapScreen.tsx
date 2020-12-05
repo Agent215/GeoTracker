@@ -20,8 +20,9 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
-import { addDays, isWithinInterval, parseISO, format, isEqual } from "date-fns/esm";
+import { addDays, subDays, isWithinInterval, parseISO, format, isBefore, isAfter, isEqual } from "date-fns/esm";
 import TwitterComponent from "../components/TwitterComponent";
+import { BREAK } from "graphql";
 
 
 
@@ -41,6 +42,7 @@ let INITIALREGION = {                                                           
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
+let JUMPDELTA = 3;
 
 const MapScreen = ({ navigation }) => {
 
@@ -72,7 +74,8 @@ const MapScreen = ({ navigation }) => {
   const [maxZoom, setMaxZoom] = useState(19);
   const [canPlay, setCanPlay] = useState(false);
   const isGibsVisible = useSelector((state) => state.disaster.isGibsVisible);         // keep track of if the GIBS data is visible
-
+  const [canJumpBack, setCanJumpBack] = useState(false);                              // keep track of jumpBack enabled
+  const [canJumpForward, setCanJumpForward] = useState(false);                        // keep track of jumpForward enabled
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
@@ -99,8 +102,46 @@ const MapScreen = ({ navigation }) => {
     setCurrentDate(startDate);            // reset start date back to begining.
     filterDisasters();                    // filter all the disasters again to give us the intitial set we started with
     setMaxZoom(19)                        // let user zoom again!!
-    setDisastersInRange(filteredDisasters);
+    //setDisastersInRange(filteredDisasters);
   }
+
+  //This funcion jumps animation forward a number of days equal to JUMPDELTA
+  const jumpForward = () => {
+    let jumpDate = addDays(currentDate, JUMPDELTA)
+    if(isBefore(jumpDate, endDate)){
+      setCurrentDate(jumpDate)
+      ShowMarkerOnDay(jumpDate)
+    }
+  }
+
+  //This function jumps animation back a number of days equal to JUMPDELTA
+  const jumpBack = () => {
+    let jumpDate = subDays(currentDate, JUMPDELTA)
+    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate)){
+      setCurrentDate(jumpDate)
+      ShowMarkerOnDay(jumpDate)
+    }
+  }
+
+  //useEffect to enable jumpForward Button during animation
+  useEffect(() => {
+    let jumpDate = addDays(currentDate, JUMPDELTA)
+    if(isBefore(jumpDate, endDate) && isGibsVisible){
+      setCanJumpForward(true)
+    } else {
+      setCanJumpForward(false)
+    }
+  })
+
+  //useEffect to enable jumpBack button during animation
+  useEffect(() => {
+    let jumpDate = subDays(currentDate, JUMPDELTA)
+    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate) && isGibsVisible){
+      setCanJumpBack(true)
+    } else {
+      setCanJumpBack(false)
+    }
+  })
 
   useEffect(() => {
     if (!isGibsVisible) {
@@ -559,6 +600,15 @@ const MapScreen = ({ navigation }) => {
           style={mapButtons.animateButtons}
         >
           <IconButton
+            icon="rewind"
+            color={Colors.blue600}
+            size={50}
+            disabled={!canJumpBack}
+            onPress={() => {
+              jumpBack();
+            }}
+          />
+          <IconButton
             icon={animateButton}
             color={Colors.blue600}
             size={50}
@@ -574,6 +624,15 @@ const MapScreen = ({ navigation }) => {
             size={50}
             onPress={() => {
               stopAnimation();
+            }}
+          />
+          <IconButton
+            icon="fast-forward"
+            color={Colors.blue600}
+            size={50}
+            disabled={!canJumpForward}
+            onPress={() => {
+              jumpForward();
             }}
           />
         </View>
@@ -664,7 +723,7 @@ const iconOnMap = StyleSheet.create({
 
     position: "absolute",
     right: 0,
-    bottom: 0,
+    bottom: 70,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
@@ -676,7 +735,7 @@ const mapButtons = StyleSheet.create({
   goToCurrent: {
     position: "absolute",
     right: -8,
-    bottom: 55,
+    bottom: 155,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
