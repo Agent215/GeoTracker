@@ -112,7 +112,7 @@ const MapScreen = ({ navigation }) => {
 
   const jumpBack = () => {
     let jumpDate = subDays(currentDate, 3)
-    if(isAfter(jumpDate, startDate) ){
+    if(isAfter(jumpDate, startDate)){
       setCurrentDate(jumpDate)
       ShowMarkerOnDay(jumpDate)
     }
@@ -698,7 +698,7 @@ const iconOnMap = StyleSheet.create({
 
     position: "absolute",
     right: 0,
-    bottom: 0,
+    bottom: 70,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
@@ -710,7 +710,7 @@ const mapButtons = StyleSheet.create({
   goToCurrent: {
     position: "absolute",
     right: -8,
-    bottom: 55,
+    bottom: 125,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
