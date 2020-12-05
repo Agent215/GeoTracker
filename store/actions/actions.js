@@ -7,6 +7,8 @@ export const SAVE_DISASTER = "SAVE_DISASTER";
 export const UNSAVE_DISASTER = "UNSAVE_DISASTER";
 export const SET_HEADER_DATE = "SET_HEADER_DATE"
 export const SET_ISGIBSVISIBLE = "SET_ISGIBSVISIBLE"
+export const SET_SAVED_DISASTERS = "SET_SAVED_DISASTERSc"
+
 
 export const SET_DATE_FILTER = "SET_DATE_FILTER"
 
@@ -43,6 +45,10 @@ export const unSaveDisaster = (unsaveDisaster) => {
 
     return { type: UNSAVE_DISASTER, unsaveDisaster: unsaveDisaster }
 }
+
+export const setSavedDisasters = (savedDisasters) => {
+    return { type: SET_SAVED_DISASTERS, savedDisasters: savedDisasters }
+};
 
 export const setIsGibsVisible = (isGibsVisible) => {
 

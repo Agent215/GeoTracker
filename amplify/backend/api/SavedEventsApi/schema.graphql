@@ -1,0 +1,18 @@
+type Todo @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  name: String!
+  description: String
+}
+
+type EventEntity @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  title: String!
+  category: String!
+  sourceLink: String!
+  locationList: String!
+  isClosed: String!
+  currentLat: Float!
+  currentLong: Float!
+  eventId: String!
+  currentDate: String!
+}

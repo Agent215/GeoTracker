@@ -10,6 +10,8 @@ import { IconButton } from "react-native-paper";
 import DisasterIcon from '../components/CustomIcon';
 import { accessibilityProps } from "react-native-paper/lib/typescript/src/components/MaterialCommunityIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { DataStore } from '@aws-amplify/datastore';
+import { EventEntity }  from '../models';
 
 // DisasterCard holds the layout to each feed card.
 // The Card uses <Grid> to space objects out in header, and footer. 2/3 of header is description 1/3 is icon
@@ -63,9 +65,12 @@ const DisasterCard = (props) => {
         </Col>
         <Col>
           <TouchableOpacity
-          onPress={() => { 
+          onPress={async () => { 
+            await DataStore.delete(EventEntity, event => event.eventId("eq", props.event.id).title('beginsWith', '[Amplify]'));
+            DataStore.start();
+
             dispatch(actions.unSaveDisaster(props.event));
-          console.log("you are at line 71 of DisasterCard"); 
+            console.log("you are at line 71 of DisasterCard"); 
         }}
           >
             <IconButton
