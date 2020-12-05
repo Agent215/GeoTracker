@@ -7,7 +7,15 @@ import signOut from '../../screens/SettingsScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
 import * as enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+
+
 enzyme.configure({ adapter: new Adapter() });
+
+Auth.signUp = jest.fn().mockImplementation(
+    () => {
+        return true;
+    });
+
 /**
  * 
  * Test that signout function returns a non null value
@@ -30,4 +38,3 @@ it('calls actions as expected when pressing buttons', () => {
         child.simulate('press');
     });
 });
-

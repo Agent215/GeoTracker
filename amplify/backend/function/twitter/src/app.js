@@ -41,7 +41,7 @@ app.get('/twitter', async(req,res) => {
             };
             return x;
           });
-    const url = `https://api.twitter.com/1.1/trends/place.json?id=${w}`;
+    const url = `https://api.twitter.com/1.1/trends/place.json?id=${w}&exclude=hashtags`;
 
     const trends = await fetch(url, {headers:headers})
        // .then(response => response.json())
@@ -85,12 +85,27 @@ app.get('/twitter/tweets', async(req,res)=>{
           let size_response = json.statuses.length;
           let tweets = [];
           for (var i =0 ; i < size_response ;i++){
-            let entry = {
+            if(json.statuses[i].entities.urls[0] != undefined){
+                 let entry = {
+                'text' : json.statuses[i].text,
+                'user' : json.statuses[i].user.screen_name ,
+                'id' : json.statuses[i].id,
+                'url' : json.statuses[i].entities.urls[0].url,
+                'date' : json.statuses[i].created_at
+
+              }
+              tweets.push(entry);
+            }
+            else{
+              let entry = {
               'text' : json.statuses[i].text,
               'user' : json.statuses[i].user.screen_name ,
-              'id' : json.statuses[i].id
+              'id' : json.statuses[i].id,
+              'date' : json.statuses[i].created_at
             }
             tweets.push(entry);
+            }
+            
           }
           let response = {
             'tweets' : tweets,

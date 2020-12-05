@@ -1,7 +1,6 @@
 import React from 'react';
 import Toast from 'react-native-easy-toast';
 
-import Colors from '../constants/Colors';
 
 const CustomToast = React.forwardRef((props, ref) => {
     return (

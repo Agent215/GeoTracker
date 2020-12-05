@@ -12,6 +12,7 @@ import useTwitterTweetsResults from "../hooks/useTwitterTweetsResult";
 import useTwitterTrendsResults from "../hooks/useTwitterTrendsResult";
 import { AntDesign } from "@expo/vector-icons";
 
+
 function TwitterComponent(props) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [trendsApi, trendsResults, errorMessage] = useTwitterTrendsResults();
@@ -36,6 +37,8 @@ function TwitterComponent(props) {
       : Math.abs(long1 - long2) * 54.6;
   };
 
+
+
   let radius = getRadius(
     props.cameraRegion.cameraLatitude,
     props.cameraRegion.cameraNELatitude,
@@ -43,6 +46,7 @@ function TwitterComponent(props) {
     props.cameraRegion.cameraNELongitude
   );
   // console.log("radius is "+radius);
+
 
   useEffect(() => {
     // console.log("Trending has changed...");
@@ -131,6 +135,11 @@ function TwitterComponent(props) {
             break;
         }
 
+
+        let query = unescape(encodeURIComponent(trend))
+        console.log(query)
+        //  let s = decodeURIComponent(escape(query)).toString();
+        //  console.log("s " +s);
         try {
           tweetApi(
             trend,
@@ -139,16 +148,16 @@ function TwitterComponent(props) {
             radius
           );
         } catch (err) {
-          alert(err + " " + tweetErrorMessage)
+          alert(+ "there was a problem fetching tweets for : " + trend + " " + err + " " + tweetErrorMessage)
         }
       });
     }
   }, [trending]);
 
   useEffect(() => {
-    
+
     if (tweetResults != undefined) {
-    
+
       Object.keys(tweets).forEach((e) => {
         if (tweets[e].trend == tweetResults.query) {
           console.log("Updaing tweets:::");
@@ -240,7 +249,7 @@ function TwitterComponent(props) {
     if (trendsResults != undefined && trendsResults != "") {
       try {
         let trendsData = trendsResults.trends.map((trend, index) => {
-         // trend = (trend.length && trend[0] == '#') ? trend.slice(1) : trend; // remove #
+          // trend = (trend.length && trend[0] == '#') ? trend.slice(1) : trend; // remove #
           return { name: trend, id: index };
         });
 
@@ -272,7 +281,7 @@ function TwitterComponent(props) {
         }}
       >
         <View style={styles.buttonContainer}>
-          <AntDesign name="twitter" size={40} color="#95e4f8" />
+          <AntDesign name="twitter" size={45} color="#2A84F1" />
         </View>
       </TouchableOpacity>
 
@@ -298,9 +307,9 @@ function TwitterComponent(props) {
               }}
             >
               {/* <Text style={{fontSize:20}}>Map Camera latitude: {props.cameraRegion.cameraLatitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera longtitude: {props.cameraRegion.cameraLongitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera Northeast latitude: {props.cameraRegion.cameraNELatitude} </Text>
-              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text>*/}
+              <Text style={{fontSize:20}}>Map Camera longtitude: {props.cameraRegion.cameraLongitude} </Text> */}
+              {/* <Text style={{fontSize:20}}>Map Camera Northeast latitude: {props.cameraRegion.cameraNELatitude} </Text>
+              <Text style={{fontSize:20}}>Map Camera Northeast longtitude: {props.cameraRegion.cameraNELongitude} </Text> */}
 
               <Text style={{ fontSize: 25, fontWeight: "bold" }}>Trending</Text>
 
@@ -393,21 +402,10 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    //supposed to show shadow in android but it doesn't
-    //https://stackoverflow.com/questions/45972506/creating-a-ui-with-box-shadow-in-react-native
     elevation: 5,
-
-    //shadow effect on IOS
-    backgroundColor: "#2E9298",
     borderRadius: 15,
-    padding: 6,
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 5,
-      height: 3,
-    },
-    shadowRadius: 5,
-    shadowOpacity: 2.0,
+    padding: 4,
+    bottom: 5
   },
 
   trendingText: {

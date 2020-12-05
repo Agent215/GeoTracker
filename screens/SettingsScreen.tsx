@@ -1,47 +1,92 @@
 import { Auth, API } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
 import * as React from 'react';
 import { Button, StyleSheet, TextInput } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native'
 import { Text, View } from '../components/Themed';
-
-
-
-export async function signOut() {
-  try {
-    await Auth.signOut();
-  } catch (error) {
-    console.log('error signing out: ', error)
-  }
-}
-
-//function to delete user
-async function onDeleteUser() {
-  const userName ='';
-
-  //collect current authenticated user
-  const user = await Auth.currentAuthenticatedUser();
-  //Auth function to delete authenticated user
-  user.deleteUser((error, data) => {
-    //send error to console if exists
-    if(error)
-      console.log('Error deleting user', error);
-    else
-      signOut();
-  });
-  
-}
+import { Todo, EventEntity }  from '../models';
+import { useDispatch } from 'react-redux';
+import * as actions from '../store/actions/actions';
 
 
 function SettingsScreen() {
+  const dispatch = useDispatch();
+
+  const signOut = async () => {
+    try {
+      await Auth.signOut();
+      await DataStore.clear();
+      dispatch(actions.setSavedDisasters([]));
+    } catch (error) {
+      console.log('error signing out: ', error)
+    }
+  }
+
+  //function to delete user
+  async function onDeleteUser() {
+    const userName ='';
+
+    //collect current authenticated user
+    const user = await Auth.currentAuthenticatedUser();
+    //Auth function to delete authenticated user
+    user.deleteUser((error, data) => {
+      //send error to console if exists
+      if(error)
+        console.log('Error deleting user', error);
+      else
+        signOut();
+    });
+    
+  }
+
+  async function forceDatastoreSync() {
+    await DataStore.start();
+  }
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Click below to sign out</Text>
       {<Button title='Sign out' onPress={signOut} />}
       <Text style={styles.title}>Click below to Delete User</Text>
       {<Button title='Delete User' onPress={onDeleteUser} />}
-      {<Button title='Log response from API for event/all query' onPress={testAPI} />}
+      {/* {<Button title='Log response from API for event/all query' onPress={testAPI} />} */}
+      {/* {<Button title='Log response from API for event/all query' onPress={testAPI} />}
+      {<Button title='Save test event to datastore' onPress={saveTestEvent} />}
+      {<Button title='Read events from datastore' onPress={readFromDatastore} />}
+      {<Button title='Force datastore sync' onPress={forceDatastoreSync} />} */}
     </View>
   );
+}
+
+async function saveTestEvent() {
+  try {
+    await DataStore.save(
+      new EventEntity({
+        title: "String",
+        category: "String",
+        sourceLink: "String",
+        locationList: "String",
+        isClosed: "String",
+        currentLat: 4.20,
+        currentLong: 6.90,
+        eventId: "String",
+        currentDate: "String"
+      })
+    );
+    console.log("Post saved successfully!");
+  } catch (error) {
+    console.log("Error saving post", error);
+  }
+}
+
+async function readFromDatastore() {
+  try {
+    const posts = await DataStore.query(EventEntity);
+    console.log("Posts retrieved successfully!", JSON.stringify(posts, null, 2));
+  } catch (error) {
+    console.log("Error retrieving posts", error);
+  }
 }
 
 async function testAPI() {

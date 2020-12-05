@@ -4,7 +4,7 @@ import { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import { currentEventList, combinedEvents, historicalEventList } from "../App";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { IconButton, Colors, Switch } from "react-native-paper";
+import { IconButton, Colors} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -20,8 +20,9 @@ import CustomModal from "../components/CustomModal";
 import * as actions from "../store/actions/actions";
 import WeatherLegend from '../components/Legend'
 import { CustomAlert } from '../components/CustomAlert';
-import { addDays, isWithinInterval, parseISO, format, isEqual } from "date-fns/esm";
+import { addDays, subDays, isWithinInterval, parseISO, format, isBefore, isAfter, isEqual } from "date-fns/esm";
 import TwitterComponent from "../components/TwitterComponent";
+import { BREAK } from "graphql";
 
 
 
@@ -41,6 +42,7 @@ let INITIALREGION = {                                                           
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
+let JUMPDELTA = 3;
 
 const MapScreen = ({ navigation }) => {
 
@@ -72,7 +74,8 @@ const MapScreen = ({ navigation }) => {
   const [maxZoom, setMaxZoom] = useState(19);
   const [canPlay, setCanPlay] = useState(false);
   const isGibsVisible = useSelector((state) => state.disaster.isGibsVisible);         // keep track of if the GIBS data is visible
-
+  const [canJumpBack, setCanJumpBack] = useState(false);                              // keep track of jumpBack enabled
+  const [canJumpForward, setCanJumpForward] = useState(false);                        // keep track of jumpForward enabled
 
   /*adding property isShow to all events, which determine if they shold show on the map
   they all should when the Map first rendered*/
@@ -99,8 +102,46 @@ const MapScreen = ({ navigation }) => {
     setCurrentDate(startDate);            // reset start date back to begining.
     filterDisasters();                    // filter all the disasters again to give us the intitial set we started with
     setMaxZoom(19)                        // let user zoom again!!
-    setDisastersInRange(filteredDisasters);
+    //setDisastersInRange(filteredDisasters);
   }
+
+  //This funcion jumps animation forward a number of days equal to JUMPDELTA
+  const jumpForward = () => {
+    let jumpDate = addDays(currentDate, JUMPDELTA)
+    if(isBefore(jumpDate, endDate)){
+      setCurrentDate(jumpDate)
+      ShowMarkerOnDay(jumpDate)
+    }
+  }
+
+  //This function jumps animation back a number of days equal to JUMPDELTA
+  const jumpBack = () => {
+    let jumpDate = subDays(currentDate, JUMPDELTA)
+    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate)){
+      setCurrentDate(jumpDate)
+      ShowMarkerOnDay(jumpDate)
+    }
+  }
+
+  //useEffect to enable jumpForward Button during animation
+  useEffect(() => {
+    let jumpDate = addDays(currentDate, JUMPDELTA)
+    if(isBefore(jumpDate, endDate) && isGibsVisible){
+      setCanJumpForward(true)
+    } else {
+      setCanJumpForward(false)
+    }
+  })
+
+  //useEffect to enable jumpBack button during animation
+  useEffect(() => {
+    let jumpDate = subDays(currentDate, JUMPDELTA)
+    if(isEqual(jumpDate, startDate) || isAfter(jumpDate, startDate) && isGibsVisible){
+      setCanJumpBack(true)
+    } else {
+      setCanJumpBack(false)
+    }
+  })
 
   useEffect(() => {
     if (!isGibsVisible) {
@@ -254,26 +295,19 @@ const MapScreen = ({ navigation }) => {
 
   const splitAndDupEvents = (events) => {
     let returnEvents = [];
-
     // for each event
     events.forEach(event => {
       let dupEvents = [];
       if (event.locationList != undefined) {
-
         if (event.locationList.length > 1) {
-
           let temp = [...event.locationList];
           // for each location
           temp.forEach(location => {
-
             //if dupEvents!contains event with location.date
             let compareDate = new Date(location.date);
             if (dupEvents.includes(compareDate.toDateString())) {
               // do nothing 
-
             } else {
-
-
               let dup: EventEntity = {
                 title: "",
                 category: "",
@@ -326,6 +360,15 @@ const MapScreen = ({ navigation }) => {
     const disasterToFilter = allEvents.map((event) => {
 
 
+      function CheckOnSameDay(event) {
+
+        let current = format(parseISO(event.currentDate), "yyyy-MM-dd");
+        let end = (format(parseISO(endDate_ISO), "yyyy-MM-dd"))
+        if (current == end) {
+          return true;
+        }
+      }
+
       let endDate;
       if (event.isClosed == null) {
         endDate = new Date().toISOString();  // if isclosed is null then that means event is still open
@@ -341,10 +384,10 @@ const MapScreen = ({ navigation }) => {
         )
         &&
         (
-          isWithinInterval(parseISO(event.currentDate), {
+          (isWithinInterval(parseISO(event.currentDate), {
             start: startDate,
             end: parseISO(endDate_ISO)
-          }) 
+          })) || CheckOnSameDay(event)
         )
       ) { event.isShow = true }
       else {
@@ -355,7 +398,7 @@ const MapScreen = ({ navigation }) => {
 
     // create a new array from the array with correctly marked isShow prop
     disasterToFilter.forEach(element => {
-      if (element.isShow) {tempArray.push(element);}
+      if (element.isShow) { tempArray.push(element); }
     })
 
     if (disasterFilter.value != "none") {
@@ -382,6 +425,7 @@ const MapScreen = ({ navigation }) => {
     const disastersOnDay = disastersInRange.map((event) => {
       let startDate = event.currentDate;
       let endingDate;
+
       if (event.isClosed == null) {        // id isClosed is null then event is open so set endate to today
         endingDate = new Date().toISOString();
       }
@@ -389,7 +433,8 @@ const MapScreen = ({ navigation }) => {
       if ((isWithinInterval(currentdate, {
         start: parseISO(startDate),
         end: parseISO(endingDate)
-      }) || (new Date(startDate).toDateString() == new Date(currentDate).toDateString()))
+      }) || (format(parseISO(startDate), "yyyy-MM-dd") == format(currentdate, "yyyy-MM-dd"))
+      )
         && (disasterFilter.value === "all"      // filter for all
           || disasterFilter.value === ""        // first time we render
           || disasterFilter.value == undefined  //just in case
@@ -430,21 +475,8 @@ const MapScreen = ({ navigation }) => {
           zoomControlEnabled={true}
           loadingEnabled={true}
           maxZoomLevel={maxZoom}
-          // onMapReady={
-          //   async () => {
-          //     console.log("Map is ready");
-          //     let camera = await mapRef.current.getCamera();
-          //     console.log("camera center lat and long:");
-          //     console.log(camera.center.latitude, camera.center.longitude);
-          //     trendsApi(camera.center.latitude, camera.center.longitude);
-
-
-
-
-          //   }
-          // }
           onRegionChangeComplete={async (NewRegion) => {
-          
+
             let mapBoundry = await mapRef.current.getMapBoundaries();
             setCameraRegion({
               cameraLatitude: NewRegion.latitude,
@@ -485,6 +517,7 @@ const MapScreen = ({ navigation }) => {
           <WeatherOverlay
             category={weatherFilter.value}
             gibsVisible={isGibsVisible}
+            date={format(currentDate, "yyyy-MM-dd")}
           />
 
         </MapView>
@@ -500,7 +533,7 @@ const MapScreen = ({ navigation }) => {
           disaster={currentDisaster}
           startDate={currentDisaster.currentDate}
           toggleModal={toggleModal}
-     
+
         />
 
         <GooglePlacesAutocomplete
@@ -549,8 +582,8 @@ const MapScreen = ({ navigation }) => {
           <TwitterComponent
             cameraRegion={cameraRegion}
             //trendsResult={trendsResults}
-            lat = {cameraRegion.cameraLatitude}
-            long = {cameraRegion.cameraLongitude}
+            lat={cameraRegion.cameraLatitude}
+            long={cameraRegion.cameraLongitude}
           />
         </View>
 
@@ -567,6 +600,15 @@ const MapScreen = ({ navigation }) => {
           style={mapButtons.animateButtons}
         >
           <IconButton
+            icon="rewind"
+            color={Colors.blue600}
+            size={50}
+            disabled={!canJumpBack}
+            onPress={() => {
+              jumpBack();
+            }}
+          />
+          <IconButton
             icon={animateButton}
             color={Colors.blue600}
             size={50}
@@ -582,6 +624,15 @@ const MapScreen = ({ navigation }) => {
             size={50}
             onPress={() => {
               stopAnimation();
+            }}
+          />
+          <IconButton
+            icon="fast-forward"
+            color={Colors.blue600}
+            size={50}
+            disabled={!canJumpForward}
+            onPress={() => {
+              jumpForward();
             }}
           />
         </View>
@@ -669,10 +720,9 @@ const iconOnMap = StyleSheet.create({
     bottom: 55,
   },
   twitter: {
-
     position: "absolute",
     right: 0,
-    bottom: 0,
+    top: 185,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
@@ -684,7 +734,7 @@ const mapButtons = StyleSheet.create({
   goToCurrent: {
     position: "absolute",
     right: -8,
-    bottom: 55,
+    top: 115,
     backgroundColor: "transparent",
     alignItems: "center",
     // justifyContent:"center",
